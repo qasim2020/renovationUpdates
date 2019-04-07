@@ -1,0 +1,25 @@
+{
+  "name": "renovationupdates",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Miscellaneous-Pk/renovationUpdates.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Miscellaneous-Pk/renovationUpdates/issues"
+  },
+  "homepage": "https://github.com/Miscellaneous-Pk/renovationUpdates#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "hbs": "^4.0.3",
+    "lodash": "^4.17.11"
+  }
+}
