@@ -244,9 +244,6 @@
         <div class="div-block-4 bg-secondary">
           <div class="div-block-5">
             <div><h5><strong class="bold-text-2">Category: New Construction / Washrooms / External Repairs</strong></h5></div>
-            <div><strong>Project Name: </strong> <span class="text-3">Main Entrance Gate</span> </div>
-            <div><strong>Responsibility:</strong> <span class="text-3">MES</span> </div>
-            <div><strong>Explain:</strong> <span class="text-3">200 sft shuttering completed</span> </div>
           </div>
           <a href="#" class="button bg-success w-button">Submit</a>
           <a href="#" class="button bg-dafault w-button">Delete</a>
@@ -260,6 +257,8 @@
           </div><a href="#" class="button bg-success w-button">Saved</a>
         </div>
       </div>
+
+      <div class="text-3"><strong></strong> <span></span> </div>
     </div>
 
     <script
@@ -320,22 +319,18 @@
 
       $('#email-form-4').on('submit',function(e) {
         e.preventDefault();
-        let val = [];
-        $(this).find('select').each(function(index) {
-          let myId = $(this).attr('id');
-          val[index] = $(`#${myId} option:selected`).val();
-          $(`#${myId}`).find('option:eq(0)').attr('selected','selected');
-        });
-        val[val.length] = $(this).find('input:eq(0)').val();
-        val[val.length] = $(this).find('input:eq(1)').val();
-        console.log(val);
-        if (val[2] == '') return false;
-        $(this).find('input:eq(0)').val('');
         $('.div-block-4:eq(0)').clone().prependTo('.category-block');
         $('.div-block-4:eq(0)').find('.bold-text-2').html(`Category: ${$(this).find('.field-label').html()}`);
-        $('.div-block-4:eq(0)').find('.text-3:eq(0)').html(val[0]).siblings('strong').html('proj Name');
-        $('.div-block-4:eq(0)').find('.text-3:eq(1)').html(val[1]);
-        $('.div-block-4:eq(0)').find('.text-3:eq(2)').html(val[2]);
+        let data = {
+          'Bunker No': $('#bunkerNo').val(),
+          'Type of Work': $('#bunker-work').val(),
+          'Unit': $('#bunker-resp').val(),
+          'Remarks': $('#bunker-remarks').val()
+        };
+        $.each(data,function(key,value) {
+          $(`.text-3:eq(-1)`).clone().appendTo('.div-block-5:eq(0)');
+          $('.div-block-4:eq(0)').find('.text-3:eq(-1)').children('span').html(value).siblings('strong').html(key+': ');
+        });
       });
 
       $('.email-form-2-btn').on('click',function() {
