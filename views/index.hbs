@@ -37,21 +37,51 @@
         display: block !important;
       }
 
+      .div-block-4 {
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.26);
+      }
+
+      .shadow {
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.26);
+        background: white !important;
+      }
+
+      .bg-primary {
+        background: #F4FAFF !important;
+      }
+
+      .bg-secondary {
+        background: #FFFFFF !important;
+      }
+
+      .text-dark {
+        color: #333333;
+      }
+
+      .border-dark {
+        border: 1px solid #333333 !important;
+      }
+
+      .disabled {
+          opacity: 0.3 !important;
+      }
+
     </style>
   </head>
 
-  <body class="body">
+  <body class="body bg-primary">
     <div class="container w-container">
       <h1 class="heading">Renovation Update</h1>
       <div>
         <div class="w-form">
-          <form id="email-form" name="email-form" data-name="Email Form" class="form"><label for="name" class="field-label">Category</label>
+          <form id="email-form" name="email-form" data-name="Email Form" class="form shadow"><label for="name" class="field-label">Category</label>
             <div class="radio-button-field w-radio"><input type="radio" id="radio-2" name="radio" value="New Construction" data-name="Radio" class="w-radio-input" /><label for="radio-2" class="w-form-label">New Construction</label></div>
             <div class="radio-button-field w-radio"><input type="radio" id="radio" name="radio" value="External Uplift" data-name="Radio" class="w-radio-input" /><label for="radio" class="w-form-label">External Uplift</label></div>
             <div class="radio-button-field w-radio"><input type="radio" id="radio-3" name="radio" value="Bunkers Works" data-name="Radio" class="w-radio-input" /><label for="radio-3" class="w-form-label">Bunkers Works</label></div>
             <div class="radio-button-field w-radio"><input type="radio" id="radio-4" name="radio" value="Material Entered the Complex" data-name="Radio" class="w-radio-input" /><label for="radio-4" class="w-form-label">Material Entered the Complex</label></div>
-            <div class="radio-button-field w-radio d-none"><input type="radio" id="radio-5" name="radio" value="Labour Attendance" data-name="Radio" class="w-radio-input" /><label for="radio-5" class="w-form-label">Labour Attendance</label></div><input type="submit"
-              value="Next" data-wait="Please wait..." class="form-button w-button" />
+            <div class="radio-button-field w-radio d-none"><input type="radio" id="radio-5" name="radio" value="Labour Attendance" data-name="Radio" class="w-radio-input" /><label for="radio-5" class="w-form-label">Labour Attendance</label>
+            </div>
+            <input type="submit" value="Next" data-wait="Please wait..." class="form-button w-button" />
           </form>
           <div class="w-form-done">
             <div>Thank you! Your submission has been received!</div>
@@ -62,7 +92,7 @@
         </div>
       </div>
       <div>
-        <div class="form new-form w-form d-none">
+        <div class="form new-form w-form d-none shadow">
           <form id="email-form-2" name="email-form-2" data-name="Email Form 2"><label for="name" class="field-label">New Construction</label><label>Project Name</label>
             <select id="const-projName" name="field-7" required="" class="w-select">
               <option value="Bunker 1 Washroom">Bunker 1 Washroom</option>
@@ -84,8 +114,8 @@
             </select>
             <label>Explain Here</label>
             <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="With measurements" id="field-2" required="" />
-            <input type="submit" value="Add More" data-wait="Please wait..." class="form-button w-button" />
-            <input id="email-form-2-btn" type="button" value="Done" data-wait="Please wait..." class="form-button bg-success w-button" />
+            <input type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button"/>
+            <input id="" type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark"/>
           </form>
 
           <div class="w-form-done">
@@ -95,8 +125,11 @@
             <div>Oops! Something went wrong while submitting the form.</div>
           </div>
         </div>
-        <div class="form new-form w-form d-none">
-          <form id="email-form-2" name="email-form-2" data-name="Email Form 2"><label for="name-4" class="field-label">External Uplift</label><label>Project Name</label><select id="field-7" name="field-7" required="" class="w-select">
+        <div class="form new-form w-form d-none shadow">
+          <form id="email-form-3" name="email-form-2" data-name="Email Form 2">
+            <label for="name-4" class="field-label">External Uplift</label>
+            <label>Project Name</label>
+            <select id="ext-projName" name="field-7" required="" class="w-select">
               <option value="Boundary Wall Paint">Boundary Wall Paint</option>
               <option value="New Lintels">New Lintels</option>
               <option value="Bunker 2 Washroom">Bunker 2 Washroom</option>
@@ -107,14 +140,20 @@
               <option value="Outdoor Lights">Outdoor Lights</option>
               <option value="Bunker 3 Themed Wall">Bunker 3 Themed Wall</option>
               <option value="Grass Laying">Grass Laying</option>
-            </select><label>Responsibility</label><select id="field-7" name="field-7" required="" class="w-select">
+            </select>
+            <label>Responsibility</label>
+            <select id="ext-resp" name="field-7" required="" class="w-select">
               <option value="MES">MES</option>
               <option value="Juke Box">Juke Box</option>
               <option value="78 Sigs">78 Sigs</option>
               <option value="Pak Arab">Pak Arab</option>
               <option value="Other">Other</option>
-            </select><label>Explain Here</label><input type="text" class="w-input" maxlength="256" name="field-5" data-name="Field 5" placeholder="With measurements" id="field-5" required="" /><input type="submit" value="Submit"
-              data-wait="Please wait..." class="form-button w-button" /><input type="submit" value="Done" data-wait="Please wait..." class="form-button bg-success w-button" /></form>
+            </select>
+            <label>Explain Here</label>
+            <input type="text" class="w-input" maxlength="256" name="field-5" data-name="Field 5" placeholder="With measurements" id="field-5" required="" /><input type="submit" value="Submit"
+              data-wait="Please wait..." class="form-button w-button" />
+            <input type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark"/>
+            </form>
           <div class="w-form-done">
             <div>Thank you! Your submission has been received!</div>
           </div>
@@ -122,8 +161,12 @@
             <div>Oops! Something went wrong while submitting the form.</div>
           </div>
         </div>
-        <div class="form new-form w-form d-none">
-          <form id="email-form-2" name="email-form-2" data-name="Email Form 2"><label for="name-3" class="field-label">Bunkers Works</label><label>Bunker Number</label><select id="field-6" name="field-6" required="" class="w-select">
+        <div class="form new-form w-form d-none shadow">
+          <form id="email-form-4" name="email-form-2" data-name="Email Form 2">
+            <label for="name-3" class="field-label">Bunkers Works</label>
+
+            <label>Bunker Number</label>
+            <select id="bunkerNo" name="field-6" required="" class="w-select">
               <option value="">Select one...</option>
               <option value="1">1</option>
               <option value="2">2</option>
@@ -131,15 +174,27 @@
               <option value="4">4</option>
               <option value="5">5</option>
               <option value="6">6</option>
-            </select><label>Type of Work</label><input type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Wall putty" id="field-3" required="" /><label>Unit</label><select id="field-7" name="field-7"
-              required="" class="w-select">
+            </select>
+
+            <label>Type of Work</label>
+            <input type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Wall putty etc" id="bunker-work" required="" />
+
+            <label>Unit</label>
+            <select id="bunker-resp" name="field-7" required="" class="w-select">
               <option value="Juke Box">Juke Box</option>
               <option value="MES">MES</option>
               <option value="Pak Arab">Pak Arab</option>
               <option value="78 Sigs">78 Sigs</option>
               <option value="Other">Other</option>
-            </select><label>Remarks</label><input type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Any thing" id="field-3" /><input type="submit" value="Submit" data-wait="Please wait..."
-              class="form-button w-button" /><input type="submit" value="Next" data-wait="Please wait..." class="form-button bg-success w-button" /></form>
+            </select>
+
+            <label>Remarks</label>
+            <input type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Any thing" id="bunker-remarks" />
+
+            <input type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button" />
+            <input type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark"/>
+
+          </form>
           <div class="w-form-done">
             <div>Thank you! Your submission has been received!</div>
           </div>
@@ -147,7 +202,7 @@
             <div>Oops! Something went wrong while submitting the form.</div>
           </div>
         </div>
-        <div class="form new-form w-form d-none">
+        <div class="form new-form w-form d-none shadow">
           <form id="email-form-2" name="email-form-2" data-name="Email Form 2" class="form-2"><label for="name-2" class="field-label">Material Entered the Complex</label><label>Owner</label><select id="field-7" name="field-7" required=""
               class="w-select">
               <option value="Juke Box">Juke Box</option>
@@ -172,7 +227,7 @@
             <div>Oops! Something went wrong while submitting the form.</div>
           </div>
         </div>
-        <div class="form new-form w-form d-none">
+        <div class="form new-form w-form d-none shadow">
           <form id="email-form-2" name="email-form-2" data-name="Email Form 2"><label for="name-5" class="field-label">Labour Attendance</label><input type="text" class="w-input" maxlength="256" name="name-2" data-name="Name 2"
               placeholder="Name of Labour" id="name-2" /><input type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="MES / JukeBox / Pak Arab etc" id="field-3" required="" /><input type="text" class="w-input"
               maxlength="256" name="field-3" data-name="Field 3" placeholder="Present / Absent" id="field-3" required="" /><input type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button" /><input type="submit" value="Next"
@@ -185,14 +240,16 @@
           </div>
         </div>
       </div>
-      <div class="category-block">
-        <div class="div-block-4">
+      <div class="category-block bg-primary">
+        <div class="div-block-4 bg-secondary">
           <div class="div-block-5">
-            <div><strong class="bold-text-2">Category: New Construction / Washrooms / External Repairs</strong></div>
+            <div><h5><strong class="bold-text-2">Category: New Construction / Washrooms / External Repairs</strong></h5></div>
             <div><strong>Project Name: </strong> <span class="text-3">Main Entrance Gate</span> </div>
-            <div><strong>Responsibility:</strong> <span class="text-4">MES</span> </div>
-            <div><strong>Explain:</strong> <span class="text-5">200 sft shuttering completed</span> </div>
-          </div><a href="#" class="button bg-success w-button">Submit</a><a href="#" class="button bg-dafault w-button">Delete</a>
+            <div><strong>Responsibility:</strong> <span class="text-3">MES</span> </div>
+            <div><strong>Explain:</strong> <span class="text-3">200 sft shuttering completed</span> </div>
+          </div>
+          <a href="#" class="button bg-success w-button">Submit</a>
+          <a href="#" class="button bg-dafault w-button">Delete</a>
         </div>
         <div class="div-block-4 bg-success-light">
           <div class="div-block-5">
@@ -211,7 +268,7 @@
   crossorigin="anonymous"></script>
     <script>
 
-      $(`.field-label:contains('New Construction')`).closest('div').toggleClass('d-none d-block');
+      $(`.field-label:contains('Bunkers Works')`).closest('div').toggleClass('d-none d-block');
 
       $('#email-form').on('submit',function(e) {
         e.preventDefault();
@@ -229,18 +286,60 @@
         $(this).find('select').each(function(index) {
           let myId = $(this).attr('id');
           val[index] = $(`#${myId} option:selected`).val();
+          $(`#${myId}`).find('option:eq(0)').attr('selected','selected');
         });
-        val[val.length] = $(this).find('input').val();
-
+        val[val.length] = $(this).find('input:eq(0)').val();
+        console.log(val);
+        if (val[2] == '') return false;
+        $(this).find('input:eq(0)').val('');
         $('.div-block-4:eq(0)').clone().prependTo('.category-block');
         $('.div-block-4:eq(0)').find('.bold-text-2').html(`Category: ${$(this).find('.field-label').html()}`);
-        $('.div-block-4:eq(0)').find('.text-3').html(val[0]);
-        $('.div-block-4:eq(0)').find('.text-4').html(val[1]);
-        $('.div-block-4:eq(0)').find('.text-5').html(val[2]);
+        $('.div-block-4:eq(0)').find('.text-3:eq(0)').html(val[0]);
+        $('.div-block-4:eq(0)').find('.text-3:eq(1)').html(val[1]);
+        $('.div-block-4:eq(0)').find('.text-3:eq(2)').html(val[2]);
       });
 
-      $('#email-form-2-btn').on('click',function() {
-        console.log(this);
+      $('#email-form-3').on('submit',function(e) {
+        e.preventDefault();
+        let val = [];
+        $(this).find('select').each(function(index) {
+          let myId = $(this).attr('id');
+          val[index] = $(`#${myId} option:selected`).val();
+          $(`#${myId}`).find('option:eq(0)').attr('selected','selected');
+        });
+        val[val.length] = $(this).find('input:eq(0)').val();
+        console.log(val);
+        if (val[2] == '') return false;
+        $(this).find('input:eq(0)').val('');
+        $('.div-block-4:eq(0)').clone().prependTo('.category-block');
+        $('.div-block-4:eq(0)').find('.bold-text-2').html(`Category: ${$(this).find('.field-label').html()}`);
+        $('.div-block-4:eq(0)').find('.text-3:eq(0)').html(val[0]);
+        $('.div-block-4:eq(0)').find('.text-3:eq(1)').html(val[1]);
+        $('.div-block-4:eq(0)').find('.text-3:eq(2)').html(val[2]);
+      });
+
+      $('#email-form-4').on('submit',function(e) {
+        e.preventDefault();
+        let val = [];
+        $(this).find('select').each(function(index) {
+          let myId = $(this).attr('id');
+          val[index] = $(`#${myId} option:selected`).val();
+          $(`#${myId}`).find('option:eq(0)').attr('selected','selected');
+        });
+        val[val.length] = $(this).find('input:eq(0)').val();
+        val[val.length] = $(this).find('input:eq(1)').val();
+        console.log(val);
+        if (val[2] == '') return false;
+        $(this).find('input:eq(0)').val('');
+        $('.div-block-4:eq(0)').clone().prependTo('.category-block');
+        $('.div-block-4:eq(0)').find('.bold-text-2').html(`Category: ${$(this).find('.field-label').html()}`);
+        $('.div-block-4:eq(0)').find('.text-3:eq(0)').html(val[0]).siblings('strong').html('proj Name');
+        $('.div-block-4:eq(0)').find('.text-3:eq(1)').html(val[1]);
+        $('.div-block-4:eq(0)').find('.text-3:eq(2)').html(val[2]);
+      });
+
+      $('.email-form-2-btn').on('click',function() {
+        $(this).closest('div').toggleClass('d-none d-block');
       })
 
     </script>
