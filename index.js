@@ -5,11 +5,7 @@ const bodyParser = require('body-parser');
 const hbs = require('hbs');
 const _ = require('lodash');
 
-// const {mongoose} = require('./db/mongoose');
-// const {Users} = require('./models/users');
-// const {sendmail} = require('./js/sendmail');
-// const {serverRunning} = require('./js/serverRunning');
-// const {uploadCloudinary} = require('./js/cloudinary');
+const {sheetGet,updateSheet} = require('./server/sheets.js');
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -18,6 +14,9 @@ app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 hbs.registerPartials(__dirname + '/views/partials');
 app.set('view engine','hbs');
+
+sheetGet('External');
+updateSheet('External','{name:qasim}');
 
 
 app.get('/',(req,res) => {
