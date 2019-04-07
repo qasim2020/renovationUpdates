@@ -17,7 +17,7 @@
       });
 
     </script>
-    
+
     <script type="text/javascript">
       ! function(o, c) {
         var n = c.documentElement,
@@ -63,7 +63,8 @@
       </div>
       <div>
         <div class="form new-form w-form d-none">
-          <form id="email-form-2" name="email-form-2" data-name="Email Form 2"><label for="name" class="field-label">New Construction</label><label>Project Name</label><select id="field-7" name="field-7" required="" class="w-select">
+          <form id="email-form-2" name="email-form-2" data-name="Email Form 2"><label for="name" class="field-label">New Construction</label><label>Project Name</label>
+            <select id="const-projName" name="field-7" required="" class="w-select">
               <option value="Bunker 1 Washroom">Bunker 1 Washroom</option>
               <option value="Entrance main Gate">Entrance main Gate</option>
               <option value="Car Park Shed">Car Park Shed</option>
@@ -72,14 +73,21 @@
               <option value="OFC / UG Laying">OFC / UG Laying</option>
               <option value="ODF of OFC and UG Installation">ODF of OFC and UG Installation</option>
               <option value="ODF / UG DPs">ODF / UG DPs</option>
-            </select><label>Responsibility</label><select id="field-7" name="field-7" required="" class="w-select">
+            </select>
+            <label>Responsibility</label>
+            <select id="const-resp" name="field-7" required="" class="w-select">
               <option value="MES">MES</option>
               <option value="Juke Box">Juke Box</option>
               <option value="78 Sigs">78 Sigs</option>
               <option value="Pak Arab">Pak Arab</option>
               <option value="Other">Other</option>
-            </select><label>Explain Here</label><input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="With measurements" id="field-2" required="" /><input type="submit" value="Add More"
-              data-wait="Please wait..." class="form-button w-button" /><input type="submit" value="Done" data-wait="Please wait..." class="form-button bg-success w-button" /></form>
+            </select>
+            <label>Explain Here</label>
+            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="With measurements" id="field-2" required="" />
+            <input type="submit" value="Add More" data-wait="Please wait..." class="form-button w-button" />
+            <input id="email-form-2-btn" type="button" value="Done" data-wait="Please wait..." class="form-button bg-success w-button" />
+          </form>
+
           <div class="w-form-done">
             <div>Thank you! Your submission has been received!</div>
           </div>
@@ -181,9 +189,9 @@
         <div class="div-block-4">
           <div class="div-block-5">
             <div><strong class="bold-text-2">Category: New Construction / Washrooms / External Repairs</strong></div>
-            <div><strong>Project Name: </strong>Main Entrance Gate</div>
-            <div><strong>Responsibility:</strong> Juke Box</div>
-            <div><strong>Explain:</strong> Shuttering work 200 sft done</div>
+            <div><strong>Project Name: </strong> <span class="text-3">Main Entrance Gate</span> </div>
+            <div><strong>Responsibility:</strong> <span class="text-4">MES</span> </div>
+            <div><strong>Explain:</strong> <span class="text-5">200 sft shuttering completed</span> </div>
           </div><a href="#" class="button bg-success w-button">Submit</a><a href="#" class="button bg-dafault w-button">Delete</a>
         </div>
         <div class="div-block-4 bg-success-light">
@@ -203,6 +211,8 @@
   crossorigin="anonymous"></script>
     <script>
 
+      $(`.field-label:contains('New Construction')`).closest('div').toggleClass('d-none d-block');
+
       $('#email-form').on('submit',function(e) {
         e.preventDefault();
         let val = $("input[type='radio']:checked").val();
@@ -212,6 +222,26 @@
         $('.new-form').removeClass('d-block').addClass('d-none');
         $(`.field-label:contains('${val}')`).closest('div').toggleClass('d-none d-block');
       });
+
+      $('#email-form-2').on('submit',function(e) {
+        e.preventDefault();
+        let val = [];
+        $(this).find('select').each(function(index) {
+          let myId = $(this).attr('id');
+          val[index] = $(`#${myId} option:selected`).val();
+        });
+        val[val.length] = $(this).find('input').val();
+
+        $('.div-block-4:eq(0)').clone().prependTo('.category-block');
+        $('.div-block-4:eq(0)').find('.bold-text-2').html(`Category: ${$(this).find('.field-label').html()}`);
+        $('.div-block-4:eq(0)').find('.text-3').html(val[0]);
+        $('.div-block-4:eq(0)').find('.text-4').html(val[1]);
+        $('.div-block-4:eq(0)').find('.text-5').html(val[2]);
+      });
+
+      $('#email-form-2-btn').on('click',function() {
+        console.log(this);
+      })
 
     </script>
   </body>
