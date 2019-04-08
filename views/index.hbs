@@ -93,8 +93,12 @@
       </div>
       <div>
         <div class="form new-form w-form d-none shadow">
-          <form id="email-form-2" name="email-form-2" data-name="Email Form 2"><label for="name" class="field-label">New Construction</label><label>Project Name</label>
+          <form id="email-form-2" name="email-form-2" data-name="Email Form 2">
+            <label for="name" class="field-label">New Construction</label>
+
+            <label>Project Name</label>
             <select id="const-projName" name="field-7" required="" class="w-select">
+              <option value>Select one...</option>
               <option value="Bunker 1 Washroom">Bunker 1 Washroom</option>
               <option value="Entrance main Gate">Entrance main Gate</option>
               <option value="Car Park Shed">Car Park Shed</option>
@@ -104,16 +108,20 @@
               <option value="ODF of OFC and UG Installation">ODF of OFC and UG Installation</option>
               <option value="ODF / UG DPs">ODF / UG DPs</option>
             </select>
+
             <label>Responsibility</label>
             <select id="const-resp" name="field-7" required="" class="w-select">
+              <option value>Select one...</option>
               <option value="MES">MES</option>
               <option value="Juke Box">Juke Box</option>
               <option value="78 Sigs">78 Sigs</option>
               <option value="Pak Arab">Pak Arab</option>
               <option value="Other">Other</option>
             </select>
+
             <label>Explain Here</label>
-            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="With measurements" id="field-2" required="" />
+            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="With measurements" id="const-explain" required="" />
+
             <input type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button"/>
             <input id="" type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark"/>
           </form>
@@ -128,8 +136,10 @@
         <div class="form new-form w-form d-none shadow">
           <form id="email-form-3" name="email-form-2" data-name="Email Form 2">
             <label for="name-4" class="field-label">External Uplift</label>
+
             <label>Project Name</label>
             <select id="ext-projName" name="field-7" required="" class="w-select">
+              <option value>Select one...</option>
               <option value="Boundary Wall Paint">Boundary Wall Paint</option>
               <option value="New Lintels">New Lintels</option>
               <option value="Bunker 2 Washroom">Bunker 2 Washroom</option>
@@ -141,17 +151,21 @@
               <option value="Bunker 3 Themed Wall">Bunker 3 Themed Wall</option>
               <option value="Grass Laying">Grass Laying</option>
             </select>
+
             <label>Responsibility</label>
             <select id="ext-resp" name="field-7" required="" class="w-select">
+              <option value>Select one...</option>
               <option value="MES">MES</option>
               <option value="Juke Box">Juke Box</option>
               <option value="78 Sigs">78 Sigs</option>
               <option value="Pak Arab">Pak Arab</option>
               <option value="Other">Other</option>
             </select>
+
             <label>Explain Here</label>
-            <input type="text" class="w-input" maxlength="256" name="field-5" data-name="Field 5" placeholder="With measurements" id="field-5" required="" /><input type="submit" value="Submit"
-              data-wait="Please wait..." class="form-button w-button" />
+            <input type="text" class="w-input" maxlength="256" name="field-5" data-name="Field 5" placeholder="With measurements" id="ext-explain" required="" />
+
+            <input type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button"/>
             <input type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark"/>
             </form>
           <div class="w-form-done">
@@ -181,6 +195,7 @@
 
             <label>Unit</label>
             <select id="bunker-resp" name="field-7" required="" class="w-select">
+              <option value>Select one...</option>
               <option value="Juke Box">Juke Box</option>
               <option value="MES">MES</option>
               <option value="Pak Arab">Pak Arab</option>
@@ -241,13 +256,7 @@
         </div>
       </div>
       <div class="category-block bg-primary">
-        <div class="div-block-4 bg-secondary">
-          <div class="div-block-5">
-            <div><h5><strong class="bold-text-2">Category: New Construction / Washrooms / External Repairs</strong></h5></div>
-          </div>
-          <a href="#" class="button bg-success w-button">Submit</a>
-          <a href="#" class="button bg-dafault w-button">Delete</a>
-        </div>
+
         <div class="div-block-4 bg-success-light">
           <div class="div-block-5">
             <div><strong class="bold-text-2">Category: External Uplift</strong></div>
@@ -258,7 +267,15 @@
         </div>
       </div>
 
-      <div class="text-3"><strong></strong> <span></span> </div>
+      <div class="div-block-4 bg-secondary d-none">
+        <div class="div-block-5">
+          <div><h5><strong class="bold-text-2">Category: New Construction / Washrooms / External Repairs</strong></h5></div>
+          <div class="text-3"><strong></strong> <span></span> </div>
+        </div>
+        <a href="#" class="button bg-success w-button">Submit</a>
+        <a href="#" class="button bg-dafault w-button">Delete</a>
+      </div>
+
     </div>
 
     <script
@@ -281,46 +298,46 @@
 
       $('#email-form-2').on('submit',function(e) {
         e.preventDefault();
-        let val = [];
-        $(this).find('select').each(function(index) {
-          let myId = $(this).attr('id');
-          val[index] = $(`#${myId} option:selected`).val();
-          $(`#${myId}`).find('option:eq(0)').attr('selected','selected');
+        $('.div-block-4:eq(-1)').clone().prependTo('.category-block');
+        $('.div-block-4:eq(0)').removeClass('d-none').find('.bold-text-2').html(`Category: ${$(this).find('.field-label').html()}`);
+        let data = {
+          'Project Name': $('#const-projName').val(),
+          'Responsibility': $('#const-resp').val(),
+          'Explaination': $('#const-explain').val(),
+        };
+        $.each(data,function(key,value) {
+          $(`.text-3:eq(-1)`).clone().appendTo('.div-block-5:eq(0)');
+          $('.div-block-4:eq(0)').find('.text-3:eq(-1)').children('span').html(value).siblings('strong').html(key+': ');
         });
-        val[val.length] = $(this).find('input:eq(0)').val();
-        console.log(val);
-        if (val[2] == '') return false;
-        $(this).find('input:eq(0)').val('');
-        $('.div-block-4:eq(0)').clone().prependTo('.category-block');
-        $('.div-block-4:eq(0)').find('.bold-text-2').html(`Category: ${$(this).find('.field-label').html()}`);
-        $('.div-block-4:eq(0)').find('.text-3:eq(0)').html(val[0]);
-        $('.div-block-4:eq(0)').find('.text-3:eq(1)').html(val[1]);
-        $('.div-block-4:eq(0)').find('.text-3:eq(2)').html(val[2]);
+        $('#const-resp').children('option:eq(0)').attr('selected',true);
+        $('#const-projName').children('option:eq(0)').attr('selected',true);
+        $('#const-explain').val('');
       });
 
       $('#email-form-3').on('submit',function(e) {
         e.preventDefault();
-        let val = [];
-        $(this).find('select').each(function(index) {
-          let myId = $(this).attr('id');
-          val[index] = $(`#${myId} option:selected`).val();
-          $(`#${myId}`).find('option:eq(0)').attr('selected','selected');
+        $('.div-block-4:eq(-1)').clone().prependTo('.category-block');
+        $('.div-block-4:eq(0)').removeClass('d-none').find('.bold-text-2').html(`Category: ${$(this).find('.field-label').html()}`);
+        let data = {
+          'Project Name': $('#ext-projName').val(),
+          'Responsibility': $('#ext-resp').val(),
+          'Explaination': $('#ext-explain').val(),
+        };
+        $.each(data,function(key,value) {
+          $(`.text-3:eq(-1)`).clone().appendTo('.div-block-5:eq(0)');
+          $('.div-block-4:eq(0)').find('.text-3:eq(-1)').children('span').html(value).siblings('strong').html(key+': ');
         });
-        val[val.length] = $(this).find('input:eq(0)').val();
-        console.log(val);
-        if (val[2] == '') return false;
-        $(this).find('input:eq(0)').val('');
-        $('.div-block-4:eq(0)').clone().prependTo('.category-block');
-        $('.div-block-4:eq(0)').find('.bold-text-2').html(`Category: ${$(this).find('.field-label').html()}`);
-        $('.div-block-4:eq(0)').find('.text-3:eq(0)').html(val[0]);
-        $('.div-block-4:eq(0)').find('.text-3:eq(1)').html(val[1]);
-        $('.div-block-4:eq(0)').find('.text-3:eq(2)').html(val[2]);
+
+        $('#ext-resp').children('option:eq(0)').attr('selected',true);
+        $('#ext-projName').children('option:eq(0)').attr('selected',true);
+        $('#ext-explain').val('');
+
       });
 
       $('#email-form-4').on('submit',function(e) {
         e.preventDefault();
-        $('.div-block-4:eq(0)').clone().prependTo('.category-block');
-        $('.div-block-4:eq(0)').find('.bold-text-2').html(`Category: ${$(this).find('.field-label').html()}`);
+        $('.div-block-4:eq(-1)').clone().prependTo('.category-block');
+        $('.div-block-4:eq(0)').removeClass('d-none').find('.bold-text-2').html(`Category: ${$(this).find('.field-label').html()}`);
         let data = {
           'Bunker No': $('#bunkerNo').val(),
           'Type of Work': $('#bunker-work').val(),
@@ -331,6 +348,10 @@
           $(`.text-3:eq(-1)`).clone().appendTo('.div-block-5:eq(0)');
           $('.div-block-4:eq(0)').find('.text-3:eq(-1)').children('span').html(value).siblings('strong').html(key+': ');
         });
+        $('#bunkerNo').children('option:eq(0)').attr('selected',true);
+        $('#bunker-work').val('');
+        $('#bunker-resp').val('Juke Box');
+        $('#bunker-remarks').val('');
       });
 
       $('.email-form-2-btn').on('click',function() {
