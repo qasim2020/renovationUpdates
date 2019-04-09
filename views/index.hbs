@@ -119,11 +119,31 @@
               <option value="Other">Other</option>
             </select>
 
-            <label>Explain Here</label>
-            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="With measurements" id="const-explain" required="" />
+            <label>Work</label>
+            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Roof shuttering done 60 %" id="const-work" required="" />
 
-            <input type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button"/>
-            <input id="" type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark"/>
+            <label>Quantity</label>
+            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="350" id="const-qty" required="" />
+
+            <label>Unit</label>
+            <select id="const-unit" name="field-7" required="" class="w-select">
+              <option value>Select one...</option>
+              <option value="sft">sft</option>
+              <option value="cft">cft</option>
+              <option value="rft">rft</option>
+              <option value="large bags">large bags</option>
+              <option value="small bags">small bags</option>
+              <option value="truck">truck</option>
+              <option value="trolley">trolley</option>
+              <option value="units">units</option>
+              <option value="Other">Other (please mention in remarks)</option>
+            </select>
+
+            <label>Remarks</label>
+            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Work is in progress" id="const-remarks" required="" />
+
+            <button type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button">Submit</button>
+            <button id="" type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark">X</button>
           </form>
 
           <div class="w-form-done">
@@ -162,11 +182,32 @@
               <option value="Other">Other</option>
             </select>
 
-            <label>Explain Here</label>
-            <input type="text" class="w-input" maxlength="256" name="field-5" data-name="Field 5" placeholder="With measurements" id="ext-explain" required="" />
+            <label>Work</label>
+            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Roof shuttering done 60 %" id="ext-work" required="" />
 
-            <input type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button"/>
-            <input type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark"/>
+            <label>Quantity</label>
+            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="350" id="ext-qty" required="" />
+
+            <label>Unit</label>
+            <select id="ext-unit" name="field-7" required="" class="w-select">
+              <option value>Select one...</option>
+              <option value="sft">sft</option>
+              <option value="cft">cft</option>
+              <option value="rft">rft</option>
+              <option value="large bags">large bags</option>
+              <option value="small bags">small bags</option>
+              <option value="truck">truck</option>
+              <option value="trolley">trolley</option>
+              <option value="units">units</option>
+              <option value="Other">Other (please mention in remarks)</option>
+            </select>
+
+            <label>Remarks</label>
+            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Work is in progress" id="ext-remarks" required="" />
+
+            <button type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button">Submit</button>
+            <button id="" type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark">X</button>
+
             </form>
           <div class="w-form-done">
             <div>Thank you! Your submission has been received!</div>
@@ -180,34 +221,51 @@
             <label for="name-3" class="field-label">Bunkers Works</label>
 
             <label>Bunker Number</label>
-            <select id="bunkerNo" name="field-6" required="" class="w-select">
+            <select id="bunker-no" name="field-6" required="" class="w-select">
               <option value="">Select one...</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
+              <option value="Bunker 1">1</option>
+              <option value="Bunker 2">2</option>
+              <option value="Bunker 3">3</option>
+              <option value="Bunker 4">4</option>
+              <option value="Bunker 5">5</option>
+              <option value="Bunker 6">6</option>
             </select>
 
-            <label>Type of Work</label>
-            <input type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Wall putty etc" id="bunker-work" required="" />
-
-            <label>Unit</label>
+            <label>Responsibility</label>
             <select id="bunker-resp" name="field-7" required="" class="w-select">
               <option value>Select one...</option>
-              <option value="Juke Box">Juke Box</option>
               <option value="MES">MES</option>
-              <option value="Pak Arab">Pak Arab</option>
+              <option value="Juke Box">Juke Box</option>
               <option value="78 Sigs">78 Sigs</option>
+              <option value="Pak Arab">Pak Arab</option>
               <option value="Other">Other</option>
+            </select>
+
+            <label>Work</label>
+            <input type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Wall putty etc" id="bunker-work" required="" />
+
+            <label>Quantity</label>
+            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="350" id="bunker-qty" required="" />
+
+            <label>Unit</label>
+            <select id="bunker-unit" name="field-7" required="" class="w-select">
+              <option value>Select one...</option>
+              <option value="sft">sft</option>
+              <option value="cft">cft</option>
+              <option value="rft">rft</option>
+              <option value="large bags">large bags</option>
+              <option value="small bags">small bags</option>
+              <option value="truck">truck</option>
+              <option value="trolley">trolley</option>
+              <option value="units">units</option>
+              <option value="Other">Other (please mention in remarks)</option>
             </select>
 
             <label>Remarks</label>
             <input type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Any thing" id="bunker-remarks" />
 
-            <input type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button" />
-            <input type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark"/>
+            <button type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button">Submit</button>
+            <button id="" type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark">X</button>
 
           </form>
           <div class="w-form-done">
@@ -218,22 +276,49 @@
           </div>
         </div>
         <div class="form new-form w-form d-none shadow">
-          <form id="email-form-2" name="email-form-2" data-name="Email Form 2" class="form-2"><label for="name-2" class="field-label">Material Entered the Complex</label><label>Owner</label><select id="field-7" name="field-7" required=""
-              class="w-select">
+          <form id="email-form-5" name="email-form-2" data-name="Email Form 2" class="form-2">
+
+            <label for="name-2" class="field-label">Material Entered the Complex</label>
+
+            <label>Owner</label>
+            <select id="mat-resp" name="field-7" required="" class="w-select">
               <option value="Juke Box">Juke Box</option>
               <option value="MES">MES</option>
               <option value="Pak Arab">Pak Arab</option>
               <option value="78 Sigs">78 Sigs</option>
               <option value="Other">Other</option>
-            </select><label>Material</label><input type="text" class="text-field w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Cement / Sand etc" id="field-3" required="" />
+            </select>
+
+            <label>Material</label>
+            <input type="text" class="text-field w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Cement / Sand etc" id="mat-name" required="" />
             <div class="div-block-6">
               <ul class="list material-results">
                 <li class="search-results">Cement</li>
                 <li class="search-results">Sand</li>
                 <li class="search-results">Iron Rods</li>
               </ul>
-            </div><label>Quantity</label><input type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="sft/ cft / bags / trolleys etc" id="field-3" required="" /><input type="submit" value="Submit"
-              data-wait="Please wait..." class="form-button w-button" /><input type="submit" value="Next" data-wait="Please wait..." class="form-button bg-success w-button" />
+            </div>
+
+            <label>Quantity</label>
+            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="350" id="mat-qty" required="" />
+
+            <label>Unit</label>
+            <select id="mat-unit" name="field-7" required="" class="w-select">
+              <option value>Select one...</option>
+              <option value="sft">sft</option>
+              <option value="cft">cft</option>
+              <option value="rft">rft</option>
+              <option value="large bags">large bags</option>
+              <option value="small bags">small bags</option>
+              <option value="truck">truck</option>
+              <option value="trolley">trolley</option>
+              <option value="units">units</option>
+              <option value="Other">Other (please mention in remarks)</option>
+            </select>
+
+            <button type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button">Submit</button>
+            <button id="" type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark">X</button>
+
           </form>
           <div class="w-form-done">
             <div>Thank you! Your submission has been received!</div>
@@ -272,8 +357,8 @@
           <div><h5><strong class="bold-text-2">Category: New Construction / Washrooms / External Repairs</strong></h5></div>
           <div class="text-3"><strong></strong> <span></span> </div>
         </div>
-        <a href="#" class="button bg-success w-button">Submit</a>
-        <a href="#" class="button bg-dafault w-button">Delete</a>
+        <button type="button" class="data-submit button bg-success w-button">Submit</button>
+        <button type="button" class="data-delete bg-danger button w-button">Delete</button>
       </div>
 
     </div>
@@ -283,8 +368,6 @@
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
     <script>
-
-      $(`.field-label:contains('Bunkers Works')`).closest('div').toggleClass('d-none d-block');
 
       $('#email-form').on('submit',function(e) {
         e.preventDefault();
@@ -303,15 +386,22 @@
         let data = {
           'Project Name': $('#const-projName').val(),
           'Responsibility': $('#const-resp').val(),
-          'Explaination': $('#const-explain').val(),
+          'Work': $('#const-work').val(),
+          'Quantity': $('#const-qty').val(),
+          'Unit': $('#const-unit').val(),
+          'Remarks': $('#const-remarks').val()
         };
         $.each(data,function(key,value) {
           $(`.text-3:eq(-1)`).clone().appendTo('.div-block-5:eq(0)');
           $('.div-block-4:eq(0)').find('.text-3:eq(-1)').children('span').html(value).siblings('strong').html(key+': ');
         });
-        $('#const-resp').children('option:eq(0)').attr('selected',true);
-        $('#const-projName').children('option:eq(0)').attr('selected',true);
-        $('#const-explain').val('');
+        $(this).find('option').each(function() {
+          $(this).attr('selected',true);
+        });
+        $(this).find('input').each(function(){
+          $(this).val('');
+        });
+
       });
 
       $('#email-form-3').on('submit',function(e) {
@@ -321,16 +411,22 @@
         let data = {
           'Project Name': $('#ext-projName').val(),
           'Responsibility': $('#ext-resp').val(),
-          'Explaination': $('#ext-explain').val(),
+          'Work': $('#ext-work').val(),
+          'Quantity': $('#ext-qty').val(),
+          'Unit': $('#ext-unit').val(),
+          'Remarks': $('#ext-remarks').val()
         };
         $.each(data,function(key,value) {
           $(`.text-3:eq(-1)`).clone().appendTo('.div-block-5:eq(0)');
           $('.div-block-4:eq(0)').find('.text-3:eq(-1)').children('span').html(value).siblings('strong').html(key+': ');
         });
 
-        $('#ext-resp').children('option:eq(0)').attr('selected',true);
-        $('#ext-projName').children('option:eq(0)').attr('selected',true);
-        $('#ext-explain').val('');
+        $(this).find('option').each(function() {
+          $(this).attr('selected',true);
+        });
+        $(this).find('input').each(function(){
+          $(this).val('');
+        });
 
       });
 
@@ -340,23 +436,76 @@
         $('.div-block-4:eq(0)').removeClass('d-none').find('.bold-text-2').html(`Category: ${$(this).find('.field-label').html()}`);
         let data = {
           'Bunker No': $('#bunkerNo').val(),
-          'Type of Work': $('#bunker-work').val(),
-          'Unit': $('#bunker-resp').val(),
+          'Responsibility': $('#bunker-resp').val(),
+          'Work': $('#bunker-work').val(),
+          'Quantity': $('#bunker-qty').val(),
+          'Unit': $('#bunker-unit').val(),
           'Remarks': $('#bunker-remarks').val()
         };
         $.each(data,function(key,value) {
           $(`.text-3:eq(-1)`).clone().appendTo('.div-block-5:eq(0)');
           $('.div-block-4:eq(0)').find('.text-3:eq(-1)').children('span').html(value).siblings('strong').html(key+': ');
         });
-        $('#bunkerNo').children('option:eq(0)').attr('selected',true);
-        $('#bunker-work').val('');
-        $('#bunker-resp').val('Juke Box');
-        $('#bunker-remarks').val('');
+
+        $(this).find('option').each(function() {
+          $(this).attr('selected',true);
+        });
+        $(this).find('input').each(function(){
+          $(this).val('');
+        });
+      });
+
+      $('#email-form-5').on('submit',function(e) {
+        e.preventDefault();
+        $('.div-block-4:eq(-1)').clone().prependTo('.category-block');
+        $('.div-block-4:eq(0)').removeClass('d-none').find('.bold-text-2').html(`Category: ${$(this).find('.field-label').html()}`);
+        let data = {
+          'Material': $('#mat-name').val(),
+          'Owner': $('#mat-resp').val(),
+          'Quantity': $('#mat-qty').val(),
+          'Units': $('#mat-unit').val(),
+        };
+        $.each(data,function(key,value) {
+          $(`.text-3:eq(-1)`).clone().appendTo('.div-block-5:eq(0)');
+          $('.div-block-4:eq(0)').find('.text-3:eq(-1)').children('span').html(value).siblings('strong').html(key+': ');
+        });
+
+        $(this).find('option').each(function() {
+          $(this).attr('selected',true);
+        });
+        $(this).find('input').each(function(){
+          $(this).val('');
+        });
       });
 
       $('.email-form-2-btn').on('click',function() {
         $(this).closest('div').toggleClass('d-none d-block');
-      })
+      });
+
+      $(`.field-label:contains('New Construction')`).closest('div').toggleClass('d-none d-block');
+      $('#const-projName').val('Bunker 1 Washroom');
+      $('#const-resp').val('MES');
+      $('#const-work').val('a lot of work done on foundations today');
+      $('#const-qty').val('300');
+      $('#const-unit').val('sft');
+      $('#const-remarks').val('it was their first day of work today');
+
+      $('.data-submit').on('click',function() {
+        console.log('hello');
+        let category = $(this).closest('.div-block-4').find('.bold-text-2').html();
+        $(this).closest('.div-block-4').find('.text-3').each(function() {
+          console.log($(this).children('strong').html(),$(this).children('span').html());
+        });
+      });
+
+      // <div class="div-block-4 bg-secondary d-none">
+      //   <div class="div-block-5">
+      //     <div><h5><strong class="bold-text-2">Category: New Construction / Washrooms / External Repairs</strong></h5></div>
+      //     <div class="text-3"><strong></strong> <span></span> </div>
+      //   </div>
+      //   <button type="button" class="data-submit button bg-success w-button">Submit</button>
+      //   <button type="button" class="data-delete button bg-success w-button">Delete</button>
+      // </div>
 
     </script>
   </body>
