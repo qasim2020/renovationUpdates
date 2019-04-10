@@ -14,27 +14,31 @@ let sheets = {
 };
 
 function sheet(name,type,values) {
-  fs.readFile('config/credentials.json', (err, content) => {
-    if (err) return console.log('Error loading client secret file:', err);
-    let data = {
-      content: JSON.parse(content),
-      values: values,
-      sheet: sheets[`${name}`]
-    };
-    if (type == 'read') return authorize(data, readSheet);
-    if (type == 'update') return authorize(data,updateSheet);
+  return new Promise((resolve, reject) => {
+    fs.readFile('config/credentials.json', (err, content) => {
+      if (err) return console.log('Error loading client secret file:', err);
+      let data = {
+        content: JSON.parse(content),
+        values: values,
+        sheet: sheets[`${name}`]
+      };
+      if (type == 'read') return resolve(authorize(data, readSheet));
+      if (type == 'update') return resolve(authorize(data,updateSheet));
+    });
   });
 }
 
 function authorize(credentials, callback) {
-  const {client_secret, client_id, redirect_uris} = credentials.content.installed;
-  const oAuth2Client = new google.auth.OAuth2(
-      client_id, client_secret, redirect_uris[0]);
+  return new Promise((resolve,reject) => {
+    const {client_secret, client_id, redirect_uris} = credentials.content.installed;
+    const oAuth2Client = new google.auth.OAuth2(
+        client_id, client_secret, redirect_uris[0]);
 
-  fs.readFile(TOKEN_PATH, (err, token) => {
-    if (err) return getNewToken(oAuth2Client, callback);
-    oAuth2Client.setCredentials(JSON.parse(token));
-    callback(oAuth2Client,credentials);
+    fs.readFile(TOKEN_PATH, (err, token) => {
+      if (err) return getNewToken(oAuth2Client, callback);
+      oAuth2Client.setCredentials(JSON.parse(token));
+      return resolve(callback(oAuth2Client,credentials));
+    });
   });
 };
 
@@ -81,20 +85,22 @@ function readSheet(auth, value) {
 };
 
 function updateSheet(auth,value) {
-  const sheets = google.sheets({version: 'v4', auth});
-  console.log(value.values);
-  let values = value.values;
-  const resource = {
-    values,
-  };
-  sheets.spreadsheets.values.append({
-    spreadsheetId: value.sheet,
-    range: "A1:F1",
-    valueInputOption: "RAW",
-    resource,
-  }, (err, res) => {
-    if (err) return console.log('The API returned an error: ' + err);
-    console.log(res.data);
+  return new Promise((resolve,reject) => {
+    const sheets = google.sheets({version: 'v4', auth});
+    console.log(value.values);
+    let values = value.values;
+    const resource = {
+      values,
+    };
+    sheets.spreadsheets.values.append({
+      spreadsheetId: value.sheet,
+      range: "A:Z",
+      valueInputOption: "RAW",
+      resource,
+    }, (err, res) => {
+      if (err) return reject('The API returned an error: ' + err);
+      resolve(res.data);
+    });
   });
 };
 

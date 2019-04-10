@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const hbs = require('hbs');
 const _ = require('lodash');
+const moment = require('moment');
 
 const {sheet} = require('./server/sheets.js');
 
@@ -26,14 +27,21 @@ app.set('view engine','hbs');
 
 app.get('/',(req,res) => {
   console.log('home page opened');
-  res.render('index.hbs');
+  let dateToday = moment().format('YYYY-MM-DD');
+  res.render('index.hbs',{dateToday});
 });
 
-app.get('/data',(req,res) => {
-  console.log(req.body);
-  res.status(200).send(req.body);
-})
+app.post('/data',(req,res) => {
+  _.pick(req.body,['date','category','name','responsibility','work','quantity','unit','remarks']);
+  var arr = _.values(req.body);
+  sheet('external','update',[arr]).then((msg) => {
+    return res.status(200).send(msg);
+  }).catch((e) => {
+    console.log(e);
+    return res.status(400).send(e);
+  })
+});
 
 app.listen(port, () => {
   console.log(`listening on port ${port}...`);
-})
+});

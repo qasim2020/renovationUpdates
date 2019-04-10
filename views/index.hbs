@@ -54,6 +54,15 @@
         background: #FFFFFF !important;
       }
 
+      .btn-danger {
+
+        margin-right: 5px;
+        border-radius: 20px;
+        background-color: red;
+        border: 1px solid #F4FAFF !important;
+
+      }
+
       .text-dark {
         color: #333333;
       }
@@ -66,15 +75,25 @@
           opacity: 0.3 !important;
       }
 
+      .text-center {
+        text-align: center;
+      }
+
     </style>
   </head>
 
   <body class="body bg-primary">
     <div class="container w-container">
-      <h1 class="heading">Renovation Update</h1>
+      <!-- <h1 class="heading">Renovation Update</h1> -->
+      <h3 class="text-center"> Upload Date:- <input id="upload-date" type="date" name="bday" value="{{dateToday}}"/></h3>
+
+
+
       <div>
         <div class="w-form">
+
           <form id="email-form" name="email-form" data-name="Email Form" class="form shadow"><label for="name" class="field-label">Category</label>
+
             <div class="radio-button-field w-radio"><input type="radio" id="radio-2" name="radio" value="New Construction" data-name="Radio" class="w-radio-input" /><label for="radio-2" class="w-form-label">New Construction</label></div>
             <div class="radio-button-field w-radio"><input type="radio" id="radio" name="radio" value="External Uplift" data-name="Radio" class="w-radio-input" /><label for="radio" class="w-form-label">External Uplift</label></div>
             <div class="radio-button-field w-radio"><input type="radio" id="radio-3" name="radio" value="Bunkers Works" data-name="Radio" class="w-radio-input" /><label for="radio-3" class="w-form-label">Bunkers Works</label></div>
@@ -97,7 +116,7 @@
             <label for="name" class="field-label">New Construction</label>
 
             <label>Project Name</label>
-            <select id="const-projName" name="field-7" required="" class="w-select">
+            <select data-name="name" id="const-projName" name="field-7" required="" class="w-select">
               <option value>Select one...</option>
               <option value="Bunker 1 Washroom">Bunker 1 Washroom</option>
               <option value="Entrance main Gate">Entrance main Gate</option>
@@ -110,7 +129,7 @@
             </select>
 
             <label>Responsibility</label>
-            <select id="const-resp" name="field-7" required="" class="w-select">
+            <select data-name="responsibility" id="const-resp" name="field-7" required="" class="w-select">
               <option value>Select one...</option>
               <option value="MES">MES</option>
               <option value="Juke Box">Juke Box</option>
@@ -120,13 +139,13 @@
             </select>
 
             <label>Work</label>
-            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Roof shuttering done 60 %" id="const-work" required="" />
+            <input data-name="work" type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Roof shuttering done 60 %" id="const-work" required="" />
 
             <label>Quantity</label>
-            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="350" id="const-qty" required="" />
+            <input data-name="quantity" type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="350" id="const-qty" required="" />
 
             <label>Unit</label>
-            <select id="const-unit" name="field-7" required="" class="w-select">
+            <select data-name="unit" id="const-unit" name="field-7" required="" class="w-select">
               <option value>Select one...</option>
               <option value="sft">sft</option>
               <option value="cft">cft</option>
@@ -140,7 +159,7 @@
             </select>
 
             <label>Remarks</label>
-            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Work is in progress" id="const-remarks" required="" />
+            <input data-name="remarks" type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Work is in progress" id="const-remarks" required="" />
 
             <button type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button">Submit</button>
             <button id="" type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark">X</button>
@@ -342,24 +361,17 @@
       </div>
       <div class="category-block bg-primary">
 
-        <div class="div-block-4 bg-success-light">
-          <div class="div-block-5">
-            <div><strong class="bold-text-2">Category: External Uplift</strong></div>
-            <div><strong>Project Name:</strong> Washroom beside Bunker 1</div>
-            <div><strong>Responsibility:</strong> MES</div>
-            <div><strong>Explain:</strong> 200 sft brick wall erected</div>
-          </div><a href="#" class="button bg-success w-button">Saved</a>
-        </div>
       </div>
 
       <div class="div-block-4 bg-secondary d-none">
         <div class="div-block-5">
           <div><h5><strong class="bold-text-2">Category: New Construction / Washrooms / External Repairs</strong></h5></div>
-          <div class="text-3"><strong></strong> <span></span> </div>
         </div>
-        <button type="button" class="data-submit button bg-success w-button">Submit</button>
-        <button type="button" class="data-delete bg-danger button w-button">Delete</button>
+        <button type="button" class="btn-submit button bg-success w-button">Submit</button>
+        <button type="button" class="btn-delete button btn-danger w-button">Delete</button>
       </div>
+
+      <div class="text-3"><strong></strong> <span></span> </div>
 
     </div>
 
@@ -384,19 +396,21 @@
         $('.div-block-4:eq(-1)').clone().prependTo('.category-block');
         $('.div-block-4:eq(0)').removeClass('d-none').find('.bold-text-2').html(`Category: ${$(this).find('.field-label').html()}`);
         let data = {
-          'Project Name': $('#const-projName').val(),
-          'Responsibility': $('#const-resp').val(),
-          'Work': $('#const-work').val(),
-          'Quantity': $('#const-qty').val(),
-          'Unit': $('#const-unit').val(),
-          'Remarks': $('#const-remarks').val()
+          'Project Name': $('#const-projName').val() + '$' + $('#const-projName').attr('data-name'),
+          'Responsibility': $('#const-resp').val() + '$' + $('#const-resp').attr('data-name'),
+          'Work': $('#const-work').val() + '$' + $('#const-work').attr('data-name'),
+          'Quantity': $('#const-qty').val() + '$' + $('#const-qty').attr('data-name'),
+          'Unit': $('#const-unit').val() + '$' + $('#const-unit').attr('data-name'),
+          'Remarks': $('#const-remarks').val() + '$' + $('#const-remarks').attr('data-name'),
         };
         $.each(data,function(key,value) {
           $(`.text-3:eq(-1)`).clone().appendTo('.div-block-5:eq(0)');
-          $('.div-block-4:eq(0)').find('.text-3:eq(-1)').children('span').html(value).siblings('strong').html(key+': ');
+          // console.log(value.split($)[1]);
+          $('.div-block-4:eq(0)').find('.text-3:eq(-1)').children('span').html(value.split('$')[0]).data({'myName':value.split('$')[1]}).siblings('strong').html(key+': ');
         });
-        $(this).find('option').each(function() {
-          $(this).attr('selected',true);
+
+        $(this).find('select').each(function() {
+          $(this).find('option:eq(0)').attr('selected',true);
         });
         $(this).find('input').each(function(){
           $(this).val('');
@@ -490,21 +504,54 @@
       $('#const-unit').val('sft');
       $('#const-remarks').val('it was their first day of work today');
 
-      $('.data-submit').on('click',function() {
-        console.log('hello');
+      $(document).on('click','.btn-submit',function() {
         let category = $(this).closest('.div-block-4').find('.bold-text-2').html();
+        // date','category','name','responsibility','work','quantity','unit','remarks'
+        let data = {
+          date: $('#upload-date').val(),
+          category,
+        };
+
         $(this).closest('.div-block-4').find('.text-3').each(function() {
-          console.log($(this).children('strong').html(),$(this).children('span').html());
+          let key = $(this).children('span').data().myName;
+          let value = $(this).children('span').html();
+          data[key] = value;
         });
+
+        // console.log(data);
+
+        data = JSON.stringify(data);
+        $.ajax({
+            url: '/data',
+            type: 'post',
+            data,
+            headers: {
+                'content-type': 'application/json',
+            }
+          }).done((res) => {
+            console.log(res);
+            $(this).closest('.div-block-4').toggleClass('bg-success-light bg-secondary');
+            $(this).html('Saved.').attr('disabled',true).siblings('button').remove();
+            // $('.saving-data').addClass('d-none').animate({opacity: 1}, 500, 'linear');
+            // $('.saving-done').html('<i class="fas fa-check-circle"></i> Published');
+            // let picId = $('.image').data().public_id;
+            // return window.location.assign(`/picture/${picId},{{token}}`);
+          }).fail((e) => {
+            console.log(e.responseText);
+          });
       });
 
-      // <div class="div-block-4 bg-secondary d-none">
+      $(document).on('click','.btn-delete',function() {
+        $(this).closest('.div-block-4').remove();
+      });
+
+      // <div class="div-block-4 bg-success-light">
       //   <div class="div-block-5">
-      //     <div><h5><strong class="bold-text-2">Category: New Construction / Washrooms / External Repairs</strong></h5></div>
-      //     <div class="text-3"><strong></strong> <span></span> </div>
-      //   </div>
-      //   <button type="button" class="data-submit button bg-success w-button">Submit</button>
-      //   <button type="button" class="data-delete button bg-success w-button">Delete</button>
+      //     <div><strong class="bold-text-2">Category: External Uplift</strong></div>
+      //     <div><strong>Project Name:</strong> Washroom beside Bunker 1</div>
+      //     <div><strong>Responsibility:</strong> MES</div>
+      //     <div><strong>Explain:</strong> 200 sft brick wall erected</div>
+      //   </div><a href="#" class="button bg-success w-button">Saved</a>
       // </div>
 
     </script>
