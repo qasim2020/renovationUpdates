@@ -32,8 +32,9 @@ app.get('/',(req,res) => {
 });
 
 app.post('/data',(req,res) => {
-  _.pick(req.body,['date','category','name','responsibility','work','quantity','unit','remarks']);
+  _.pick(req.body,['timestamp','date','category','name','responsibility','work','quantity','unit','remarks']);
   var arr = _.values(req.body);
+  console.log(arr);
   sheet('external','update',[arr]).then((msg) => {
     return res.status(200).send(msg);
   }).catch((e) => {
