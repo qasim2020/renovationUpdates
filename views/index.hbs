@@ -590,7 +590,7 @@
         $(this).closest('div').toggleClass('d-none d-block');
       });
 
-      // $(`.field-label:contains('Material In')`).closest('div').toggleClass('d-none d-block');
+      // $(`.field-label:contains('New Construction')`).closest('div').toggleClass('d-none d-block');
       //
       // $('#const-projName').val('Bunker 1 Washroom');
       // $('#const-resp').val('MES');
@@ -604,7 +604,7 @@
           height: $('.div-block-4').outerHeight(),
           width: $('.div-block-4').outerWidth()
         });
-        let category = $(this).closest('.div-block-4').find('.bold-text-2').html().split('category: ')[1];
+        let category = $(this).closest('.div-block-4').find('.bold-text-2').html().split('Category: ')[1];
         // date','category','name','responsibility','work','quantity','unit','remarks'
         let data = {
           timestamp: new Date().toString(),
