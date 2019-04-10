@@ -8,7 +8,7 @@ const TOKEN_PATH = 'token.json';
 
 let sheets = {
   bunkers: '1hTznrKNzJDImMyHuEg3yiktJf2nWfB8N0OWIjxu6uJ0',
-  external: '1v-LIx1IzkAgr9V-E_1WD0GDV6BYCU7mktJyEnumMRBw',
+  external: '1-ViuHnzTD-6OpRC7nnfj2BzQxMKthfmCAyzGwSGRceU',
   construction: '1-ViuHnzTD-6OpRC7nnfj2BzQxMKthfmCAyzGwSGRceU',
   material: '10f4xlmbpb_1Lu8raDjk5ofxBZA1REIOZzUilm_lMzIs'
 };

@@ -54,6 +54,11 @@
         background: #FFFFFF !important;
       }
 
+      .bg-dark {
+        border-radius: 11px;
+        background-color: rgba(0, 0, 0, 0.76);
+      }
+
       .btn-danger {
 
         margin-right: 5px;
@@ -79,13 +84,81 @@
         text-align: center;
       }
 
+      #upload-date {
+        border-radius: 20px;
+        border: none;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.26);
+      }
+
+      .lds-ellipsis {
+        display: inline-block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        width: 64px;
+        height: 64px;
+      }
+      .lds-ellipsis div {
+        position: absolute;
+        width: 11px;
+        height: 11px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        border-radius: 50%;
+        background: white;
+        animation-timing-function: cubic-bezier(0, 1, 1, 0);
+      }
+      .lds-ellipsis div:nth-child(1) {
+        left: 6px;
+        animation: lds-ellipsis1 0.6s infinite;
+      }
+      .lds-ellipsis div:nth-child(2) {
+        left: 6px;
+        animation: lds-ellipsis2 0.6s infinite;
+      }
+      .lds-ellipsis div:nth-child(3) {
+        left: 26px;
+        animation: lds-ellipsis2 0.6s infinite;
+      }
+      .lds-ellipsis div:nth-child(4) {
+        left: 45px;
+        animation: lds-ellipsis3 0.6s infinite;
+      }
+      @keyframes lds-ellipsis1 {
+        0% {
+          transform: scale(0);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      @keyframes lds-ellipsis3 {
+        0% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(0);
+        }
+      }
+      @keyframes lds-ellipsis2 {
+        0% {
+          transform: translate(0, 0);
+        }
+        100% {
+          transform: translate(19px, 0);
+        }
+      }
+
+
     </style>
   </head>
 
   <body class="body bg-primary">
     <div class="container w-container">
       <!-- <h1 class="heading">Renovation Update</h1> -->
-      <h3 class="text-center"> Upload Date:- <input id="upload-date" type="date" name="bday" value="{{dateToday}}"/></h3>
+      <h3 class="text-center"> Date <input class="text-center" id="upload-date" type="date" name="bday" value="{{dateToday}}"/></h3>
 
 
 
@@ -97,7 +170,7 @@
             <div class="radio-button-field w-radio"><input type="radio" id="radio-2" name="radio" value="New Construction" data-name="Radio" class="w-radio-input" /><label for="radio-2" class="w-form-label">New Construction</label></div>
             <div class="radio-button-field w-radio"><input type="radio" id="radio" name="radio" value="External Uplift" data-name="Radio" class="w-radio-input" /><label for="radio" class="w-form-label">External Uplift</label></div>
             <div class="radio-button-field w-radio"><input type="radio" id="radio-3" name="radio" value="Bunkers Works" data-name="Radio" class="w-radio-input" /><label for="radio-3" class="w-form-label">Bunkers Works</label></div>
-            <div class="radio-button-field w-radio"><input type="radio" id="radio-4" name="radio" value="Material Entered the Complex" data-name="Radio" class="w-radio-input" /><label for="radio-4" class="w-form-label">Material Entered the Complex</label></div>
+            <div class="radio-button-field w-radio"><input type="radio" id="radio-4" name="radio" value="Material In" data-name="Radio" class="w-radio-input" /><label for="radio-4" class="w-form-label">Material In</label></div>
             <div class="radio-button-field w-radio d-none"><input type="radio" id="radio-5" name="radio" value="Labour Attendance" data-name="Radio" class="w-radio-input" /><label for="radio-5" class="w-form-label">Labour Attendance</label>
             </div>
             <input type="submit" value="Next" data-wait="Please wait..." class="form-button w-button" />
@@ -122,10 +195,19 @@
               <option value="Entrance main Gate">Entrance main Gate</option>
               <option value="Car Park Shed">Car Park Shed</option>
               <option value="Pathways">Pathways</option>
-              <option value="Mosque">Mosque</option>
+              <option value="FHCC Mosque">FHCC Mosque</option>
               <option value="OFC / UG Laying">OFC / UG Laying</option>
               <option value="ODF of OFC and UG Installation">ODF of OFC and UG Installation</option>
-              <option value="ODF / UG DPs">ODF / UG DPs</option>
+              <option value="Unit Mosque">Unit Mosque</option>
+              <option value="MT Washing Pit">MT Washing Pit</option>
+              <option value="MT Shed">MT Shed</option>
+              <option value="Cook House">Cook House</option>
+              <option value="Dining Hall">Dining Hall</option>
+              <option value="Stores in Hangers">Stores in Hangers</option>
+              <option value="Quarter Gd">Quarter Gd</option>
+              <option value="POL Store">POL Store</option>
+              <option value="Metalled Road">Metalled Road</option>
+              <option value="other">other...</option>
             </select>
 
             <label>Responsibility</label>
@@ -177,14 +259,10 @@
             <label for="name-4" class="field-label">External Uplift</label>
 
             <label>Project Name</label>
-            <select id="ext-projName" name="field-7" required="" class="w-select">
+            <select data-name="name" id="ext-projName" name="field-7" required="" class="w-select">
               <option value>Select one...</option>
               <option value="Boundary Wall Paint">Boundary Wall Paint</option>
               <option value="New Lintels">New Lintels</option>
-              <option value="Bunker 2 Washroom">Bunker 2 Washroom</option>
-              <option value="Bunker 3 Washroom">Bunker 3 Washroom</option>
-              <option value="Bunker 5 Washroom">Bunker 5 Washroom</option>
-              <option value="Bunker 6 Washroom">Bunker 6 Washroom</option>
               <option value="Outdoor CCTV Installation">Outdoor CCTV Installation</option>
               <option value="Outdoor Lights">Outdoor Lights</option>
               <option value="Bunker 3 Themed Wall">Bunker 3 Themed Wall</option>
@@ -192,7 +270,7 @@
             </select>
 
             <label>Responsibility</label>
-            <select id="ext-resp" name="field-7" required="" class="w-select">
+            <select data-name="responsibility" id="ext-resp" name="field-7" required="" class="w-select">
               <option value>Select one...</option>
               <option value="MES">MES</option>
               <option value="Juke Box">Juke Box</option>
@@ -202,13 +280,13 @@
             </select>
 
             <label>Work</label>
-            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Roof shuttering done 60 %" id="ext-work" required="" />
+            <input data-name="work" type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Roof shuttering done 60 %" id="ext-work" required="" />
 
             <label>Quantity</label>
-            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="350" id="ext-qty" required="" />
+            <input data-name="quantity"  type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="350" id="ext-qty" required="" />
 
             <label>Unit</label>
-            <select id="ext-unit" name="field-7" required="" class="w-select">
+            <select data-name="unit" id="ext-unit" name="field-7" required="" class="w-select">
               <option value>Select one...</option>
               <option value="sft">sft</option>
               <option value="cft">cft</option>
@@ -222,7 +300,7 @@
             </select>
 
             <label>Remarks</label>
-            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Work is in progress" id="ext-remarks" required="" />
+            <input data-name="remarks" type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Work is in progress" id="ext-remarks" required="" />
 
             <button type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button">Submit</button>
             <button id="" type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark">X</button>
@@ -240,7 +318,7 @@
             <label for="name-3" class="field-label">Bunkers Works</label>
 
             <label>Bunker Number</label>
-            <select id="bunker-no" name="field-6" required="" class="w-select">
+            <select data-name="name" id="bunker-projName" name="field-6" required="" class="w-select">
               <option value="">Select one...</option>
               <option value="Bunker 1">1</option>
               <option value="Bunker 2">2</option>
@@ -251,7 +329,7 @@
             </select>
 
             <label>Responsibility</label>
-            <select id="bunker-resp" name="field-7" required="" class="w-select">
+            <select data-name="responsibility" id="bunker-resp" name="field-7" required="" class="w-select">
               <option value>Select one...</option>
               <option value="MES">MES</option>
               <option value="Juke Box">Juke Box</option>
@@ -261,13 +339,13 @@
             </select>
 
             <label>Work</label>
-            <input type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Wall putty etc" id="bunker-work" required="" />
+            <input data-name="work" type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Wall putty etc" id="bunker-work" required="" />
 
             <label>Quantity</label>
-            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="350" id="bunker-qty" required="" />
+            <input data-name="quantity"  type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="350" id="bunker-qty" required="" />
 
             <label>Unit</label>
-            <select id="bunker-unit" name="field-7" required="" class="w-select">
+            <select data-name="unit"  id="bunker-unit" name="field-7" required="" class="w-select">
               <option value>Select one...</option>
               <option value="sft">sft</option>
               <option value="cft">cft</option>
@@ -281,7 +359,7 @@
             </select>
 
             <label>Remarks</label>
-            <input type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Any thing" id="bunker-remarks" />
+            <input data-name="remarks"  type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Any thing" id="bunker-remarks" />
 
             <button type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button">Submit</button>
             <button id="" type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark">X</button>
@@ -297,10 +375,31 @@
         <div class="form new-form w-form d-none shadow">
           <form id="email-form-5" name="email-form-2" data-name="Email Form 2" class="form-2">
 
-            <label for="name-2" class="field-label">Material Entered the Complex</label>
+            <label for="name-2" class="field-label">Material In</label>
+
+            <label>Project Name</label>
+            <select data-name="name" id="mat-name" name="field-6" required="" class="w-select">
+              <option value>Select one...</option>
+              <option value="Bunker 1 Washroom">Washrooms</option>
+              <option value="Entrance main Gate">Entrance main Gate</option>
+              <option value="Car Park Shed">Car Park Shed</option>
+              <option value="Pathways">Pathways</option>
+              <option value="FHCC Mosque">FHCC Mosque</option>
+              <option value="OFC / UG Laying">OFC / UG Laying</option>
+              <option value="Unit Mosque">Unit Mosque</option>
+              <option value="MT Washing Pit">MT Washing Pit</option>
+              <option value="MT Shed">MT Shed</option>
+              <option value="Cook House">Cook House</option>
+              <option value="Dining Hall">Dining Hall</option>
+              <option value="Stores in Hangers">Stores in Hangers</option>
+              <option value="Quarter Gd">Quarter Gd</option>
+              <option value="POL Store">POL Store</option>
+              <option value="Metalled Road">Metalled Road</option>
+              <option value="other">other... (please mention in remarks)</option>
+            </select>
 
             <label>Owner</label>
-            <select id="mat-resp" name="field-7" required="" class="w-select">
+            <select data-name="responsibility" id="mat-resp" name="field-7" required="" class="w-select">
               <option value="Juke Box">Juke Box</option>
               <option value="MES">MES</option>
               <option value="Pak Arab">Pak Arab</option>
@@ -309,20 +408,20 @@
             </select>
 
             <label>Material</label>
-            <input type="text" class="text-field w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Cement / Sand etc" id="mat-name" required="" />
-            <div class="div-block-6">
+            <input data-name="work" type="text" class="text-field w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Cement / Sand etc" id="mat-work" required="" />
+            <!-- <div class="div-block-6">
               <ul class="list material-results">
                 <li class="search-results">Cement</li>
                 <li class="search-results">Sand</li>
                 <li class="search-results">Iron Rods</li>
               </ul>
-            </div>
+            </div> -->
 
             <label>Quantity</label>
-            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="350" id="mat-qty" required="" />
+            <input type="text" class="w-input" maxlength="256" name="field-2" data-name="quantity" placeholder="350" id="mat-qty" required="" />
 
             <label>Unit</label>
-            <select id="mat-unit" name="field-7" required="" class="w-select">
+            <select data-name="unit" id="mat-unit" name="field-7" required="" class="w-select">
               <option value>Select one...</option>
               <option value="sft">sft</option>
               <option value="cft">cft</option>
@@ -334,6 +433,9 @@
               <option value="units">units</option>
               <option value="Other">Other (please mention in remarks)</option>
             </select>
+
+            <label>Remarks</label>
+            <input data-name="remarks"  type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Any thing" id="mat-remarks" />
 
             <button type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button">Submit</button>
             <button id="" type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark">X</button>
@@ -363,12 +465,17 @@
 
       </div>
 
-      <div class="div-block-4 bg-secondary d-none">
+      <div class="div-block-4 bg-secondary" style="position:relative">
+        <div class="overlay border-dark bg-dark" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">
+          <h3 class="saving" style="position:absolute;top:20%;left:50%;transform:translate(-50%,-50%);color:white;z-index:2">Saving</h3>
+          <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+        </div>
         <div class="div-block-5">
           <div><h5><strong class="bold-text-2">Category: New Construction / Washrooms / External Repairs</strong></h5></div>
         </div>
         <button type="button" class="btn-submit button bg-success w-button">Submit</button>
         <button type="button" class="btn-delete button btn-danger w-button">Delete</button>
+
       </div>
 
       <div class="text-3"><strong></strong> <span></span> </div>
@@ -380,6 +487,15 @@
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
     <script>
+
+    $(document).ready(function(){
+
+      $('.overlay').css({
+        height: $('.div-block-4').outerHeight(),
+        width: $('.div-block-4').outerWidth()
+      });
+
+    })
 
       $('#email-form').on('submit',function(e) {
         e.preventDefault();
@@ -403,18 +519,8 @@
           'Unit': $('#const-unit').val() + '$' + $('#const-unit').attr('data-name'),
           'Remarks': $('#const-remarks').val() + '$' + $('#const-remarks').attr('data-name'),
         };
-        $.each(data,function(key,value) {
-          $(`.text-3:eq(-1)`).clone().appendTo('.div-block-5:eq(0)');
-          // console.log(value.split($)[1]);
-          $('.div-block-4:eq(0)').find('.text-3:eq(-1)').children('span').html(value.split('$')[0]).data({'myName':value.split('$')[1]}).siblings('strong').html(key+': ');
-        });
 
-        $(this).find('select').each(function() {
-          $(this).find('option:eq(0)').attr('selected',true);
-        });
-        $(this).find('input').each(function(){
-          $(this).val('');
-        });
+        dataNoted(data,this);
 
       });
 
@@ -423,24 +529,15 @@
         $('.div-block-4:eq(-1)').clone().prependTo('.category-block');
         $('.div-block-4:eq(0)').removeClass('d-none').find('.bold-text-2').html(`Category: ${$(this).find('.field-label').html()}`);
         let data = {
-          'Project Name': $('#ext-projName').val(),
-          'Responsibility': $('#ext-resp').val(),
-          'Work': $('#ext-work').val(),
-          'Quantity': $('#ext-qty').val(),
-          'Unit': $('#ext-unit').val(),
-          'Remarks': $('#ext-remarks').val()
+          'Project Name': $('#ext-projName').val()+ '$' + $('#ext-projName').attr('data-name'),
+          'Responsibility': $('#ext-resp').val()+ '$' + $('#ext-resp').attr('data-name'),
+          'Work': $('#ext-work').val()+ '$' + $('#ext-work').attr('data-name'),
+          'Quantity': $('#ext-qty').val()+ '$' + $('#ext-qty').attr('data-name'),
+          'Unit': $('#ext-unit').val()+ '$' + $('#ext-unit').attr('data-name'),
+          'Remarks': $('#ext-remarks').val()+ '$' + $('#ext-remarks').attr('data-name')
         };
-        $.each(data,function(key,value) {
-          $(`.text-3:eq(-1)`).clone().appendTo('.div-block-5:eq(0)');
-          $('.div-block-4:eq(0)').find('.text-3:eq(-1)').children('span').html(value).siblings('strong').html(key+': ');
-        });
 
-        $(this).find('option').each(function() {
-          $(this).attr('selected',true);
-        });
-        $(this).find('input').each(function(){
-          $(this).val('');
-        });
+        dataNoted(data,this);
 
       });
 
@@ -449,24 +546,15 @@
         $('.div-block-4:eq(-1)').clone().prependTo('.category-block');
         $('.div-block-4:eq(0)').removeClass('d-none').find('.bold-text-2').html(`Category: ${$(this).find('.field-label').html()}`);
         let data = {
-          'Bunker No': $('#bunkerNo').val(),
-          'Responsibility': $('#bunker-resp').val(),
-          'Work': $('#bunker-work').val(),
-          'Quantity': $('#bunker-qty').val(),
-          'Unit': $('#bunker-unit').val(),
-          'Remarks': $('#bunker-remarks').val()
+          'Bunker No': $('#bunker-projName').val() + '$' + $('#bunker-projName').attr('data-name'),
+          'Responsibility': $('#bunker-resp').val() + '$' + $('#bunker-resp').attr('data-name'),
+          'Work': $('#bunker-work').val() + '$' + $('#bunker-work').attr('data-name'),
+          'Quantity': $('#bunker-qty').val() + '$' + $('#bunker-qty').attr('data-name'),
+          'Unit': $('#bunker-unit').val() + '$' + $('#bunker-unit').attr('data-name'),
+          'Remarks': $('#bunker-remarks').val() + '$' + $('#bunker-remarks').attr('data-name')
         };
-        $.each(data,function(key,value) {
-          $(`.text-3:eq(-1)`).clone().appendTo('.div-block-5:eq(0)');
-          $('.div-block-4:eq(0)').find('.text-3:eq(-1)').children('span').html(value).siblings('strong').html(key+': ');
-        });
 
-        $(this).find('option').each(function() {
-          $(this).attr('selected',true);
-        });
-        $(this).find('input').each(function(){
-          $(this).val('');
-        });
+        dataNoted(data,this);
       });
 
       $('#email-form-5').on('submit',function(e) {
@@ -474,29 +562,38 @@
         $('.div-block-4:eq(-1)').clone().prependTo('.category-block');
         $('.div-block-4:eq(0)').removeClass('d-none').find('.bold-text-2').html(`Category: ${$(this).find('.field-label').html()}`);
         let data = {
-          'Material': $('#mat-name').val(),
-          'Owner': $('#mat-resp').val(),
-          'Quantity': $('#mat-qty').val(),
-          'Units': $('#mat-unit').val(),
+          'Project': $('#mat-name').val() + '$' + $('#mat-projName').attr('mat-name'),
+          'Owner': $('#mat-resp').val() + '$' + $('#mat-resp').attr('data-name'),
+          'Material': $('#mat-work').val() + '$' + $('#mat-work').attr('data-name'),
+          'Quantity': $('#mat-qty').val() + '$' + $('#mat-qty').attr('data-name'),
+          'Units': $('#mat-unit').val() + '$' + $('#mat-unit').attr('data-name'),
+          'Remarks': $('#mat-remarks').val() + '$' + $('#mat-remarks').attr('data-name'),
         };
+
+        dataNoted(data,this);
+
+      });
+
+      function dataNoted(data,element) {
         $.each(data,function(key,value) {
           $(`.text-3:eq(-1)`).clone().appendTo('.div-block-5:eq(0)');
-          $('.div-block-4:eq(0)').find('.text-3:eq(-1)').children('span').html(value).siblings('strong').html(key+': ');
+          $('.div-block-4:eq(0)').find('.text-3:eq(-1)').children('span').data({myName: value.split('$')[1]}).html(value.split('$')[0]).siblings('strong').html(key+': ');
         });
 
-        $(this).find('option').each(function() {
-          $(this).attr('selected',true);
+        $(element).find('select').each(function() {
+          $(this).find('option:eq(0)').attr('selected',true);
         });
-        $(this).find('input').each(function(){
+        $(element).find('input').each(function(){
           $(this).val('');
         });
-      });
+      };
 
       $('.email-form-2-btn').on('click',function() {
         $(this).closest('div').toggleClass('d-none d-block');
       });
 
-      $(`.field-label:contains('New Construction')`).closest('div').toggleClass('d-none d-block');
+      $(`.field-label:contains('Material In')`).closest('div').toggleClass('d-none d-block');
+
       $('#const-projName').val('Bunker 1 Washroom');
       $('#const-resp').val('MES');
       $('#const-work').val('a lot of work done on foundations today');
@@ -518,7 +615,7 @@
           data[key] = value;
         });
 
-        // console.log(data);
+        return console.log(data);
 
         data = JSON.stringify(data);
         $.ajax({
@@ -531,11 +628,7 @@
           }).done((res) => {
             console.log(res);
             $(this).closest('.div-block-4').toggleClass('bg-success-light bg-secondary');
-            $(this).html('Saved.').attr('disabled',true).siblings('button').remove();
-            // $('.saving-data').addClass('d-none').animate({opacity: 1}, 500, 'linear');
-            // $('.saving-done').html('<i class="fas fa-check-circle"></i> Published');
-            // let picId = $('.image').data().public_id;
-            // return window.location.assign(`/picture/${picId},{{token}}`);
+            $(this).html('Saved.!').attr('disabled',true).siblings('button').remove();
           }).fail((e) => {
             console.log(e.responseText);
           });
@@ -544,15 +637,6 @@
       $(document).on('click','.btn-delete',function() {
         $(this).closest('.div-block-4').remove();
       });
-
-      // <div class="div-block-4 bg-success-light">
-      //   <div class="div-block-5">
-      //     <div><strong class="bold-text-2">Category: External Uplift</strong></div>
-      //     <div><strong>Project Name:</strong> Washroom beside Bunker 1</div>
-      //     <div><strong>Responsibility:</strong> MES</div>
-      //     <div><strong>Explain:</strong> 200 sft brick wall erected</div>
-      //   </div><a href="#" class="button bg-success w-button">Saved</a>
-      // </div>
 
     </script>
   </body>
