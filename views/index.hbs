@@ -152,14 +152,21 @@
         }
       }
 
+      .error {
+        background-color: rgb(244,193,193,1);
+        padding: 15px;
+        border-radius: 11px;
+        font-weight: bold;
+      }
+
 
     </style>
   </head>
 
   <body class="body bg-primary">
     <div class="container w-container">
-      <h1 class="text-center"><u>Works Update</u></h1>
-      <h3 class="text-center"> Date <input class="text-center" id="upload-date" type="date" name="bday" value="{{dateToday}}"/></h3>
+      <!-- <h1 class="heading">Works Update</h1> -->
+      <h3 class="text-center"> <span class="field-label">Date</span> <input class="text-center" id="upload-date" type="date" name="bday" value="{{dateToday}}"/></h3>
 
 
 
@@ -476,6 +483,7 @@
         </div>
         <button type="button" class="btn-submit button bg-success w-button">Submit</button>
         <button type="button" class="btn-delete button btn-danger w-button">Delete</button>
+        <p class="error d-none"></p>
 
       </div>
 
@@ -488,12 +496,6 @@
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
     <script>
-
-    $(document).ready(function(){
-
-
-
-    })
 
       $('#email-form').on('submit',function(e) {
         e.preventDefault();
@@ -573,6 +575,10 @@
       });
 
       function dataNoted(data,element) {
+        $(`.text-3:eq(-1)`).clone().appendTo('.div-block-5:eq(0)');
+        let date = $('#upload-date').val().split("-").reverse().join("-");
+        $('.div-block-4:eq(0)').find('.text-3:eq(-1)').children('span').data({myName: 'date'}).html(date).addClass('date-selected').siblings('strong').html('Date:');
+        console.log($('.date-selected').html());
         $.each(data,function(key,value) {
           $(`.text-3:eq(-1)`).clone().appendTo('.div-block-5:eq(0)');
           $('.div-block-4:eq(0)').find('.text-3:eq(-1)').children('span').data({myName: value.split('$')[1]}).html(value.split('$')[0]).siblings('strong').html(key+': ');
@@ -590,25 +596,27 @@
         $(this).closest('div').toggleClass('d-none d-block');
       });
 
-      // $(`.field-label:contains('New Construction')`).closest('div').toggleClass('d-none d-block');
-      //
-      // $('#const-projName').val('Bunker 1 Washroom');
-      // $('#const-resp').val('MES');
-      // $('#const-work').val('a lot of work done on foundations today');
-      // $('#const-qty').val('300');
-      // $('#const-unit').val('sft');
-      // $('#const-remarks').val('it was their first day of work today');
+      $(`.field-label:contains('New Construction')`).closest('div').toggleClass('d-none d-block');
+      $('#const-projName').val('Bunker 1 Washroom');
+      $('#const-resp').val('MES');
+      $('#const-work').val('a lot of work done on foundations today');
+      $('#const-qty').val('300');
+      $('#const-unit').val('sft');
+      $('#const-remarks').val('it was their first day of work today');
 
       $(document).on('click','.btn-submit',function() {
         $(this).closest('.div-block-4').find('.overlay').toggleClass('d-none').css({
           height: $('.div-block-4').outerHeight(),
           width: $('.div-block-4').outerWidth()
         });
+        // $('#upload-date').closest('.text-3').removeClass('.text-3');
+        $(this).closest('.div-block-4').find('.date-selected').closest('.text-3').removeClass('text-3');
         let category = $(this).closest('.div-block-4').find('.bold-text-2').html().split('Category: ')[1];
         // date','category','name','responsibility','work','quantity','unit','remarks'
+        let date = $('#upload-date').val();
         let data = {
           timestamp: new Date().toString(),
-          date: $('#upload-date').val(),
+          date: $(this).closest('.div-block-4').find('.date-selected').html().split('-').reverse().join('-'),
           category,
         };
 
@@ -617,6 +625,8 @@
           let value = $(this).children('span').html();
           data[key] = value;
         });
+
+        // return console.log(data);
 
         data = JSON.stringify(data);
         $.ajax({
@@ -633,6 +643,8 @@
             $(this).closest('.div-block-4').find('.overlay').toggleClass('d-none');
           }).fail((e) => {
             console.log(e.responseText);
+            $(this).closest('.div-block-4').find('.error').toggleClass('d-none').html(e.responseText);
+            $(this).closest('.div-block-4').find('.overlay').toggleClass('d-none');
           });
       });
 
