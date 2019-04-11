@@ -32,9 +32,9 @@ app.get('/',(req,res) => {
 });
 
 app.post('/data',(req,res) => {
-  _.pick(req.body,['timestamp','date','category','name','responsibility','work','quantity','unit','remarks']);
+  _.pick(req.body,['timestamp','date','loc','category','name','responsibility','work','quantity','unit','remarks']);
   var arr = _.values(req.body);
-  if (arr.length != 9) return res.status(400).send('Please fill all the fields in the form.');
+  if (arr.length != 10) return res.status(400).send('Please fill all the fields in the form.');
   // return res.status(200).send('ok');
   sheet('external','update',[arr]).then((msg) => {
     return res.status(200).send(msg);
