@@ -176,8 +176,8 @@
           <form id="email-form" name="email-form" data-name="Email Form" class="form shadow"><label for="name" class="field-label">Category</label>
 
             <div class="radio-button-field w-radio"><input type="radio" id="radio-2" name="radio" value="New Construction" data-name="Radio" class="w-radio-input" /><label for="radio-2" class="w-form-label">New Construction</label></div>
-            <div class="radio-button-field w-radio"><input type="radio" id="radio" name="radio" value="External Uplift" data-name="Radio" class="w-radio-input" /><label for="radio" class="w-form-label">External Uplift</label></div>
-            <div class="radio-button-field w-radio"><input type="radio" id="radio-3" name="radio" value="Bunkers Works" data-name="Radio" class="w-radio-input" /><label for="radio-3" class="w-form-label">Bunkers Works</label></div>
+            <div class="radio-button-field w-radio"><input type="radio" id="radio" name="radio" value="External Uplift (FHCC)" data-name="Radio" class="w-radio-input" /><label for="radio" class="w-form-label">External Uplift (FHCC)</label></div>
+            <div class="radio-button-field w-radio"><input type="radio" id="radio-3" name="radio" value="Bunkers Works (FHCC)" data-name="Radio" class="w-radio-input" /><label for="radio-3" class="w-form-label">Bunkers Works (FHCC)</label></div>
             <div class="radio-button-field w-radio"><input type="radio" id="radio-4" name="radio" value="Material In" data-name="Radio" class="w-radio-input" /><label for="radio-4" class="w-form-label">Material In</label></div>
             <div class="radio-button-field w-radio d-none"><input type="radio" id="radio-5" name="radio" value="Labour Attendance" data-name="Radio" class="w-radio-input" /><label for="radio-5" class="w-form-label">Labour Attendance</label>
             </div>
@@ -199,13 +199,13 @@
             <label>Project Name</label>
             <select data-name="name" id="const-projName" name="field-7" required="" class="w-select">
               <option value>Select one...</option>
-              <option value="Bunker 1 Washroom">Bunker 1 Washroom</option>
+              <option value="Bunker 1 Washroom">Washrooms</option>
               <option value="Entrance main Gate">Entrance main Gate</option>
               <option value="Car Park Shed">Car Park Shed</option>
-              <option value="Pathways">Pathways</option>
+              <option value="FHCC Pathways">FHCC Pathways</option>
+              <option value="Unit Pathways">Unit Pathways</option>
               <option value="FHCC Mosque">FHCC Mosque</option>
               <option value="OFC / UG Laying">OFC / UG Laying</option>
-              <option value="ODF of OFC and UG Installation">ODF of OFC and UG Installation</option>
               <option value="Unit Mosque">Unit Mosque</option>
               <option value="MT Washing Pit">MT Washing Pit</option>
               <option value="MT Shed">MT Shed</option>
@@ -215,7 +215,10 @@
               <option value="Quarter Gd">Quarter Gd</option>
               <option value="POL Store">POL Store</option>
               <option value="Metalled Road">Metalled Road</option>
-              <option value="other">other...</option>
+              <option value="Aluminimum Windows/Doors">Aluminimum Windows/Door</option>
+              <option value="SM Bk 2 Water Tank">SM Bk 2 Water Tank</option>
+              <option value="SM Bk 2 OAS Earth">SM Bk 2 OAS Earth</option>
+              <option value="other">other... (please mention in remarks)</option>
             </select>
 
             <label>Responsibility</label>
@@ -264,7 +267,7 @@
         </div>
         <div class="form new-form w-form d-none shadow">
           <form id="email-form-3" name="email-form-2" data-name="Email Form 2">
-            <label for="name-4" class="field-label">External Uplift</label>
+            <label for="name-4" class="field-label">External Uplift (FHCC)</label>
 
             <label>Project Name</label>
             <select data-name="name" id="ext-projName" name="field-7" required="" class="w-select">
@@ -323,7 +326,7 @@
         </div>
         <div class="form new-form w-form d-none shadow">
           <form id="email-form-4" name="email-form-2" data-name="Email Form 2">
-            <label for="name-3" class="field-label">Bunkers Works</label>
+            <label for="name-3" class="field-label">Bunkers Works (FHCC)</label>
 
             <label>Bunker Number</label>
             <select data-name="name" id="bunker-projName" name="field-6" required="" class="w-select">
@@ -391,7 +394,8 @@
               <option value="Bunker 1 Washroom">Washrooms</option>
               <option value="Entrance main Gate">Entrance main Gate</option>
               <option value="Car Park Shed">Car Park Shed</option>
-              <option value="Pathways">Pathways</option>
+              <option value="FHCC Pathways">FHCC Pathways</option>
+              <option value="Unit Pathways">Unit Pathways</option>
               <option value="FHCC Mosque">FHCC Mosque</option>
               <option value="OFC / UG Laying">OFC / UG Laying</option>
               <option value="Unit Mosque">Unit Mosque</option>
@@ -403,6 +407,9 @@
               <option value="Quarter Gd">Quarter Gd</option>
               <option value="POL Store">POL Store</option>
               <option value="Metalled Road">Metalled Road</option>
+              <option value="Aluminimum Windows/Doors">Aluminimum Windows/Door</option>
+              <option value="SM Bk 2 Water Tank">SM Bk 2 Water Tank</option>
+              <option value="SM Bk 2 OAS Earth">SM Bk 2 OAS Earth</option>
               <option value="other">other... (please mention in remarks)</option>
             </select>
 
@@ -596,13 +603,13 @@
         $(this).closest('div').toggleClass('d-none d-block');
       });
 
-      $(`.field-label:contains('New Construction')`).closest('div').toggleClass('d-none d-block');
-      $('#const-projName').val('Bunker 1 Washroom');
-      $('#const-resp').val('MES');
-      $('#const-work').val('a lot of work done on foundations today');
-      $('#const-qty').val('300');
-      $('#const-unit').val('sft');
-      $('#const-remarks').val('it was their first day of work today');
+      // $(`.field-label:contains('New Construction')`).closest('div').toggleClass('d-none d-block');
+      // $('#const-projName').val('Bunker 1 Washroom');
+      // $('#const-resp').val('MES');
+      // $('#const-work').val('a lot of work done on foundations today');
+      // $('#const-qty').val('300');
+      // $('#const-unit').val('sft');
+      // $('#const-remarks').val('it was their first day of work today');
 
       $(document).on('click','.btn-submit',function() {
         $(this).closest('.div-block-4').find('.overlay').toggleClass('d-none').css({
