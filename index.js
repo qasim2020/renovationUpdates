@@ -24,6 +24,27 @@ app.set('view engine','hbs');
 // [new Date().toString(),'MES','Sand','2000', 'cft','Brought it for const of Washroom']
 // ]);
 
+hbs.localsAsTemplateData(app);
+app.locals.foo = {
+  comments: [
+    {comment: 'my name is qasim'},
+    {comment: 'how are you'},
+    {comment: 'are you doing fine'},
+  ]
+};
+
+hbs.registerHelper('askSuggestions',() => {
+  let suggestions = {
+  people: [
+    {firstName: "Yehuda", lastName: "Katz"},
+    {firstName: "Carl", lastName: "Lerche"},
+    {firstName: "Alan", lastName: "Johnson"}
+  ]
+}
+  console.log(suggestions);
+  return suggestions;
+});
+
 
 app.get('/',(req,res) => {
   console.log('home page opened');
@@ -35,7 +56,6 @@ app.post('/data',(req,res) => {
   _.pick(req.body,['timestamp','date','loc','category','name','responsibility','work','quantity','unit','remarks']);
   var arr = _.values(req.body);
   if (arr.length != 10) return res.status(400).send('Please fill all the fields in the form.');
-  // return res.status(200).send('ok');
   sheet('external','update',[arr]).then((msg) => {
     return res.status(200).send(msg);
   }).catch((e) => {

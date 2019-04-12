@@ -159,6 +159,11 @@
         font-weight: bold;
       }
 
+      .selected {
+        background-color: #3798EC;
+        color: white;
+      }
+
 
     </style>
   </head>
@@ -234,10 +239,11 @@
             </select>
 
             <label>Work</label>
-            <input data-name="work" type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Roof shuttering done 60 %" id="const-work" required="" />
+            <input data-name="work" type="text" class="w-input search-input" maxlength="256" name="field-2" placeholder="Roof shuttering done 60 %" id="const-work" required="" />
+            <div class="work-suggestions div-block-6">{{> search}}</div>
 
             <label>Quantity</label>
-            <input data-name="quantity" type="number" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="350" id="const-qty" required="" />
+            <input data-name="quantity" type="number" class="w-input" maxlength="256" name="field-2" placeholder="350" id="const-qty" required="" />
 
             <label>Unit</label>
             <select data-name="unit" id="const-unit" name="field-7" required="" class="w-select">
@@ -254,7 +260,7 @@
             </select>
 
             <label>Remarks</label>
-            <input data-name="remarks" type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Work is in progress" id="const-remarks" required="" />
+            <input data-name="remarks" type="text" class="w-input" maxlength="256" name="field-2" placeholder="Work is in progress" id="const-remarks" required="" />
 
             <button type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button">Submit</button>
             <button id="" type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark">X</button>
@@ -268,7 +274,7 @@
           </div>
         </div>
         <div class="form new-form w-form d-none shadow">
-          <form id="email-form-3" name="email-form-2" data-name="Email Form 2">
+          <form id="email-form-3" name="email-form-2">
             <label for="name-4" class="field-label">External Uplift (FHCC)</label>
 
             <label>Project Name</label>
@@ -293,10 +299,10 @@
             </select>
 
             <label>Work</label>
-            <input data-name="work" type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Roof shuttering done 60 %" id="ext-work" required="" />
+            <input data-name="work" type="text" class="w-input" maxlength="256" name="field-2" placeholder="Roof shuttering done 60 %" id="ext-work" required="" />
 
             <label>Quantity</label>
-            <input data-name="quantity"  type="number" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="350" id="ext-qty" required="" />
+            <input data-name="quantity"  type="number" class="w-input" maxlength="256" name="field-2" placeholder="350" id="ext-qty" required="" />
 
             <label>Unit</label>
             <select data-name="unit" id="ext-unit" name="field-7" required="" class="w-select">
@@ -313,7 +319,7 @@
             </select>
 
             <label>Remarks</label>
-            <input data-name="remarks" type="text" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="Work is in progress" id="ext-remarks" required="" />
+            <input data-name="remarks" type="text" class="w-input" maxlength="256" name="field-2" placeholder="Work is in progress" id="ext-remarks" required="" />
 
             <button type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button">Submit</button>
             <button id="" type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark">X</button>
@@ -327,7 +333,7 @@
           </div>
         </div>
         <div class="form new-form w-form d-none shadow">
-          <form id="email-form-4" name="email-form-2" data-name="Email Form 2">
+          <form id="email-form-4" name="email-form-2">
             <label for="name-3" class="field-label">Bunkers Works (FHCC)</label>
 
             <label>Bunker Number</label>
@@ -352,10 +358,10 @@
             </select>
 
             <label>Work</label>
-            <input data-name="work" type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Wall putty etc" id="bunker-work" required="" />
+            <input data-name="work" type="text" class="w-input" maxlength="256" name="field-3" placeholder="Wall putty etc" id="bunker-work" required="" />
 
             <label>Quantity</label>
-            <input data-name="quantity"  type="number" class="w-input" maxlength="256" name="field-2" data-name="Field 2" placeholder="350" id="bunker-qty" required="" />
+            <input data-name="quantity"  type="number" class="w-input" maxlength="256" name="field-2" placeholder="350" id="bunker-qty" required="" />
 
             <label>Unit</label>
             <select data-name="unit"  id="bunker-unit" name="field-7" required="" class="w-select">
@@ -372,7 +378,7 @@
             </select>
 
             <label>Remarks</label>
-            <input data-name="remarks"  type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Any thing" id="bunker-remarks" />
+            <input data-name="remarks"  type="text" class="w-input" maxlength="256" name="field-3" placeholder="Any thing" id="bunker-remarks" />
 
             <button type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button">Submit</button>
             <button id="" type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark">X</button>
@@ -428,7 +434,7 @@
             </select>
 
             <label>Material</label>
-            <input data-name="work" type="text" class="text-field w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Cement / Sand etc" id="mat-work" required="" />
+            <input data-name="work" type="text" class="text-field w-input" maxlength="256" name="field-3" placeholder="Cement / Sand etc" id="mat-work" required="" />
             <!-- <div class="div-block-6">
               <ul class="list material-results">
                 <li class="search-results">Cement</li>
@@ -455,7 +461,7 @@
             </select>
 
             <label>Remarks</label>
-            <input data-name="remarks"  type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="Any thing" id="mat-remarks" />
+            <input data-name="remarks"  type="text" class="w-input" maxlength="256" name="field-3" placeholder="Any thing" id="mat-remarks" />
 
             <button type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button">Submit</button>
             <button id="" type="button" value="X" data-wait="Please wait..." class="email-form-2-btn form-button bg-primary text-dark w-button border-dark">X</button>
@@ -470,8 +476,8 @@
         </div>
         <div class="form new-form w-form d-none shadow">
           <form id="email-form-2" name="email-form-2" data-name="Email Form 2"><label for="name-5" class="field-label">Labour Attendance</label><input type="text" class="w-input" maxlength="256" name="name-2" data-name="Name 2"
-              placeholder="Name of Labour" id="name-2" /><input type="text" class="w-input" maxlength="256" name="field-3" data-name="Field 3" placeholder="MES / JukeBox / Pak Arab etc" id="field-3" required="" /><input type="text" class="w-input"
-              maxlength="256" name="field-3" data-name="Field 3" placeholder="Present / Absent" id="field-3" required="" /><input type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button" /><input type="submit" value="Next"
+              placeholder="Name of Labour" id="name-2" /><input type="text" class="w-input" maxlength="256" name="field-3" placeholder="MES / JukeBox / Pak Arab etc" id="field-3" required="" /><input type="text" class="w-input"
+              maxlength="256" name="field-3" placeholder="Present / Absent" id="field-3" required="" /><input type="submit" value="Submit" data-wait="Please wait..." class="form-button w-button" /><input type="submit" value="Next"
               data-wait="Please wait..." class="form-button bg-success w-button" /></form>
           <div class="w-form-done">
             <div>Thank you! Your submission has been received!</div>
@@ -502,12 +508,31 @@
       <div class="text-3"><strong></strong> <span></span> </div>
 
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
 
-    <script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
     <script>
+
+      $(document).ready(() => {
+        let suggestions = {
+          comment: 'qasim',
+          comment: 'hashim',
+          comment: 'lubna',
+          comment: 'hakim',
+        };
+
+        var context = {title: "My New Post", body: "This is my first post!"};
+
+        // var source   = $('#entry-template').html();
+        // var template = Handlebars.compile(source);
+        // var html    = template(suggestions);
+        console.log(`{{> search}}`);
+        // $('.div-block-6').html(html);
+
+      });
+
+
+
 
       $('#email-form').on('submit',function(e) {
         e.preventDefault();
@@ -617,13 +642,13 @@
         $(this).closest('div').toggleClass('d-none d-block');
       });
 
-      // $(`.field-label:contains('New Construction')`).closest('div').toggleClass('d-none d-block');
-      // $('#const-projName').val('Bunker 1 Washroom & FHCC');
-      // $('#const-resp').val('MES');
-      // $('#const-work').val('a lot of work done on foundations today');
-      // $('#const-qty').val('300');
-      // $('#const-unit').val('sft');
-      // $('#const-remarks').val('it was their first day of work today');
+      $(`.field-label:contains('New Construction')`).closest('div').toggleClass('d-none d-block');
+      $('#const-projName').val('Bunker 1 Washroom & FHCC');
+      $('#const-resp').val('MES');
+      $('#const-work').val('a lot of work done on foundations today');
+      $('#const-qty').val('300');
+      $('#const-unit').val('sft');
+      $('#const-remarks').val('it was their first day of work today');
 
       $(document).on('click','.btn-submit',function() {
         $(this).closest('.div-block-4').find('.overlay').toggleClass('d-none').css({
@@ -673,7 +698,23 @@
         $(this).closest('.div-block-4').remove();
       });
 
+      $(document).on('mouseenter mouseleave','.search-results',function(){
+        $(this).toggleClass('selected');
+      });
+
+      $(document).on('keyup','.search-input',function(){
+        console.log('here');
+        $(this).closest('form').find('.material-results').show();
+      })
+
+      $(document).on('click','.selected',function(){
+        let myValue = $(this).html();
+        $(this).closest('form').find('.search-input').val(myValue);
+        $(this).closest('.material-results').hide();
+      })
+
     </script>
+
   </body>
 
 </html>
