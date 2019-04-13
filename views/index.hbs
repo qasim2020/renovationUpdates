@@ -738,16 +738,21 @@
             $.each(res,function(key,value) {
               suggestions[key] = value[0]
             });
-            suggestions = suggestions.filter(function(elem, index, self) {
-              elem = elem.toLowerCase();
-              self = self.toLowerCase();
-              return index === self.indexOf(elem);
-            });
+            
+            suggestions = unique(suggestions);
 
           }).fail((e) => {
             console.log(e.responseText);
           });
       })
+
+      function unique(list) {
+        var result = [];
+        $.each(list, function(i, e) {
+          if ($.inArray(e, result) == -1) result.push(e);
+        });
+        return result;
+      };
 
       $(document).on('click','.selected',function(){
         let myValue = $(this).html();
