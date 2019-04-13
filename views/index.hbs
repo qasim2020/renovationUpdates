@@ -166,12 +166,13 @@
 
       .list {
         position: absolute;
-        background-color: rgb(244,193,193,1);
         overflow: scroll;
+        background-color: rgba(244,193,193,1) !important;
       }
 
       .search-results {
         padding-right: 15px;
+
       }
 
 
@@ -738,7 +739,7 @@
             $.each(res,function(key,value) {
               suggestions[key] = value[0]
             });
-            
+
             suggestions = unique(suggestions);
 
           }).fail((e) => {
