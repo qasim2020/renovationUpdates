@@ -164,6 +164,17 @@
         color: white;
       }
 
+      .list {
+        position: absolute;
+        background-color: rgb(244,193,193,1);
+        overflow: scroll;
+      }
+
+      .search-results {
+        padding-right: 15px;
+      }
+
+
 
     </style>
   </head>
@@ -239,8 +250,8 @@
             </select>
 
             <label>Work</label>
-            <input data-name="work" type="text" class="w-input search-input" maxlength="256" name="field-2" placeholder="Roof shuttering done 60 %" id="const-work" required="" />
-            <div class="work-suggestions div-block-6">{{> search}}</div>
+            <input autocomplete="off" data-name="work" type="text" class="w-input search-input" maxlength="256" name="field-2" placeholder="Roof shuttering done 60 %" id="const-work" required="" />
+            <div class="work-suggestions div-block-6"></div>
 
             <label>Quantity</label>
             <input data-name="quantity" type="number" class="w-input" maxlength="256" name="field-2" placeholder="350" id="const-qty" required="" />
@@ -299,7 +310,8 @@
             </select>
 
             <label>Work</label>
-            <input data-name="work" type="text" class="w-input" maxlength="256" name="field-2" placeholder="Roof shuttering done 60 %" id="ext-work" required="" />
+            <input autocomplete="off" data-name="work" type="text" class="w-input search-input" maxlength="256" name="field-2" placeholder="Roof shuttering done 60 %" id="ext-work" required="" />
+            <div class="work-suggestions div-block-6"></div>
 
             <label>Quantity</label>
             <input data-name="quantity"  type="number" class="w-input" maxlength="256" name="field-2" placeholder="350" id="ext-qty" required="" />
@@ -358,7 +370,8 @@
             </select>
 
             <label>Work</label>
-            <input data-name="work" type="text" class="w-input" maxlength="256" name="field-3" placeholder="Wall putty etc" id="bunker-work" required="" />
+            <input autocomplete="off" data-name="work" type="text" class="w-input search-input" maxlength="256" name="field-3" placeholder="Wall putty etc" id="bunker-work" required="" />
+            <div class="work-suggestions div-block-6"></div>
 
             <label>Quantity</label>
             <input data-name="quantity"  type="number" class="w-input" maxlength="256" name="field-2" placeholder="350" id="bunker-qty" required="" />
@@ -434,7 +447,8 @@
             </select>
 
             <label>Material</label>
-            <input data-name="work" type="text" class="text-field w-input" maxlength="256" name="field-3" placeholder="Cement / Sand etc" id="mat-work" required="" />
+            <input autocomplete="off" data-name="work" type="text" class="text-field w-input search-input" maxlength="256" name="field-3" placeholder="Cement / Sand etc" id="mat-work" required="" />
+            <div class="work-suggestions div-block-6"></div>
             <!-- <div class="div-block-6">
               <ul class="list material-results">
                 <li class="search-results">Cement</li>
@@ -511,28 +525,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
 
+    <script id="entry-template" type="text/x-handlebars-template">
+
+      <ul class="list material-results">
+        \{{#each this}}
+          <li class="search-results">\{{@this}}</li>
+        \{{/each}}
+      </ul>
+
+    </script>
+
     <script>
-
-      $(document).ready(() => {
-        let suggestions = {
-          comment: 'qasim',
-          comment: 'hashim',
-          comment: 'lubna',
-          comment: 'hakim',
-        };
-
-        var context = {title: "My New Post", body: "This is my first post!"};
-
-        // var source   = $('#entry-template').html();
-        // var template = Handlebars.compile(source);
-        // var html    = template(suggestions);
-        console.log(`{{> search}}`);
-        // $('.div-block-6').html(html);
-
-      });
-
-
-
 
       $('#email-form').on('submit',function(e) {
         e.preventDefault();
@@ -542,6 +545,7 @@
         console.log(val);
         $('.new-form').removeClass('d-block').addClass('d-none');
         $(`.field-label:contains('${val}')`).closest('div').toggleClass('d-none d-block');
+        $('.material-results').hide();
       });
 
       $('#email-form-2').on('submit',function(e) {
@@ -642,13 +646,13 @@
         $(this).closest('div').toggleClass('d-none d-block');
       });
 
-      $(`.field-label:contains('New Construction')`).closest('div').toggleClass('d-none d-block');
-      $('#const-projName').val('Bunker 1 Washroom & FHCC');
-      $('#const-resp').val('MES');
-      $('#const-work').val('a lot of work done on foundations today');
-      $('#const-qty').val('300');
-      $('#const-unit').val('sft');
-      $('#const-remarks').val('it was their first day of work today');
+      // $(`.field-label:contains('New Construction')`).closest('div').toggleClass('d-none d-block');
+      // $('#const-projName').val('Bunker 1 Washroom & FHCC');
+      // $('#const-resp').val('MES');
+      // $('#const-work').val('a lot of work done on foundations today');
+      // $('#const-qty').val('300');
+      // $('#const-unit').val('sft');
+      // $('#const-remarks').val('it was their first day of work today');
 
       $(document).on('click','.btn-submit',function() {
         $(this).closest('.div-block-4').find('.overlay').toggleClass('d-none').css({
@@ -703,8 +707,46 @@
       });
 
       $(document).on('keyup','.search-input',function(){
-        console.log('here');
+        let val = $(this).val();
+        if (val.length == 0) return;
+        arr = $.grep(suggestions, function( n, i ) {
+          n = n.toLowerCase();
+          val = val.toLowerCase();
+          return n.indexOf(val) !== -1;
+        });
+        compileHbs(arr);
         $(this).closest('form').find('.material-results').show();
+      })
+
+      function compileHbs(data) {
+        var source   = document.getElementById("entry-template").innerHTML;
+        var template = Handlebars.compile(source);
+        var html    = template(data);
+        $('.div-block-6').html(html);
+      }
+
+      let suggestions = [];
+
+      $(document).ready(() => {
+        $.ajax({
+            url: '/getSuggestions',
+            type: 'get',
+            headers: {
+                'content-type': 'application/json',
+            }
+          }).done((res) => {
+            $.each(res,function(key,value) {
+              suggestions[key] = value[0]
+            });
+            suggestions = suggestions.filter(function(elem, index, self) {
+              elem = elem.toLowerCase();
+              self = self.toLowerCase();
+              return index === self.indexOf(elem);
+            });
+
+          }).fail((e) => {
+            console.log(e.responseText);
+          });
       })
 
       $(document).on('click','.selected',function(){

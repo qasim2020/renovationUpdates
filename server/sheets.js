@@ -67,20 +67,20 @@ function getNewToken(oAuth2Client, callback) {
 };
 
 function readSheet(auth, value) {
-  const sheets = google.sheets({version: 'v4', auth});
-  sheets.spreadsheets.values.get({
-    spreadsheetId: value.sheet,
-    range: 'A:F',
-  }, (err, res) => {
-    if (err) return console.log('The API returned an error: ' + err);
-    const rows = res.data.values;
-    if (rows.length) {
-      rows.map((row) => {
-        console.log(`${row[0]},${row[1]},${row[2]}, ${row[3]}, ${row[4]}`);
-      });
-    } else {
-      console.log('No data found.');
-    }
+  return new Promise((resolve,reject) => {
+    const sheets = google.sheets({version: 'v4', auth});
+    sheets.spreadsheets.values.get({
+      spreadsheetId: value.sheet,
+      range: 'G2:G',
+    }, (err, res) => {
+      if (err) return reject('The API returned an error: ' + err);
+      const rows = res.data.values;
+      if (rows.length) {
+        resolve(rows);
+      } else {
+        reject('No data found.');
+      }
+    });
   });
 };
 

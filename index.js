@@ -25,32 +25,25 @@ app.set('view engine','hbs');
 // ]);
 
 hbs.localsAsTemplateData(app);
-app.locals.foo = {
-  comments: [
-    {comment: 'my name is qasim'},
-    {comment: 'how are you'},
-    {comment: 'are you doing fine'},
-  ]
-};
-
-hbs.registerHelper('askSuggestions',() => {
-  let suggestions = {
-  people: [
-    {firstName: "Yehuda", lastName: "Katz"},
-    {firstName: "Carl", lastName: "Lerche"},
-    {firstName: "Alan", lastName: "Johnson"}
-  ]
-}
-  console.log(suggestions);
-  return suggestions;
-});
-
 
 app.get('/',(req,res) => {
+
   console.log('home page opened');
   let dateToday = moment().format('YYYY-MM-DD');
-  res.render('index.hbs',{dateToday});
+  res.render('index.hbs',{
+    dateToday,
+  });
+
 });
+
+app.get('/getSuggestions',(req,res) => {
+  sheet('external','read').then((msg) => {
+    res.status(200).send(msg);
+  }).catch((e) => {
+    console.log(e);
+    res.status(400).semd(e);
+  })
+})
 
 app.post('/data',(req,res) => {
   _.pick(req.body,['timestamp','date','loc','category','name','responsibility','work','quantity','unit','remarks']);
