@@ -24,8 +24,6 @@ app.set('view engine','hbs');
 // [new Date().toString(),'MES','Sand','2000', 'cft','Brought it for const of Washroom']
 // ]);
 
-hbs.localsAsTemplateData(app);
-
 app.get('/',(req,res) => {
 
   console.log('home page opened');
@@ -37,12 +35,12 @@ app.get('/',(req,res) => {
 });
 
 app.get('/getSuggestions',(req,res) => {
-  sheet('external','read').then((msg) => {
+  sheet('external','todayUpdates').then((msg)=> {
     res.status(200).send(msg);
   }).catch((e) => {
     console.log(e);
     res.status(400).semd(e);
-  })
+  });
 })
 
 app.post('/data',(req,res) => {

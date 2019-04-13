@@ -2,6 +2,7 @@
 const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
+const _ = require('lodash');
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const TOKEN_PATH = 'token.json';
@@ -24,9 +25,35 @@ function sheet(name,type,values) {
       };
       if (type == 'read') return resolve(authorize(data, readSheet));
       if (type == 'update') return resolve(authorize(data,updateSheet));
+      if (type == 'todayUpdates') return resolve(authorize(data,todayUpdates));
     });
   });
 }
+
+function todayUpdates(auth, value) {
+  return new Promise((resolve,reject) => {
+    const sheets = google.sheets({version: 'v4', auth});
+    var request = {
+    spreadsheetId: value.sheet,
+    ranges: ['A1:J','G2:G'],
+    valueRenderOption: 'UNFORMATTED_VALUE',
+    dateTimeRenderOption: 'FORMATTED_STRING',
+  };
+
+  sheets.spreadsheets.values.batchGet(request, function(err, response) {
+    if (err) {
+      console.error(err);
+      reject(err);
+    }
+    resolve(response.data.valueRanges);
+    // TODO: Change code below to process the `response` object:
+    // _.each(response.data.values, function(k,v) {
+    //   console.log(k,v);
+    // resolve();
+    // console.log(JSON.stringify(response, null, 2));
+  });
+  });
+};
 
 function authorize(credentials, callback) {
   return new Promise((resolve,reject) => {

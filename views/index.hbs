@@ -175,6 +175,25 @@
         cursor: pointer;
       }
 
+      table {
+        border-collapse: collapse;
+        border-radius: 40px;
+      }
+
+      th {
+        background-color: #3798EC;
+        color: white;
+      }
+
+      td, th {
+        border: 1px solid rgba(0,0,0,0.4);
+        text-align: left;
+        padding: 8px;
+      }
+
+      tr:nth-child(even) {
+        background-color: rgba(0,0,0,0.1);
+      }
 
 
     </style>
@@ -199,13 +218,14 @@
             <div class="radio-button-field w-radio d-none"><input type="radio" id="radio-5" name="radio" value="Labour Attendance" data-name="Radio" class="w-radio-input" /><label for="radio-5" class="w-form-label">Labour Attendance</label>
             </div>
             <input type="submit" value="Next" data-wait="Please wait..." class="form-button w-button" />
+            <div class="w-form-done">
+              <div>Thank you! Your submission has been received!</div>
+            </div>
+            <div class="w-form-fail">
+              <div>Oops! Something went wrong while submitting the form.</div>
+            </div>
           </form>
-          <div class="w-form-done">
-            <div>Thank you! Your submission has been received!</div>
-          </div>
-          <div class="w-form-fail">
-            <div>Oops! Something went wrong while submitting the form.</div>
-          </div>
+
         </div>
       </div>
       <div>
@@ -450,13 +470,6 @@
             <label>Material</label>
             <input autocomplete="off" data-name="work" type="text" class="text-field w-input search-input" maxlength="256" name="field-3" placeholder="Cement / Sand etc" id="mat-work" required="" />
             <div class="work-suggestions div-block-6"></div>
-            <!-- <div class="div-block-6">
-              <ul class="list material-results">
-                <li class="search-results">Cement</li>
-                <li class="search-results">Sand</li>
-                <li class="search-results">Iron Rods</li>
-              </ul>
-            </div> -->
 
             <label>Quantity</label>
             <input type="number" class="w-input" maxlength="256" name="field-2" data-name="quantity" placeholder="350" id="mat-qty" required="" />
@@ -502,6 +515,7 @@
           </div>
         </div>
       </div>
+
       <div class="category-block bg-primary">
 
       </div>
@@ -522,6 +536,23 @@
 
       <div class="text-3"><strong></strong> <span></span> </div>
 
+      <div class="form w-form shadow" style="position:relative">
+        <label for="" class="field-label">Today's Updates</label>
+        <button id="showFHCCData" type="button" value="Submit" data-wait="Please wait..." class="form-button w-button">FHCC</button>
+        <button id="showUnitData" type="button" value="Submit" data-wait="Please wait..." class="form-button w-button bg-primary text-dark border-dark">Unit</button>
+        <br><br>
+        <table id="today-table" class="">
+
+        </table>
+        <div class="table-overlay border-dark bg-dark d-none" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">
+          <h3 class="saving" style="position:absolute;top:10%;left:50%;transform:translate(-50%,-50%);color:white;z-index:2">Loading Data</h3>
+          <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+        </div>
+        <div class="w-form-fail d-none">
+          <div>Oops! Something went wrong while submitting the form.</div>
+        </div>
+      </div>
+
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
@@ -536,12 +567,29 @@
 
     </script>
 
+    <script id="table-template" type="text/x-handlebars-template">
+
+    <tr>
+      <th>Project</th>
+      <th>Works / Material</th>
+      <th>Quantity</th>
+    </tr>
+    \{{#each this}}
+    <tr>
+      <td>\{{project}}</td>
+      <td>\{{works}}</td>
+      <td>\{{quantity}}</td>
+    </tr>
+    \{{/each}}
+
+  </script>
+
     <script>
 
       $('#email-form').on('submit',function(e) {
         e.preventDefault();
         let val = $("input[type='radio']:checked").val();
-        if (!val) return $('.w-form-fail:eq(0)').addClass('d-block');
+        if (!val) return $('.w-form-fail:eq(0)').addClass('d-block').html('Please select an input');
         $('.w-form-fail:eq(0)').removeClass('d-block');
         console.log(val);
         $('.new-form').removeClass('d-block').addClass('d-none');
@@ -692,6 +740,7 @@
             $(this).closest('.div-block-4').toggleClass('bg-success-light bg-secondary');
             $(this).html('Saved.!').attr('disabled',true).siblings('button').remove();
             $(this).closest('.div-block-4').find('.overlay').toggleClass('d-none');
+            refreshData();
           }).fail((e) => {
             console.log(e.responseText);
             $(this).closest('.div-block-4').find('.error').toggleClass('d-none').html(e.responseText);
@@ -727,28 +776,115 @@
       }
 
       let suggestions = [];
+      let res2 = [];
+      let fhccdata = {};
+      let unitdata = {};
 
       $(document).ready(() => {
+        refreshData();
+      })
+
+      function refreshData() {
+        $('.table-overlay').closest('.form').find('.w-form-fail').removeClass('d-block').addClass('d-none');
+        $('.table-overlay').removeClass('d-none').css({
+          height: $('.table-overlay').closest('.form').outerHeight(),
+          width: $('.table-overlay').closest('.form').outerWidth()
+        });
         $.ajax({
             url: '/getSuggestions',
             type: 'get',
             headers: {
                 'content-type': 'application/json',
             }
-          }).done((res) => {
+          }).done((msg) => {
+            $('.table-overlay').addClass('d-none');
+            let res = msg[1].values;
             $.each(res,function(key,value) {
               suggestions[key] = value[0]
             });
 
             suggestions = unique(suggestions);
 
+            res2 = msg[0].values;
+            showData(res2);
+
           }).fail((e) => {
+            $('.table-overlay').addClass('d-none');
             console.log(e.responseText);
+            $('.table-overlay').closest('.form').find('.w-form-fail').toggleClass('d-none d-block').html(e.responseText);
           });
+      };
+
+      function showData(data) {
+
+        fhccdata = {};
+        unitdata = {};
+        let rows = [];
+        let val = $('#upload-date').val();
+
+        arr = $.grep(data, function( n, i ) {
+          return n.indexOf(val) !== -1;
+        });
+
+        arr.sort(function(a, b){
+            if(a[4] < b[4]) { return -1; }
+            if(a[4] > b[4]) { return 1; }
+            return 0;
+        });
+
+        let fhcc = $.grep(arr,function(n,i){
+          return n[2].indexOf('FHCC') !== -1;
+        });
+
+        let unit = $.grep(arr,function(n,i){
+          return n[2].indexOf('Unit') !== -1;
+        });
+
+        $.each(fhcc,function(key,value) {
+          fhccdata[key] = {
+            project: value[4],
+            works: value[6],
+            quantity: value[7] + ' ' + value[8],
+          }
+        });
+
+        $.each(unit,function(key,value) {
+          unitdata[key] = {
+            project: value[4],
+            works: value[6],
+            quantity: value[7] + ' ' + value[8],
+          }
+        });
+
+        compileTableHbs(fhccdata);
+      }
+
+      $('#showFHCCData').on('click',function(){
+        $(this).removeClass('bg-primary text-dark border-dark');
+        $(this).siblings('button').addClass('bg-primary text-dark border-dark');
+        compileTableHbs(fhccdata);
+      });
+
+      $('#showUnitData').on('click',function(){
+        $(this).removeClass('bg-primary text-dark border-dark');
+        $(this).siblings('button').addClass('bg-primary text-dark border-dark');
+        compileTableHbs(unitdata);
+      });
+
+      $('#upload-date').on('change',function(){
+        showData(res2);
       })
+
+      function compileTableHbs(data) {
+        var source   = document.getElementById("table-template").innerHTML;
+        var template = Handlebars.compile(source);
+        var html    = template(data);
+        $('#today-table').html(html);
+      }
 
       function unique(list) {
         var result = [];
+
         $.each(list, function(i, e) {
           if ($.inArray(e, result) == -1) result.push(e);
         });
