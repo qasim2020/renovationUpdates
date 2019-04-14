@@ -543,7 +543,11 @@
         <button id="showUnitData" type="button" value="Submit" data-wait="Please wait..." class="form-button w-button bg-primary text-dark border-dark">Unit</button>
         <br><br>
         <table id="today-table" class="">
-
+          <tr>
+            <th>Project</th>
+            <th>Works</th>
+            <th>Quantity</th>
+          </tr>
         </table>
         <div class="table-overlay border-dark bg-dark d-none" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">
           <h3 class="saving" style="position:absolute;top:10%;left:50%;transform:translate(-50%,-50%);color:white;z-index:2">Loading Data</h3>
@@ -570,20 +574,20 @@
 
     <script id="table-template" type="text/x-handlebars-template">
 
-    <tr>
-      <th>Project</th>
-      <th>Works / Material</th>
-      <th>Quantity</th>
-    </tr>
-    \{{#each this}}
-    <tr>
-      <td>\{{project}}</td>
-      <td>\{{works}}</td>
-      <td>\{{quantity}}</td>
-    </tr>
-    \{{/each}}
+      \{{#if tabletitle}}
+      <tr>
+        <td rowspan="3">\{{tabletitle}}</td>
+      </tr>
+      \{{/if}}
+      \{{#each this}}
+      <tr>
+        <td>\{{project}}</td>
+        <td>\{{works}}</td>
+        <td>\{{quantity}}</td>
+      </tr>
+      \{{/each}}
 
-  </script>
+    </script>
 
     <script>
 
@@ -779,7 +783,9 @@
       let suggestions = [];
       let res2 = [];
       let fhccdata = {};
+      let fhccmaterial = {};
       let unitdata = {};
+      let unitmaterial = {};
 
       $(document).ready(() => {
         refreshData();
@@ -833,6 +839,12 @@
             return 0;
         });
 
+        arr.sort(function(a, b){
+            if(a[3] < b[3]) { return -1; }
+            if(a[3] > b[3]) { return 1; }
+            return 0;
+        });
+
         let fhcc = $.grep(arr,function(n,i){
           return n[2].indexOf('FHCC') !== -1;
         });
@@ -841,7 +853,19 @@
           return n[2].indexOf('Unit') !== -1;
         });
 
+        let i = 0;
         $.each(fhcc,function(key,value) {
+
+          if (value[3] == 'Material In') {
+            fhccmaterial[i] = {
+              type: value[3],
+              project: value[4],
+              works: value[6],
+              quantity: value[7] + ' ' + value[8],
+            };
+            return i++;
+          };
+
           fhccdata[key] = {
             type: value[3],
             project: value[4],
@@ -850,7 +874,20 @@
           };
         });
 
+        i = 0;
+
+        // console.log(fhccmaterial);
+
         $.each(unit,function(key,value) {
+          if (value[3] == 'Material In') {
+            unitmaterial[i] = {
+              type: value[3],
+              project: value[4],
+              works: value[6],
+              quantity: value[7] + ' ' + value[8],
+            };
+            return i++;
+          };
           unitdata[key] = {
             type: value[3],
             project: value[4],
@@ -859,7 +896,13 @@
           }
         });
 
+        fhccmaterial.tabletitle = 'Materials Entered';
+        unitmaterial.tabletitle = 'Materials Entered';
+
+        // console.log(fhccdata);
+
         compileTableHbs(fhccdata);
+        compileTableHbs(fhccmaterial);
       }
 
       $('#showFHCCData').on('click',function(){
@@ -882,6 +925,7 @@
         var source   = document.getElementById("table-template").innerHTML;
         var template = Handlebars.compile(source);
         var html    = template(data);
+        console.log(html);
         $('#today-table').html(html);
       }
 
