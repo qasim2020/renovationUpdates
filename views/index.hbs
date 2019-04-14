@@ -843,14 +843,16 @@
 
         $.each(fhcc,function(key,value) {
           fhccdata[key] = {
+            type: value[3],
             project: value[4],
             works: value[6],
             quantity: value[7] + ' ' + value[8],
-          }
+          };
         });
 
         $.each(unit,function(key,value) {
           unitdata[key] = {
+            type: value[3],
             project: value[4],
             works: value[6],
             quantity: value[7] + ' ' + value[8],
