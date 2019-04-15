@@ -543,11 +543,7 @@
         <button id="showUnitData" type="button" value="Submit" data-wait="Please wait..." class="form-button w-button bg-primary text-dark border-dark">Unit</button>
         <br><br>
         <table id="today-table" class="">
-          <tr>
-            <th>Project</th>
-            <th>Works</th>
-            <th>Quantity</th>
-          </tr>
+
         </table>
         <div class="table-overlay border-dark bg-dark d-none" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">
           <h3 class="saving" style="position:absolute;top:10%;left:50%;transform:translate(-50%,-50%);color:white;z-index:2">Loading Data</h3>
@@ -557,6 +553,8 @@
           <div>Oops! Something went wrong while submitting the form.</div>
         </div>
       </div>
+
+
 
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.1/handlebars.min.js"></script>
@@ -574,18 +572,50 @@
 
     <script id="table-template" type="text/x-handlebars-template">
 
+      <tr>
+        <th>Project</th>
+        <th>Works</th>
+        <th>Quantity</th>
+      </tr>
+
+      \{{#each this}}
+        \{{#if this.project}}
+
+          <tr>
+            <td>\{{project}}</td>
+            <td>\{{works}}</td>
+            <td>\{{quantity}}</td>
+          </tr>
+
+        \{{/if}}
+      \{{/each}}
+
+
+
+    </script>
+
+    <script id="material-template" type="text/x-handlebars-template">
+
       \{{#if tabletitle}}
       <tr>
-        <td rowspan="3">\{{tabletitle}}</td>
+        <th colspan="3"><b>\{{tabletitle}}</b></th>
       </tr>
       \{{/if}}
+
+
       \{{#each this}}
-      <tr>
-        <td>\{{project}}</td>
-        <td>\{{works}}</td>
-        <td>\{{quantity}}</td>
-      </tr>
+        \{{#if this.project}}
+
+          <tr>
+            <td>\{{project}}</td>
+            <td>\{{works}}</td>
+            <td>\{{quantity}}</td>
+          </tr>
+
+        \{{/if}}
       \{{/each}}
+
+
 
     </script>
 
@@ -876,8 +906,6 @@
 
         i = 0;
 
-        // console.log(fhccmaterial);
-
         $.each(unit,function(key,value) {
           if (value[3] == 'Material In') {
             unitmaterial[i] = {
@@ -899,22 +927,23 @@
         fhccmaterial.tabletitle = 'Materials Entered';
         unitmaterial.tabletitle = 'Materials Entered';
 
-        // console.log(fhccdata);
-
         compileTableHbs(fhccdata);
-        compileTableHbs(fhccmaterial);
+        compileMaterialHbs(fhccmaterial);
+
       }
 
       $('#showFHCCData').on('click',function(){
         $(this).removeClass('bg-primary text-dark border-dark');
         $(this).siblings('button').addClass('bg-primary text-dark border-dark');
         compileTableHbs(fhccdata);
+        compileMaterialHbs(fhccmaterial);
       });
 
       $('#showUnitData').on('click',function(){
         $(this).removeClass('bg-primary text-dark border-dark');
         $(this).siblings('button').addClass('bg-primary text-dark border-dark');
         compileTableHbs(unitdata);
+        compileMaterialHbs(unitmaterial);
       });
 
       $('#upload-date').on('change',function(){
@@ -925,8 +954,14 @@
         var source   = document.getElementById("table-template").innerHTML;
         var template = Handlebars.compile(source);
         var html    = template(data);
-        console.log(html);
         $('#today-table').html(html);
+      }
+
+      function compileMaterialHbs(data) {
+        var source   = document.getElementById("material-template").innerHTML;
+        var template = Handlebars.compile(source);
+        var html    = template(data);
+        $('#today-table').append(html);
       }
 
       function unique(list) {
