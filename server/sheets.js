@@ -11,7 +11,8 @@ let sheets = {
   bunkers: '1hTznrKNzJDImMyHuEg3yiktJf2nWfB8N0OWIjxu6uJ0',
   external: '1-ViuHnzTD-6OpRC7nnfj2BzQxMKthfmCAyzGwSGRceU',
   construction: '1-ViuHnzTD-6OpRC7nnfj2BzQxMKthfmCAyzGwSGRceU',
-  material: '10f4xlmbpb_1Lu8raDjk5ofxBZA1REIOZzUilm_lMzIs'
+  material: '10f4xlmbpb_1Lu8raDjk5ofxBZA1REIOZzUilm_lMzIs',
+  old: '15TGQS6gj_sZb0HkvvlwACL6YsuPxlgcvJb0xnyAoPw0'
 };
 
 function sheet(name,type,values) {
@@ -46,11 +47,6 @@ function todayUpdates(auth, value) {
       reject(err);
     }
     resolve(response.data.valueRanges);
-    // TODO: Change code below to process the `response` object:
-    // _.each(response.data.values, function(k,v) {
-    //   console.log(k,v);
-    // resolve();
-    // console.log(JSON.stringify(response, null, 2));
   });
   });
 };
@@ -98,7 +94,7 @@ function readSheet(auth, value) {
     const sheets = google.sheets({version: 'v4', auth});
     sheets.spreadsheets.values.get({
       spreadsheetId: value.sheet,
-      range: 'G2:G',
+      range: '1:1000',
     }, (err, res) => {
       if (err) return reject('The API returned an error: ' + err);
       const rows = res.data.values;

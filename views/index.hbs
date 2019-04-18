@@ -818,8 +818,42 @@
       let unitmaterial = {};
 
       $(document).ready(() => {
-        refreshData();
+        // refreshData();
+
+        sortOldData();
+        // $.ajax({
+        //     url: '/getOldData',
+        //     type: 'get',
+        //     headers: {
+        //         'content-type': 'application/json',
+        //     }
+        //   }).done((res) => {
+        //     console.log(res);
+        //     console.log('old data fetched !');
+        //     // sortOldData(res);
+        //     localStorage.data = JSON.stringify(res);
+        //     sortOldData();
+        //   }).fail((e) => {
+        //     console.log(e.responseText);
+        //   });
       })
+
+      function sortOldData() {
+        let data = JSON.parse(localStorage.data);
+        let dates = data[1];
+        let works = {};
+        let index = '';
+        works{['qasim']['hashim']} = 'hello world';
+        // $.each(data,function(key,value){
+        //   if (!value[0]) return;
+        //   // console.log(value[0].indexOf('Bunker'));
+        //   if (value[0].indexOf('Bunker') != -1) {
+        //     index = value[0];
+        //   };
+        //   works[['index'][value[0]]] = value;
+        // })
+        console.log(works);
+      }
 
       function refreshData() {
         $('.table-overlay').closest('.form').find('.w-form-fail').removeClass('d-block').addClass('d-none');

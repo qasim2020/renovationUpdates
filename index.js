@@ -16,7 +16,6 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 hbs.registerPartials(__dirname + '/views/partials');
 app.set('view engine','hbs');
 
-// sheet('external','read');
 // sheet('bunkers','read');
 // sheet('construction','read');
 // sheet('material','read');
@@ -36,6 +35,15 @@ app.get('/',(req,res) => {
 
 app.get('/getSuggestions',(req,res) => {
   sheet('external','todayUpdates').then((msg)=> {
+    res.status(200).send(msg);
+  }).catch((e) => {
+    console.log(e);
+    res.status(400).semd(e);
+  });
+});
+
+app.get('/getOldData',(req,res) => {
+  sheet('old','read').then((msg) => {
     res.status(200).send(msg);
   }).catch((e) => {
     console.log(e);
