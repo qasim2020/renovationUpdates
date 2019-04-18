@@ -843,14 +843,17 @@
         let dates = data[1];
         let works = {};
         let index = '';
-        // works{['qasim']['hashim']} = 'hello world';
+        let eachWork = {};
         $.each(data,function(key,value){
           if (!value[0]) return;
-          // console.log(value[0].indexOf('Bunker'));
           if (value[0].indexOf('Bunker') != -1) {
+            eachWork = {};
             index = value[0];
           };
-          works[['index'][value[0]]] = value;
+          eachWork[value[0]] = $.each(value,function(nKey,nValue) {
+            return nValue;
+          });
+          works[index] = eachWork;
         })
         console.log(works);
       }
