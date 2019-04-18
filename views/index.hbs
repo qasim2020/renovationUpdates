@@ -843,15 +843,15 @@
         let dates = data[1];
         let works = {};
         let index = '';
-        works{['qasim']['hashim']} = 'hello world';
-        // $.each(data,function(key,value){
-        //   if (!value[0]) return;
-        //   // console.log(value[0].indexOf('Bunker'));
-        //   if (value[0].indexOf('Bunker') != -1) {
-        //     index = value[0];
-        //   };
-        //   works[['index'][value[0]]] = value;
-        // })
+        // works{['qasim']['hashim']} = 'hello world';
+        $.each(data,function(key,value){
+          if (!value[0]) return;
+          // console.log(value[0].indexOf('Bunker'));
+          if (value[0].indexOf('Bunker') != -1) {
+            index = value[0];
+          };
+          works[['index'][value[0]]] = value;
+        })
         console.log(works);
       }
 
