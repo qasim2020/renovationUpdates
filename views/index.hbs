@@ -842,21 +842,61 @@
         let data = JSON.parse(localStorage.data);
         let dates = data[1];
         let works = {};
+        let obj = {};
         let index = '';
-        let eachWork = {};
+        let eachWork = [];
         $.each(data,function(key,value){
           if (!value[0]) return;
-          if (value[0].indexOf('Bunker') != -1) {
-            eachWork = {};
-            index = value[0];
+          if (value[0].indexOf('Bunker') != -1 || value[0].indexOf('Mosque') != -1 || value[0].indexOf('Entrance Main Gate') != -1 || value[0].indexOf('FHCC Pathways') != -1 || value[0].indexOf('OFC / UG Laying') != -1) {
+            eachWork = [];
+            return index = value[0];
           };
-          eachWork[value[0]] = $.each(value,function(nKey,nValue) {
-            return nValue;
+          if (!index) return;
+          obj = {};
+          $.each(value,function(nKey,nValue) {
+            if (!nValue || nKey == 0 || nKey == 1) return;
+            let prop = dates[nKey];
+            obj[prop] = nValue;
           });
+          // console.log(obj);
+          eachWork[value[0]] = obj;
           works[index] = eachWork;
         })
-        console.log(works);
+
+        // console.log(works);
+        let sortedData = [];
+
+        $.each(works,function(key,value){
+          console.log(key,value[0]);
+          $.each(value,function(nKey,nValue){
+            console.log(nValue);
+            // $.each(nValue,function(mKey,mValue){
+            //   console.log(mValue);
+            //   let arr = [
+            //     new Date().toString(),
+            //     mKey, // Day
+            //     'FHCC',
+            //     'Bunkers Works (FHCC)',
+            //     key, // Project
+            //     'JukeBox',
+            //     nKey, // Works
+            //   ];
+            //   sortedData.push(arr);
+            // })
+          })
+        })
+        // console.log(sortedData);
       }
+      // Time stamp	Work Day	Location	Category	Project	Resp	Works / Material	Quantity	Units	Remarks
+      // Mosque
+      // Entrance Main Gate
+      // FHCC Pathways
+      // OFC / UG Laying
+      // works = {
+      //   eachWork[value[0]] : {
+      //     obj[prop] : nValue,
+      //   }
+      // }
 
       function refreshData() {
         $('.table-overlay').closest('.form').find('.w-form-fail').removeClass('d-block').addClass('d-none');
