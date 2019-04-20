@@ -3,6 +3,7 @@ const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
 const _ = require('lodash');
+const axios = require('axios');
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const TOKEN_PATH = 'token.json';
@@ -12,7 +13,8 @@ let sheets = {
   external: '1-ViuHnzTD-6OpRC7nnfj2BzQxMKthfmCAyzGwSGRceU',
   construction: '1-ViuHnzTD-6OpRC7nnfj2BzQxMKthfmCAyzGwSGRceU',
   material: '10f4xlmbpb_1Lu8raDjk5ofxBZA1REIOZzUilm_lMzIs',
-  old: '15TGQS6gj_sZb0HkvvlwACL6YsuPxlgcvJb0xnyAoPw0'
+  old: '15TGQS6gj_sZb0HkvvlwACL6YsuPxlgcvJb0xnyAoPw0',
+  oldformatted: '1Eb8K8-Ksy-DnDTD0FIRyhNsJTaKGgYuhk50bD7axUfw'
 };
 
 function sheet(name,type,values) {
@@ -26,6 +28,7 @@ function sheet(name,type,values) {
       };
       if (type == 'read') return resolve(authorize(data, readSheet));
       if (type == 'update') return resolve(authorize(data,updateSheet));
+      if (type == 'batchUpdate') return resolve(authorize(data,batchUpdateSheet));
       if (type == 'todayUpdates') return resolve(authorize(data,todayUpdates));
     });
   });
@@ -92,17 +95,19 @@ function getNewToken(oAuth2Client, callback) {
 function readSheet(auth, value) {
   return new Promise((resolve,reject) => {
     const sheets = google.sheets({version: 'v4', auth});
-    sheets.spreadsheets.values.get({
+    var request = {
       spreadsheetId: value.sheet,
-      range: '1:1000',
-    }, (err, res) => {
-      if (err) return reject('The API returned an error: ' + err);
-      const rows = res.data.values;
-      if (rows.length) {
-        resolve(rows);
-      } else {
-        reject('No data found.');
+      ranges: ['Sheet 1 - Progress!1:1000','Sheet 2 - Material!1:100'],
+      valueRenderOption: 'UNFORMATTED_VALUE',
+      dateTimeRenderOption: 'FORMATTED_STRING',
+    };
+
+    sheets.spreadsheets.values.batchGet(request, function(err, response) {
+      if (err) {
+        console.error(err);
+        return reject(err);
       }
+      return resolve(response.data.valueRanges);
     });
   });
 };
@@ -123,6 +128,29 @@ function updateSheet(auth,value) {
     }, (err, res) => {
       if (err) return reject('The API returned an error: ' + err);
       resolve(res.data);
+    });
+  });
+};
+
+function batchUpdateSheet(auth,value) {
+  return new Promise((resolve,reject) => {
+    const sheets = google.sheets({version: 'v4', auth});
+    let values = value.values;
+    const resource = {
+      data: [
+        {
+          "range":"Sheet1!A2:Z2000",
+          values,
+        }
+      ],
+      valueInputOption: 'RAW',
+    };
+    sheets.spreadsheets.values.batchUpdate({
+      spreadsheetId: value.sheet,
+      resource,
+    }, (err, res) => {
+      if (err) return reject('The batchUpdate API returned an error: ' + err);
+      return resolve(res.data);
     });
   });
 };

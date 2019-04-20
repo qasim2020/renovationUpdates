@@ -237,7 +237,7 @@
             <label>Project Name</label>
             <select data-name="name" id="const-projName" name="field-7" required="" class="w-select">
               <option value>Select one...</option>
-              <option value="Bunker 1 Washroom & FHCC">Bunker 1 Washroom<option value>Select one...</option>
+              <option value="Bunker 1 Washroom & FHCC">Bunker 1 Washroom</option>
               <option value="Bunker 1 Washroom & FHCC">Washrooms</option>
               <option value="Entrance main Gate & FHCC">Entrance main Gate</option>
               <option value="Car Park Shed & FHCC">Car Park Shed</option>
@@ -313,7 +313,7 @@
             <label>Project Name</label>
             <select data-name="name" id="ext-projName" name="field-7" required="" class="w-select">
               <option value>Select one...</option>
-              <option value="Boundary Wall Paint & FHCC">Boundary Wall Paint</option>
+              <option value="Boundary Wall & FHCC">Boundary Wall</option>
               <option value="New Lintels & FHCC">New Lintels</option>
               <option value="Outdoor CCTV Installation & FHCC">Outdoor CCTV Installation</option>
               <option value="Outdoor Lights & FHCC">Outdoor Lights</option>
@@ -832,71 +832,137 @@
         //     console.log('old data fetched !');
         //     // sortOldData(res);
         //     localStorage.data = JSON.stringify(res);
-        //     sortOldData();
+        //     // sortOldData();
         //   }).fail((e) => {
         //     console.log(e.responseText);
         //   });
-      })
+      });
 
       function sortOldData() {
-        let data = JSON.parse(localStorage.data);
+
+        let dataWorks = JSON.parse(localStorage.data)[0].values;
+        let dataMaterials = JSON.parse(localStorage.data)[1].values;
+        let sortedMaterialData = sortOldMaterialData(dataMaterials);
+        return console.log(sortedMaterialData);
+
+        let sortedData = sortOldWorksData(dataWorks);
+        sortedData.sort(function(a, b){
+            if(a[0] < b[0]) { return -1; }
+            if(a[0] > b[0]) { return 1; }
+            return 0;
+        });
+
+        $.each(sortedData,function(key,value){
+          this[0] = value[0].toString();
+        });
+
+        return console.log(sortedData);
+
+        sortedData = JSON.stringify(sortedData);
+
+        $.ajax({
+            url: '/oldDataUpload',
+            type: 'post',
+            data: sortedData,
+            headers: {
+                'content-type': 'application/json',
+            }
+          }).done((res) => {
+            console.log(res);
+          }).fail((e) => {
+            console.log(e.responseText);
+          });
+
+      }
+
+      function sortOldMaterialData(data) {
+        let dates = [];
+        var material = data[1];
+        let eachWork = {};
+        $.each(data,function(key,value){
+          dates[key] = value[0];
+        })
+
+        $.each(data,function(key,value){
+          // console.log(value);
+          $.each(value,function(nKey,nValue){
+            eachWork[material[nKey]] = nValue;
+          })
+        })
+
+        console.log(eachWork);
+
+        // 0: "Fri Nov 30 2018 00:00:00 GMT+0500 (Pakistan Standard Time)"
+        // 1: "11/30/2018"
+        // 2: "FHCC"
+        // 3: "Bunkers Works (FHCC)"
+        // 4: "Bunker 2"
+        // 5: "Juke Box"
+        // 6: "External Plastering"
+        // 7: 162
+        dates = dates.slice(3,dates.length);
+        // return material;
+      }
+
+      function sortOldWorksData(data) {
         let dates = data[1];
         let works = {};
         let obj = {};
         let index = '';
-        let eachWork = [];
+        let eachWork = {};
         $.each(data,function(key,value){
           if (!value[0]) return;
-          if (value[0].indexOf('Bunker') != -1 || value[0].indexOf('Mosque') != -1 || value[0].indexOf('Entrance Main Gate') != -1 || value[0].indexOf('FHCC Pathways') != -1 || value[0].indexOf('OFC / UG Laying') != -1) {
-            eachWork = [];
+          if (value[0].indexOf('Bunker') != -1 || value[0].indexOf('Mosque') != -1 || value[0].indexOf('Entrance Main Gate') != -1 || value[0].indexOf('FHCC Pathways') != -1 || value[0].indexOf('OFC / UG Laying') != -1 || value[0] == 'Drain') {
+            eachWork = {};
             return index = value[0];
           };
           if (!index) return;
           obj = {};
           $.each(value,function(nKey,nValue) {
             if (!nValue || nKey == 0 || nKey == 1) return;
+            // if (!nValue) return;
             let prop = dates[nKey];
             obj[prop] = nValue;
           });
-          // console.log(obj);
+
           eachWork[value[0]] = obj;
           works[index] = eachWork;
-        })
+        });
 
-        // console.log(works);
         let sortedData = [];
 
         $.each(works,function(key,value){
-          console.log(key,value[0]);
           $.each(value,function(nKey,nValue){
-            console.log(nValue);
-            // $.each(nValue,function(mKey,mValue){
-            //   console.log(mValue);
-            //   let arr = [
-            //     new Date().toString(),
-            //     mKey, // Day
-            //     'FHCC',
-            //     'Bunkers Works (FHCC)',
-            //     key, // Project
-            //     'JukeBox',
-            //     nKey, // Works
-            //   ];
-            //   sortedData.push(arr);
-            // })
+            $.each(nValue,function(mKey,mValue){
+              let arr = [];
+              arr[0] = new Date(mKey);
+              arr[1] = mKey;
+              arr[2] = 'FHCC';
+              arr[3] = ''; // 'Bunkers Works (FHCC)',
+              arr[4] = key;
+              arr[5] = ''; // 'Juke Box',
+              arr[6] = nKey;
+              arr[7] = mValue;
+
+              if (key.indexOf('Pathways') != -1) {
+                arr[3] = 'New Construction';
+                arr[5] = 'MES';
+              } else if (key.indexOf('OFC / UG') != -1) {
+                arr[3] = 'New Construction';
+                arr[5] = 'Pak Arab';
+              } else {
+                arr[3] = 'Bunkers Works (FHCC)';
+                arr[5] = 'Juke Box';
+              }
+
+              sortedData.push(arr);
+            })
           })
-        })
-        // console.log(sortedData);
-      }
-      // Time stamp	Work Day	Location	Category	Project	Resp	Works / Material	Quantity	Units	Remarks
-      // Mosque
-      // Entrance Main Gate
-      // FHCC Pathways
-      // OFC / UG Laying
-      // works = {
-      //   eachWork[value[0]] : {
-      //     obj[prop] : nValue,
-      //   }
-      // }
+        });
+
+        return sortedData;
+
+      };
 
       function refreshData() {
         $('.table-overlay').closest('.form').find('.w-form-fail').removeClass('d-block').addClass('d-none');

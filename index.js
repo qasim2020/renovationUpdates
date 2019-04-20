@@ -38,7 +38,7 @@ app.get('/getSuggestions',(req,res) => {
     res.status(200).send(msg);
   }).catch((e) => {
     console.log(e);
-    res.status(400).semd(e);
+    res.status(400).send(e);
   });
 });
 
@@ -46,8 +46,8 @@ app.get('/getOldData',(req,res) => {
   sheet('old','read').then((msg) => {
     res.status(200).send(msg);
   }).catch((e) => {
-    console.log(e);
-    res.status(400).semd(e);
+    console.log(e.response.status,e.response.statusText);
+    res.status(400).send(e);
   });
 })
 
@@ -60,6 +60,16 @@ app.post('/data',(req,res) => {
   }).catch((e) => {
     console.log(e);
     return res.status(400).send(e);
+  })
+});
+
+app.post('/oldDataUpload',(req,res) => {
+  // console.log(req.body);
+  sheet('oldformatted','batchUpdate',req.body).then((msg) => {
+    return res.status(200).send(msg);
+  }).catch((e) => {
+    console.log(e);
+    res.status(400).send(e);
   })
 });
 
