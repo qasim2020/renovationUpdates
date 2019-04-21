@@ -97,7 +97,7 @@ function readSheet(auth, value) {
     const sheets = google.sheets({version: 'v4', auth});
     var request = {
       spreadsheetId: value.sheet,
-      ranges: ['Sheet 1 - Progress!1:1000','Sheet 2 - Material!1:100'],
+      ranges: ['Sheet1!1:1000','Sheet2!1:1000'],
       valueRenderOption: 'UNFORMATTED_VALUE',
       dateTimeRenderOption: 'FORMATTED_STRING',
     };

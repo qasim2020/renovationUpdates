@@ -818,9 +818,9 @@
       let unitmaterial = {};
 
       $(document).ready(() => {
-        // refreshData();
+        refreshData();
 
-        sortOldData();
+        // sortOldData();
         // $.ajax({
         //     url: '/getOldData',
         //     type: 'get',
@@ -832,20 +832,21 @@
         //     console.log('old data fetched !');
         //     // sortOldData(res);
         //     localStorage.data = JSON.stringify(res);
-        //     // sortOldData();
+        //     sortOldData();
         //   }).fail((e) => {
         //     console.log(e.responseText);
         //   });
       });
 
+      let sortedData = [];
+
       function sortOldData() {
 
         let dataWorks = JSON.parse(localStorage.data)[0].values;
         let dataMaterials = JSON.parse(localStorage.data)[1].values;
-        let sortedMaterialData = sortOldMaterialData(dataMaterials);
-        return console.log(sortedMaterialData);
+        sortOldWorksData(dataMaterials);
+        sortOldWorksData(dataWorks);
 
-        let sortedData = sortOldWorksData(dataWorks);
         sortedData.sort(function(a, b){
             if(a[0] < b[0]) { return -1; }
             if(a[0] > b[0]) { return 1; }
@@ -856,9 +857,8 @@
           this[0] = value[0].toString();
         });
 
-        return console.log(sortedData);
-
         sortedData = JSON.stringify(sortedData);
+        console.log('ajax started');
 
         $.ajax({
             url: '/oldDataUpload',
@@ -873,35 +873,6 @@
             console.log(e.responseText);
           });
 
-      }
-
-      function sortOldMaterialData(data) {
-        let dates = [];
-        var material = data[1];
-        let eachWork = {};
-        $.each(data,function(key,value){
-          dates[key] = value[0];
-        })
-
-        $.each(data,function(key,value){
-          // console.log(value);
-          $.each(value,function(nKey,nValue){
-            eachWork[material[nKey]] = nValue;
-          })
-        })
-
-        console.log(eachWork);
-
-        // 0: "Fri Nov 30 2018 00:00:00 GMT+0500 (Pakistan Standard Time)"
-        // 1: "11/30/2018"
-        // 2: "FHCC"
-        // 3: "Bunkers Works (FHCC)"
-        // 4: "Bunker 2"
-        // 5: "Juke Box"
-        // 6: "External Plastering"
-        // 7: 162
-        dates = dates.slice(3,dates.length);
-        // return material;
       }
 
       function sortOldWorksData(data) {
@@ -920,7 +891,6 @@
           obj = {};
           $.each(value,function(nKey,nValue) {
             if (!nValue || nKey == 0 || nKey == 1) return;
-            // if (!nValue) return;
             let prop = dates[nKey];
             obj[prop] = nValue;
           });
@@ -928,8 +898,6 @@
           eachWork[value[0]] = obj;
           works[index] = eachWork;
         });
-
-        let sortedData = [];
 
         $.each(works,function(key,value){
           $.each(value,function(nKey,nValue){
@@ -944,7 +912,10 @@
               arr[6] = nKey;
               arr[7] = mValue;
 
-              if (key.indexOf('Pathways') != -1) {
+              if (key.indexOf('Bunkers') != -1) {
+                arr[3] = 'Material In';
+                arr[5] = 'Juke Box';
+              } else if (key.indexOf('Pathways') != -1) {
                 arr[3] = 'New Construction';
                 arr[5] = 'MES';
               } else if (key.indexOf('OFC / UG') != -1) {
