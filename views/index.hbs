@@ -289,6 +289,8 @@
               <option value="truck">truck</option>
               <option value="trolley">trolley</option>
               <option value="units">units</option>
+              <option value="meters">meters</option>
+              <option value="buckets">buckets</option>
               <option value="Other">Other (please mention in remarks)</option>
             </select>
 
@@ -349,6 +351,8 @@
               <option value="truck">truck</option>
               <option value="trolley">trolley</option>
               <option value="units">units</option>
+              <option value="meters">meters</option>
+              <option value="buckets">buckets</option>
               <option value="Other">Other (please mention in remarks)</option>
             </select>
 
@@ -409,6 +413,8 @@
               <option value="truck">truck</option>
               <option value="trolley">trolley</option>
               <option value="units">units</option>
+              <option value="meters">meters</option>
+              <option value="buckets">buckets</option>
               <option value="Other">Other (please mention in remarks)</option>
             </select>
 
@@ -486,6 +492,8 @@
               <option value="truck">truck</option>
               <option value="trolley">trolley</option>
               <option value="units">units</option>
+              <option value="meters">meters</option>
+              <option value="buckets">buckets</option>
               <option value="Other">Other (please mention in remarks)</option>
             </select>
 
@@ -538,6 +546,7 @@
       <div class="text-3"><strong></strong> <span></span> </div>
 
       <div class="form w-form shadow" style="position:relative">
+
         <label for="" class="field-label">Today's Updates</label>
         <button id="showFHCCData" type="button" value="Submit" data-wait="Please wait..." class="form-button w-button">FHCC</button>
         <button id="showUnitData" type="button" value="Submit" data-wait="Please wait..." class="form-button w-button bg-primary text-dark border-dark">Unit</button>
@@ -545,13 +554,16 @@
         <table id="today-table" class="">
 
         </table>
+
         <div class="table-overlay border-dark bg-dark d-none" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">
           <h3 class="saving" style="position:absolute;top:10%;left:50%;transform:translate(-50%,-50%);color:white;z-index:2">Loading Data</h3>
           <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
         </div>
+
         <div class="w-form-fail d-none">
           <div>Oops! Something went wrong while submitting the form.</div>
         </div>
+
       </div>
 
 
@@ -966,7 +978,7 @@
           });
       };
 
-      function showData(data) {
+      function showData(data,location) {
 
         fhccdata = {};
         unitdata = {};
@@ -976,6 +988,10 @@
         arr = $.grep(data, function( n, i ) {
           return n.indexOf(date) !== -1;
         });
+
+        if (!arr.length) {
+          return $('#today-table').html('').siblings('.w-form-fail').removeClass('d-none').addClass('d-block').html('Sorry no data found for this date.');
+        }
 
         arr.sort(function(a, b){
             if(a[4] < b[4]) { return -1; }
@@ -1041,8 +1057,15 @@
         fhccmaterial.tabletitle = 'Materials Entered';
         unitmaterial.tabletitle = 'Materials Entered';
 
-        compileTableHbs(fhccdata);
-        compileMaterialHbs(fhccmaterial);
+        let loc = location || 'FHCC';
+        console.log(loc);
+        if (loc == 'FHCC') {
+          compileTableHbs(fhccdata);
+          compileMaterialHbs(fhccmaterial);
+        } else {
+          compileTableHbs(unitdata);
+          compileMaterialHbs(unitmaterial);
+        };
 
       }
 
@@ -1061,10 +1084,17 @@
       });
 
       $('#upload-date').on('change',function(){
-        showData(res2);
+        let loc;
+        if ($('#showUnitData').attr('class').indexOf('bg-primary') == -1) {
+          loc = 'unit';
+        } else {
+          loc = 'FHCC';
+        }
+        showData(res2,loc);
       })
 
       function compileTableHbs(data) {
+        $('#today-table').siblings('.w-form-fail').removeClass('d-block').addClass('d-none');
         var source   = document.getElementById("table-template").innerHTML;
         var template = Handlebars.compile(source);
         var html    = template(data);
@@ -1072,6 +1102,7 @@
       }
 
       function compileMaterialHbs(data) {
+        $('#today-table').siblings('.w-form-fail').removeClass('d-block').addClass('d-none');
         var source   = document.getElementById("material-template").innerHTML;
         var template = Handlebars.compile(source);
         var html    = template(data);
