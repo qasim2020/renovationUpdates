@@ -742,13 +742,13 @@
         $(this).closest('div').toggleClass('d-none d-block');
       });
 
-      $(`.field-label:contains('New Construction')`).closest('div').toggleClass('d-none d-block');
-      $('#const-projName').val('Bunker 1 Washroom & FHCC');
-      $('#const-resp').val('MES');
-      $('#const-work').val('a lot of work done on foundations today');
-      $('#const-qty').val('300');
-      $('#const-unit').val('sft');
-      $('#const-remarks').val('it was their first day of work today');
+      // $(`.field-label:contains('New Construction')`).closest('div').toggleClass('d-none d-block');
+      // $('#const-projName').val('Bunker 1 Washroom & FHCC');
+      // $('#const-resp').val('MES');
+      // $('#const-work').val('a lot of work done on foundations today');
+      // $('#const-qty').val('300');
+      // $('#const-unit').val('sft');
+      // $('#const-remarks').val('it was their first day of work today');
 
       $(document).on('click','.btn-submit',function() {
         $(this).closest('.div-block-4').find('.overlay').toggleClass('d-none').css({
@@ -982,7 +982,7 @@
             });
 
             suggestions = unique(suggestions);
-            localStorage.data = JSON.stringify(msg[0].values);
+            // localStorage.data = JSON.stringify(msg[0].values);
             res2 = msg[0].values;
             showData(res2);
 
