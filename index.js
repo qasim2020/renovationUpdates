@@ -52,8 +52,8 @@ app.get('/getOldData',(req,res) => {
 })
 
 app.post('/data',(req,res) => {
-  _.pick(req.body,['timestamp','date','loc','category','name','responsibility','work','quantity','unit','remarks']);
-  var arr = _.values(req.body);
+  // _.pick(req.body,['timestamp','date','loc','category','name','responsibility','work','quantity','unit','remarks']);
+  let arr = req.body;
   if (arr.length != 10) return res.status(400).send('Please fill all the fields in the form.');
   sheet('external','update',[arr]).then((msg) => {
     return res.status(200).send(msg);

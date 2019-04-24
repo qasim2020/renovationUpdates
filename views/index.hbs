@@ -742,13 +742,13 @@
         $(this).closest('div').toggleClass('d-none d-block');
       });
 
-      // $(`.field-label:contains('New Construction')`).closest('div').toggleClass('d-none d-block');
-      // $('#const-projName').val('Bunker 1 Washroom & FHCC');
-      // $('#const-resp').val('MES');
-      // $('#const-work').val('a lot of work done on foundations today');
-      // $('#const-qty').val('300');
-      // $('#const-unit').val('sft');
-      // $('#const-remarks').val('it was their first day of work today');
+      $(`.field-label:contains('New Construction')`).closest('div').toggleClass('d-none d-block');
+      $('#const-projName').val('Bunker 1 Washroom & FHCC');
+      $('#const-resp').val('MES');
+      $('#const-work').val('a lot of work done on foundations today');
+      $('#const-qty').val('300');
+      $('#const-unit').val('sft');
+      $('#const-remarks').val('it was their first day of work today');
 
       $(document).on('click','.btn-submit',function() {
         $(this).closest('.div-block-4').find('.overlay').toggleClass('d-none').css({
@@ -758,21 +758,27 @@
         $(this).closest('.div-block-4').find('.date-selected').closest('.text-3').removeClass('text-3');
         let category = $(this).closest('.div-block-4').find('.bold-text-2').html().split('Category: ')[1];
         // date','category','name','responsibility','work','quantity','unit','remarks'
+        // "Thu Nov 29 2018 00:00:00 GMT+0500 (Pakistan Standard Time)", "11/29/2018", "FHCC", "Material In", "Bunkers", "Juke Box", "Cement", "50 Bags"]
         let date = $('#upload-date').val();
-        let data = {
-          timestamp: new Date().toString(),
-          date: $(this).closest('.div-block-4').find('.date-selected').html().split('-').reverse().join('-'),
-          loc: $(this).closest('.div-block-4').find('.location').data().location.trim(),
+        let data = [
+          new Date().toString(),
+          $(this).closest('.div-block-4').find('.date-selected').html().split('-').reverse().join('-'),
+          $(this).closest('.div-block-4').find('.location').data().location.trim(),
           category,
-        };
-
+        ]
+        let i = 4;
         $(this).closest('.div-block-4').find('.text-3').each(function() {
-          let key = $(this).children('span').data().myName;
+          // let key = $(this).children('span').data().myName;
           let value = $(this).children('span').html().trim();
-          data[key] = value;
+          data[i] = value;
+          i++
         });
 
-        // return console.log(data);
+        // console.log(JSON.parse(localStorage.data));
+        // thisdata = JSON.parse(localStorage.data);
+        // console.log(thisdata);
+        // thisdata[thisdata.length] = data;
+        // return console.log(thisdata);
 
         data = JSON.stringify(data);
         $.ajax({
@@ -787,7 +793,11 @@
             $(this).closest('.div-block-4').toggleClass('bg-success-light bg-secondary');
             $(this).html('Saved.!').attr('disabled',true).siblings('button').remove();
             $(this).closest('.div-block-4').find('.overlay').toggleClass('d-none');
-            refreshData();
+
+            let mydata = JSON.parse(data);
+            res2[res2.length] = mydata;
+            showData(res2,mydata[2]);
+
           }).fail((e) => {
             console.log(e.responseText);
             $(this).closest('.div-block-4').find('.error').toggleClass('d-none').html(e.responseText);
@@ -953,6 +963,11 @@
           height: $('.table-overlay').closest('.form').outerHeight(),
           width: $('.table-overlay').closest('.form').outerWidth()
         });
+
+        // res2 = JSON.parse(localStorage.data);
+        // showData(res2);
+        // $('.table-overlay').addClass('d-none');
+
         $.ajax({
             url: '/getSuggestions',
             type: 'get',
@@ -967,7 +982,7 @@
             });
 
             suggestions = unique(suggestions);
-
+            localStorage.data = JSON.stringify(msg[0].values);
             res2 = msg[0].values;
             showData(res2);
 
@@ -981,12 +996,17 @@
       function showData(data,location) {
 
         fhccdata = {};
+        fhccmaterial = {};
         unitdata = {};
+        unitmaterial = {};
+
         let rows = [];
         let date = $('#upload-date').val();
 
         arr = $.grep(data, function( n, i ) {
-          return n.indexOf(date) !== -1;
+          let dataDate = new Date(n[1]).toString().slice(0,15);
+          let valueDate = new Date(date).toString().slice(0,15);
+          return dataDate.indexOf(valueDate) != -1;
         });
 
         if (!arr.length) {
@@ -1016,12 +1036,14 @@
         let i = 0;
         $.each(fhcc,function(key,value) {
 
+          let myunit = value[8] || '';
+
           if (value[3] == 'Material In') {
             fhccmaterial[i] = {
               type: value[3],
               project: value[4],
               works: value[6],
-              quantity: value[7] + ' ' + value[8],
+              quantity: value[7] + ' ' + myunit,
             };
             return i++;
           };
@@ -1030,19 +1052,22 @@
             type: value[3],
             project: value[4],
             works: value[6],
-            quantity: value[7] + ' ' + value[8],
+            quantity: value[7] + ' ' + myunit,
           };
         });
 
         i = 0;
 
         $.each(unit,function(key,value) {
+
+          let myunit2 = value[8] || '';
+
           if (value[3] == 'Material In') {
             unitmaterial[i] = {
               type: value[3],
               project: value[4],
               works: value[6],
-              quantity: value[7] + ' ' + value[8],
+              quantity: value[7] + ' ' + myunit2,
             };
             return i++;
           };
@@ -1050,7 +1075,7 @@
             type: value[3],
             project: value[4],
             works: value[6],
-            quantity: value[7] + ' ' + value[8],
+            quantity: value[7] + ' ' + myunit2,
           }
         });
 

@@ -39,7 +39,7 @@ function todayUpdates(auth, value) {
     const sheets = google.sheets({version: 'v4', auth});
     var request = {
     spreadsheetId: value.sheet,
-    ranges: ['A1:J','G2:G'],
+    ranges: ['Sheet2!A1:J','Sheet2!G2:G'],
     valueRenderOption: 'UNFORMATTED_VALUE',
     dateTimeRenderOption: 'FORMATTED_STRING',
   };
@@ -122,7 +122,7 @@ function updateSheet(auth,value) {
     };
     sheets.spreadsheets.values.append({
       spreadsheetId: value.sheet,
-      range: "A:Z",
+      range: "Sheet2!A:Z",
       valueInputOption: "RAW",
       resource,
     }, (err, res) => {
