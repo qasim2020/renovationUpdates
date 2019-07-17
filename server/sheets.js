@@ -35,23 +35,27 @@ function sheet(name,type,values) {
 }
 
 function todayUpdates(auth, value) {
+
   return new Promise((resolve,reject) => {
     const sheets = google.sheets({version: 'v4', auth});
+    console.log(value.sheet);
     var request = {
     spreadsheetId: value.sheet,
-    ranges: ['A1:J','G2:G'],
+    ranges: ['Sheet2!A1:J2000','Sheet2!G2:G'],
     valueRenderOption: 'UNFORMATTED_VALUE',
     dateTimeRenderOption: 'FORMATTED_STRING',
   };
 
   sheets.spreadsheets.values.batchGet(request, function(err, response) {
-    if (err) {
-      console.error(err);
-      reject(err);
-    }
-    resolve(response.data.valueRanges);
+      if (err) {
+        console.error(err);
+        reject(err);
+      }
+      resolve(response.data.valueRanges);
+    });
+
   });
-  });
+
 };
 
 function authorize(credentials, callback) {
@@ -122,7 +126,7 @@ function updateSheet(auth,value) {
     };
     sheets.spreadsheets.values.append({
       spreadsheetId: value.sheet,
-      range: "A:Z",
+      range: "Sheet2!A:Z",
       valueInputOption: "RAW",
       resource,
     }, (err, res) => {
