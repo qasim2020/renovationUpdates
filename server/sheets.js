@@ -35,8 +35,10 @@ function sheet(name,type,values) {
 }
 
 function todayUpdates(auth, value) {
+
   return new Promise((resolve,reject) => {
     const sheets = google.sheets({version: 'v4', auth});
+    console.log(value.sheet);
     var request = {
     spreadsheetId: value.sheet,
     ranges: ['Sheet2!A1:J','Sheet2!G2:G'],
@@ -45,13 +47,15 @@ function todayUpdates(auth, value) {
   };
 
   sheets.spreadsheets.values.batchGet(request, function(err, response) {
-    if (err) {
-      console.error(err);
-      reject(err);
-    }
-    resolve(response.data.valueRanges);
+      if (err) {
+        console.error(err);
+        reject(err);
+      }
+      resolve(response.data.valueRanges);
+    });
+
   });
-  });
+
 };
 
 function authorize(credentials, callback) {
