@@ -27,7 +27,7 @@
     "express": "^4.16.4",
     "googleapis": "^27.0.0",
     "hbs": "^4.0.4",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "moment": "^2.24.0",
     "read-excel-file": "^4.0.3"
   }
