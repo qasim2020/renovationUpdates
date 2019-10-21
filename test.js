@@ -2,94 +2,86 @@ const readXlsxFile = require('read-excel-file/node');
 
 readXlsxFile(__dirname+'/server/leaveplan.xlsm').then((rows) => {
   let formattedData = rows.map(val => {
-    return {name: val[1], rank: val[0], nextLeave: val[2], nextLeaveDuration: val[3], lastArrival: val[4], onleave: new Date() - val[4] < 0, onDutyPeriod: Math.round((new Date() - val[4]) / 24 / 60 / 60 / 1000)}
+    return {
+      name: val[1],
+      rank: val[0],
+      nextLeave: val[2],
+      nextLeaveDuration: val[3],
+      lastArrival: val[4],
+      onleave: new Date() - val[4] < 0,
+      onDutyPeriod: Math.round((new Date() - val[4]) / 24 / 60 / 60 / 1000)
+    }
   }).filter(val => {
     return val.rank;
   });
 
-  let longestPeriodSorted = formattedData.sort((a,b) => b.onDutyPeriod - a.onDutyPeriod).filter(val => val.onDutyPeriod > 0);
+  let leaveSlot = 10;
 
-  let onLeave = formattedData.reduce((total,val) => {
-    if (val.onleave) return total+1;
-    return total;
-  },0)
+  for (var i = 0; i < 30; i++) {
 
-  console.log(longestPeriodSorted, onLeave);
+    let longestPeriodSorted = formattedData.sort((a,b) => b.onDutyPeriod - a.onDutyPeriod).filter(val => val.onDutyPeriod > 0);
 
-  // let longestPeriodSorted = formattedData.sort((a,b) => b.onDutyPeriod - a.onDutyPeriod).filter(val => val.onDutyPeriod > 0);
+    let onLeave = formattedData.reduce((total,val) => {
+      if (val.onleave) return total+1;
+      return total;
+    },0)
 
-  // console.log(longestPeriodSorted);
+    console.log({onLeave});
 
-  // let leaveSlot = 6, todaysLeaves = [];
-  //
-  // for (var i = 0; i < 2; i++) {
-  //
-  //   let date = new Date();
-  //   let iteratedDate = date.addDays(i)
-  //
-  //   let longestPeriodSorted = formattedData.sort((a,b) => b.onDutyPeriod - a.onDutyPeriod).filter(val => val.onDutyPeriod > 0);
-  //
-  //   let onLeave = formattedData.reduce((total,val) => {
-  //     if (val.onleave) return total+1;
-  //     return total;
-  //   },0)
-  //
-  //   todaysLeaves.push(longestPeriodSorted.map(val => {
-  //     if (onLeave > leaveSlot) return {index: i, name: val.name, leaveAlloted: false};
-  //     leaveSlot = leaveSlot - 1;
-  //     formattedData = formattedData.map(val => {
-  //       return {... {
-  //         leaveAlloted: val.nextLeave,
-  //         leaveDuration: val.nextLeaveDuration,
-  //       }}
-  //     });
-  //     return {index: i, name: val.name, onLeave: true, leaveAlloted: val.nextLeave, leaveDuration: val.nextLeaveDuration }
-  //   }))
-  //
-  // }
-  //
-  // console.log(todaysLeaves);
+    let date = (new Date()).addDays(i);
 
+    console.log(`this is ${date}`);
 
-  // let futureDays = [];
+    if (leaveSlot <= onLeave) {
+      console.log('empty data into the array');
+      formattedData = formattedData.map(val => {
+        // console.log(val.name, (new Date()).addDays(i) - val.lastArrival < 0);
+        return Object.assign(val, {
+          onleave: (new Date()).addDays(i) - val.lastArrival < 0,
+        })
+      })
+      continue;
+    }
 
-  // let date = new Date();
-  //
-  // for (i = 0; i < 30; i++) {
-  //
-  //   // futureDays.push(date.addDays(i));
-  //
-  //   if (onLeave > leaveSlot) return;
-  //
-  //   // check longest period without leave
-  //
-  //   let longestPeriod = formattedData.filter(val => {
-  //     return
-  //   })
-  //
-  //   //
-  //
-  // }
-  //
-  // // console.log(futureDays);
-  //
-  // // go through each person for each date
-  //
-  // let datavsdate = futureDays.map(val => {
-  //   if (onLeave > leaveSlot)
-  //   return {
-  //     day: val,
-  //     leaveAval: onLeave > leaveSlot,
-  //   }
-  // })
-  //
-  // console.log(datavsdate);
+    while (leaveSlot > onLeave) {
+      console.log(`giving leave to ${longestPeriodSorted[0].name}`);
+      leaveSlot = leaveSlot - 1;
+      switch (true) {
+        case /(WW)$/.test(longestPeriodSorted[0].nextLeave):
+          formattedData = updateData(formattedData, longestPeriodSorted[0], 'WWC', 10)
+          console.log(`matched *WW ${longestPeriodSorted[0].nextLeave}  C`);
+          console.log(formattedData.find(val => longestPeriodSorted[0].name == val.name));
+          break;
+        case /(WC)$/.test(longestPeriodSorted[0].nextLeave):
+          formattedData = updateData(formattedData, longestPeriodSorted[0], 'WCW', 4)
+          console.log(`matched *WC ${longestPeriodSorted[0].nextLeave}  W`);
+          console.log(formattedData.find(val => longestPeriodSorted[0].name == val.name));
+          break;
+        case /(CW)$/.test(longestPeriodSorted[0].nextLeave):
+          formattedData = updateData(formattedData, longestPeriodSorted[0], 'CWW', 4)
+          console.log(`matched *CW ${longestPeriodSorted[0].nextLeave}  W`);
+          console.log(formattedData.find(val => longestPeriodSorted[0].name == val.name));
+          break;
+        case /(PW)$/.test(longestPeriodSorted[0].nextLeave):
+          formattedData = updateData(formattedData, longestPeriodSorted[0], 'PWW', 4)
+          console.log(`matched *PW ${longestPeriodSorted[0].nextLeave}  W`);
+          console.log(formattedData.find(val => longestPeriodSorted[0].name == val.name));
+          break;
+        case /(WP)$/.test(longestPeriodSorted[0].nextLeave):
+          formattedData = updateData(formattedData, longestPeriodSorted[0], 'WPW', 4)
+          console.log(`matched *WP ${longestPeriodSorted[0].nextLeave}  W`);
+          console.log(formattedData.find(val => longestPeriodSorted[0].name == val.name));
+          break;
+        default:
+          console.log(longestPeriodSorted[0].nextLeave);
+      }
 
-  // check the longest period a person is away
+      longestPeriodSorted.shift();
 
-  // give leave as suggested
+    }
 
-  // update that person record and show in console
+  }
+
 }).catch((e) => {
   console.log(e);
   res.status(400).render('1-redirect.hbs',{
@@ -106,4 +98,21 @@ Date.prototype.addDays = function(days) {
     var date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);
     return date;
+}
+
+function updateData(data, object, string, duration) {
+  let updated = data.map(val => {
+    if (val.name == object.name) {
+      return Object.assign(val,{
+        nextLeave: string,
+        nextLeaveDuration: duration,
+        lastArrival: (new Date()).addDays(duration),
+        onDutyPeriod: Math.round((new Date() - (new Date()).addDays(duration)) / 24 / 60 / 60 / 1000),
+        onleave: new Date() - (new Date()).addDays(duration) < 0
+      })
+    }
+    return val;
+  })
+
+  return updated;
 }
