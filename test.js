@@ -15,72 +15,97 @@ readXlsxFile(__dirname+'/server/leaveplan.xlsm').then((rows) => {
     return val.rank;
   });
 
+  console.table(formattedData);
+
+  let longestPeriodSorted = [];
+
   let leaveSlot = 10;
 
-  for (var i = 0; i < 30; i++) {
+  for (var i = 0; i < 3; i++) {
 
-    let longestPeriodSorted = formattedData.sort((a,b) => b.onDutyPeriod - a.onDutyPeriod).filter(val => val.onDutyPeriod > 0);
+    longestPeriodSorted = formattedData.sort((a,b) => b.onDutyPeriod - a.onDutyPeriod).filter(val => val.onDutyPeriod > 0);
 
     let onLeave = formattedData.reduce((total,val) => {
       if (val.onleave) return total+1;
       return total;
     },0)
 
-    console.log({onLeave});
-
-    let date = (new Date()).addDays(i);
-
-    console.log(`this is ${date}`);
-
-    if (leaveSlot <= onLeave) {
-      console.log('empty data into the array');
-      formattedData = formattedData.map(val => {
-        // console.log(val.name, (new Date()).addDays(i) - val.lastArrival < 0);
-        return Object.assign(val, {
-          onleave: (new Date()).addDays(i) - val.lastArrival < 0,
-        })
+    while (onLeave < leaveSlot) {
+      onLeave = onLeave + 1;
+      Object.assign(longestPeriodSorted[0],{
+        [`day${i}`]: 'W',
       })
-      continue;
     }
 
-    while (leaveSlot > onLeave) {
-      console.log(`giving leave to ${longestPeriodSorted[0].name}`);
-      leaveSlot = leaveSlot - 1;
-      switch (true) {
-        case /(WW)$/.test(longestPeriodSorted[0].nextLeave):
-          formattedData = updateData(formattedData, longestPeriodSorted[0], 'WWC', 10)
-          console.log(`matched *WW ${longestPeriodSorted[0].nextLeave}  C`);
-          console.log(formattedData.find(val => longestPeriodSorted[0].name == val.name));
-          break;
-        case /(WC)$/.test(longestPeriodSorted[0].nextLeave):
-          formattedData = updateData(formattedData, longestPeriodSorted[0], 'WCW', 4)
-          console.log(`matched *WC ${longestPeriodSorted[0].nextLeave}  W`);
-          console.log(formattedData.find(val => longestPeriodSorted[0].name == val.name));
-          break;
-        case /(CW)$/.test(longestPeriodSorted[0].nextLeave):
-          formattedData = updateData(formattedData, longestPeriodSorted[0], 'CWW', 4)
-          console.log(`matched *CW ${longestPeriodSorted[0].nextLeave}  W`);
-          console.log(formattedData.find(val => longestPeriodSorted[0].name == val.name));
-          break;
-        case /(PW)$/.test(longestPeriodSorted[0].nextLeave):
-          formattedData = updateData(formattedData, longestPeriodSorted[0], 'PWW', 4)
-          console.log(`matched *PW ${longestPeriodSorted[0].nextLeave}  W`);
-          console.log(formattedData.find(val => longestPeriodSorted[0].name == val.name));
-          break;
-        case /(WP)$/.test(longestPeriodSorted[0].nextLeave):
-          formattedData = updateData(formattedData, longestPeriodSorted[0], 'WPW', 4)
-          console.log(`matched *WP ${longestPeriodSorted[0].nextLeave}  W`);
-          console.log(formattedData.find(val => longestPeriodSorted[0].name == val.name));
-          break;
-        default:
-          console.log(longestPeriodSorted[0].nextLeave);
-      }
+  };
 
-      longestPeriodSorted.shift();
+  console.table(longestPeriodSorted);
 
-    }
+  // return;
+    //
+    // let longestPeriodSorted = formattedData.sort((a,b) => b.onDutyPeriod - a.onDutyPeriod).filter(val => val.onDutyPeriod > 0);
+    //
+    // let onLeave = formattedData.reduce((total,val) => {
+    //   if (val.onleave) return total+1;
+    //   return total;
+    // },0)
+    //
+    // console.table({onLeave, leaveSlot});
+    //
+    // let date = (new Date()).addDays(i);
+    //
+    // console.log(`this is ${date}`);
+    //
+    // if (leaveSlot <= onLeave) {
+    //   console.log('empty data into the array');
+    //   formattedData = formattedData.map(val => {
+    //     return Object.assign(val, {
+    //       onleave: (new Date()).addDays(i) - val.lastArrival < 0,
+    //     })
+    //   })
+    //   continue;
+    // }
+    //
+    // while (leaveSlot > onLeave) {
+    //   console.log(`giving leave to ${longestPeriodSorted[0].name}`);
+    //   leaveSlot = leaveSlot - 1;
+    //   switch (true) {
+    //     case /(WW)$/.test(longestPeriodSorted[0].nextLeave):
+    //       formattedData = updateData(formattedData, longestPeriodSorted[0], 'WWC', 10)
+    //       // console.log(`matched *WW ${longestPeriodSorted[0].nextLeave}  C`);
+    //       // console.log(formattedData.find(val => longestPeriodSorted[0].name == val.name));
+    //       break;
+    //     case /(WC)$/.test(longestPeriodSorted[0].nextLeave):
+    //       formattedData = updateData(formattedData, longestPeriodSorted[0], 'WCW', 4)
+    //       // console.log(`matched *WC ${longestPeriodSorted[0].nextLeave}  W`);
+    //       // console.log(formattedData.find(val => longestPeriodSorted[0].name == val.name));
+    //       break;
+    //     case /(CW)$/.test(longestPeriodSorted[0].nextLeave):
+    //       formattedData = updateData(formattedData, longestPeriodSorted[0], 'CWW', 4)
+    //       // console.log(`matched *CW ${longestPeriodSorted[0].nextLeave}  W`);
+    //       // console.log(formattedData.find(val => longestPeriodSorted[0].name == val.name));
+    //       break;
+    //     case /(PW)$/.test(longestPeriodSorted[0].nextLeave):
+    //       formattedData = updateData(formattedData, longestPeriodSorted[0], 'PWW', 4)
+    //       // console.log(`matched *PW ${longestPeriodSorted[0].nextLeave}  W`);
+    //       // console.log(formattedData.find(val => longestPeriodSorted[0].name == val.name));
+    //       break;
+    //     case /(WP)$/.test(longestPeriodSorted[0].nextLeave):
+    //       formattedData = updateData(formattedData, longestPeriodSorted[0], 'WPW', 4)
+    //       // console.log(`matched *WP ${longestPeriodSorted[0].nextLeave}  W`);
+    //       // console.log(formattedData.find(val => longestPeriodSorted[0].name == val.name));
+    //       break;
+    //     default:
+    //       console.log(longestPeriodSorted[0].nextLeave);
+    //   }
+    //
+    //   longestPeriodSorted.shift();
+    //
+    // }
+    //
+    // leaveSlot = 10;
 
-  }
+  // }
 
 }).catch((e) => {
   console.log(e);
