@@ -44,7 +44,7 @@ app.get('/',(req,res) => {
         })
         return total;
       },{})
-    )
+    ).filter((val,index) => Object.keys(val).length > 2 && index != 0);
     console.log(sorted);
     res.render('abasyn.hbs',{
       sorted,

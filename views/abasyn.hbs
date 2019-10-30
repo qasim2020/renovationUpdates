@@ -33,14 +33,21 @@
         padding: 2rem 2rem 1rem 2rem;
         margin-top: -2rem;
         width: 100%;
+        box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.15);
       }
 
       .line-circle {
-        width: 40px !important;
-      height: 35px !important;
-      margin-left: 0px;
-      z-index: 5;
-      background: white;
+        /* width: 40px !important; */
+        height: 35px !important;
+        margin-left: 0px;
+        z-index: 5;
+        background: white;
+        padding: 5px 8px;
+        box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.15);
+        color: black;
+        font-weight: bold;
+        left: 50%;
+        transform: translate(-20%);
       }
 
       .top-badge {
@@ -63,12 +70,6 @@
       opacity: 0.7;
       font-size: 80%;
       }
-
-      /* $color1: rgba(91, 192, 235, 1);
-      $color2: rgba(253, 231, 76, 1);
-      $color3: rgba(155, 197, 61, 1);
-      $color4: rgba(229, 89, 52, 1);
-      $color5: rgba(250, 121, 33, 1); */
 
       .red-flag {
         color: red;
@@ -107,7 +108,7 @@
 
     <div class="container">
 
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
         <a class="navbar-brand" href="#">MCSC Abasyn</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -115,31 +116,63 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item active">
-              <a class="nav-link" href="#">TLP <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="#">Abasyn <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">SRE</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">ALGO</a>
+              <a class="nav-link" href="#">Portfolio</a>
             </li>
           </ul>
         </div>
       </nav>
 
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-light border font-weight-bold">TPL</button>
+        <button type="button" class="btn btn-light border font-weight-bold">SRE</button>
+        <button type="button" class="btn btn-light border font-weight-bold">ALGO</button>
+      </div>
+
       <div class="vertical-line shadow"></div>
 
-      <h4 class="">Software Requirement Engineering</h4>
       {{#each sorted}}
-      {{#if SRE}}
+
+      {{#if TPL}}
+
       <div class="issue-card d-flex justify-content-start">
-        <span class="line-circle rounded-cicle border rounded bg-warning"></span>
+        <span class="line-circle rounded-cicle rounded">TPL</span>
+        <div class="card-area border rounded">
+          <p class="top-badge">{{Date}}</p>
+          <p class="middle-text">{{{fixText TPL}}}</p>
+        </div>
+      </div>
+
+      {{/if}}
+
+      {{#if SRE}}
+
+      <div class="issue-card d-flex justify-content-start">
+        <span class="line-circle rounded-cicle rounded">SRE</span>
         <div class="card-area border rounded">
           <p class="top-badge">{{Date}}</p>
           <p class="middle-text">{{{fixText SRE}}}</p>
         </div>
       </div>
+
       {{/if}}
+
+      {{#if ALGO}}
+
+      <div class="issue-card d-flex justify-content-start">
+        <span class="line-circle rounded-cicle rounded">ALGO</span>
+        <div class="card-area border rounded">
+          <p class="top-badge">{{Date}}</p>
+          <p class="middle-text">{{{fixText ALGO}}}</p>
+        </div>
+      </div>
+
+      {{/if}}
+
+
+
       {{/each}}
 
     </div>
