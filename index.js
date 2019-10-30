@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const hbs = require('hbs');
 const _ = require('lodash');
 const moment = require('moment');
+const readXlsxFile = require('read-excel-file/node');
 
 const {sheet} = require('./server/sheets.js');
 
@@ -16,19 +17,38 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 hbs.registerPartials(__dirname + '/views/partials');
 app.set('view engine','hbs');
 
-// sheet('bunkers','read');
-// sheet('construction','read');
-// sheet('material','read');
-// sheet('material','update',[
-// [new Date().toString(),'MES','Sand','2000', 'cft','Brought it for const of Washroom']
-// ]);
+hbs.registerHelper("fixText",function (text) {
+  if (!text) return;
+  console.log(typeof text);
+  text = text.toString().trim().replace(/\r\n/g,'').split(';');
+  text = text.reduce((total,val) => {
+    return total + `<p>` + val + `<p>`;
+  }, '')
+  return text;
+})
 
 app.get('/',(req,res) => {
 
   console.log('home page opened');
   let dateToday = moment().format('YYYY-MM-DD');
-  res.render('index.hbs',{
-    dateToday,
+  // THIS IS OFFICE DATA - NOW NOT IN USE
+  // res.render('index.hbs',{
+  //   dateToday,
+  // });
+  readXlsxFile(__dirname+'/server/life.xlsx').then((rows) => {
+    let sorted = rows.map((val) =>
+      val.reduce((total,inner,index) => {
+
+        if (inner) Object.assign(total,{
+          [rows[0][index]]: inner
+        })
+        return total;
+      },{})
+    )
+    console.log(sorted);
+    res.render('abasyn.hbs',{
+      sorted,
+    });
   });
 
 });
