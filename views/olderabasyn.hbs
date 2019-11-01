@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style media="screen">
+      .btn-group {
+        left: 50%;
+        transform: translate(-50%);
+        margin-bottom: 2rem;
+      }
+      .issue-card {
+        margin: 4rem 2rem;
+      }
+
+      .vertical-line {
+        border-left: 2px dotted #9e9e9e;
+        height: 80%;
+        position: fixed;
+        margin-left: 3rem;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.4;
+      }
+
+      .card-area {
+        font-weight: bold;
+        margin-left: 2rem;
+        padding: 2rem 2rem 1rem 2rem;
+        margin-top: -2rem;
+        width: 100%;
+        box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.15);
+      }
+
+      .line-circle {
+        /* width: 40px !important; */
+        height: 35px !important;
+        margin-left: 0px;
+        z-index: 5;
+        background: white;
+        padding: 5px 8px;
+        box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.15);
+        color: black;
+        font-weight: bold;
+        left: 50%;
+        transform: translate(-20%);
+      }
+
+      .top-badge {
+      display: inline;
+      background: rgb(15, 147, 204);
+      color: #f8f9fa;
+      padding: 2px 9px;
+      font-weight: bold;
+      border-radius: 2px;
+      font-size: 80%;
+      }
+
+      .middle-text {
+      padding-top: 1rem;
+      font-size: 120%;
+      /* font-style: italic; */
+      }
+
+      .bottom-badge, .loc-badge {
+      opacity: 0.7;
+      font-size: 80%;
+      }
+
+      .red-flag {
+        color: red;
+      }
+
+      .good-flag {
+        color: green;
+      }
+
+      .vgood-flag {
+        font-size: 120%;
+        color: green;
+      }
+
+      .pt-3 {
+        padding-top: 3rem;
+      }
+
+      .custom-container {
+        max-width: 800px;
+        margin: auto;
+      }
+
+      h4 {
+        margin-left: 6rem;
+        border-bottom: 1px solid black;
+        display: inline-block;
+        padding-bottom: 1rem;
+        padding-top: 10px;
+      }
+
+    </style>
+    <title>MCSC - Abasyn</title>
+  </head>
+  <body class="bg-light">
+
+    <div class="container">
+
+      <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+        <a class="navbar-brand" href="#">MCSC Abasyn</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Abasyn <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Portfolio</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-light border font-weight-bold">TPL</button>
+        <button type="button" class="btn btn-light border font-weight-bold">SRE</button>
+        <button type="button" class="btn btn-light border font-weight-bold">ALGO</button>
+      </div>
+
+      <div class="vertical-line shadow"></div>
+
+      {{#each sorted}}
+
+      {{#if TPL}}
+
+      <div class="issue-card d-flex justify-content-start">
+        <span class="line-circle rounded-cicle rounded">TPL</span>
+        <div class="card-area border rounded">
+          <p class="top-badge">{{Date}}</p>
+          <p class="middle-text">{{{fixText TPL}}}</p>
+        </div>
+      </div>
+
+      {{/if}}
+
+      {{#if SRE}}
+
+      <div class="issue-card d-flex justify-content-start">
+        <span class="line-circle rounded-cicle rounded">SRE</span>
+        <div class="card-area border rounded">
+          <p class="top-badge">{{Date}}</p>
+          <p class="middle-text">{{{fixText SRE}}}</p>
+        </div>
+      </div>
+
+      {{/if}}
+
+      {{#if ALGO}}
+
+      <div class="issue-card d-flex justify-content-start">
+        <span class="line-circle rounded-cicle rounded">ALGO</span>
+        <div class="card-area border rounded">
+          <p class="top-badge">{{Date}}</p>
+          <p class="middle-text">{{{fixText ALGO}}}</p>
+        </div>
+      </div>
+
+      {{/if}}
+
+
+
+      {{/each}}
+
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>

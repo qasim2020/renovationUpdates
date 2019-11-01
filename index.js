@@ -31,10 +31,7 @@ app.get('/',(req,res) => {
 
   console.log('home page opened');
   let dateToday = moment().format('YYYY-MM-DD');
-  // THIS IS OFFICE DATA - NOW NOT IN USE
-  // res.render('index.hbs',{
-  //   dateToday,
-  // });
+
   readXlsxFile(__dirname+'/server/life.xlsx').then((rows) => {
     let sorted = rows.map((val) =>
       val.reduce((total,inner,index) => {
@@ -44,12 +41,49 @@ app.get('/',(req,res) => {
         })
         return total;
       },{})
-    ).filter((val,index) => Object.keys(val).length > 2 && index != 0);
+    ).filter((val,index) => index != 0);
+
+    sorted.map(val => {
+      Object.keys(val).forEach(key => {
+        if (key == 'Date') return;
+        let arr = val[key].replace('/\r/\n','').trim().split(';');
+        let values = arr.reduce((total,nVal) => {
+          if (!nVal) return total;
+          total.push(
+            {[nVal.split(':')[0].replace('\r\n','')]: nVal.split(':')[1].trim()}
+          );
+          return total;
+        },[])
+        val[key] = values;
+      });
+      return val;
+    })
+
     console.log(sorted);
     res.render('abasyn.hbs',{
-      sorted,
-    });
+        sorted,
+      });
   });
+
+  // THIS IS OFFICE DATA - NOW NOT IN USE
+  // res.render('index.hbs',{
+  //   dateToday,
+  // });
+  // readXlsxFile(__dirname+'/server/life.xlsx').then((rows) => {
+  //   let sorted = rows.map((val) =>
+  //     val.reduce((total,inner,index) => {
+  //
+  //       if (inner) Object.assign(total,{
+  //         [rows[0][index]]: inner
+  //       })
+  //       return total;
+  //     },{})
+  //   ).filter((val,index) => Object.keys(val).length > 2 && index != 0);
+  //   console.log(sorted);
+  //   res.render('abasyn.hbs',{
+  //     sorted,
+  //   });
+  // });
 
 });
 
