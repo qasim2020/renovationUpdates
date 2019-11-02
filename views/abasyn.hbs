@@ -200,15 +200,23 @@
 
     .lower-bar.topic {
       align-items: start;
-      padding-top: 21px;
+      padding-top: 17px;
       padding-bottom: 14px;
     }
 
     .lower-bar.video {
-      font-weight: bold;
-      opacity: 0.8;
+      /* font-weight: bold; */
+      /* opacity: 0.8; */
     }
 
+    .video > p:nth-last-child(1) {
+      padding: 2px 11px;
+      border: 1px solid #219653;
+      background: transparent;
+      color: #219653;
+      font-size: 15px;
+      font-weight: bold;
+    }
 
     .subj-card {
       width: 100%;
@@ -418,7 +426,7 @@
               </g>
               </svg>
               <p>{{getObjectValue this 1}}</p>
-              <p>{{getObjectValue this 2}} hrs</p>
+              <button>{{getObjectValue this 2}} hrs</button>
             </div>
             {{/if}}
             {{#if (ifTopic this 'Slides')}}
