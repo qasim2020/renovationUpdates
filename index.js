@@ -27,6 +27,28 @@ hbs.registerHelper("fixText",function (text) {
   return text;
 })
 
+hbs.registerHelper("ifTopic",function (data, compareTo) {
+  // return 'true';
+  // console.log(data,'*****');
+  // console.log(Object.keys(data).some(key => key == compareTo), data, compareTo, '******');
+  return Object.keys(data).some(key => key == compareTo);
+})
+
+hbs.registerHelper("getObjectValue", (data,position) => {
+  // console.log(data[0]);
+  for (var key in data) {
+    if (data.hasOwnProperty(key)) {
+      return data[key].split(',')[position].split('- ')[1];
+    }
+  }
+})
+
+hbs.registerHelper("getTopicsListed", (data) => {
+  return data['Topics'].split(',').reduce((total,val) => {
+    return total += `<li>${val}</li>`;
+  },'');
+})
+
 app.get('/',(req,res) => {
 
   console.log('home page opened');
@@ -50,18 +72,32 @@ app.get('/',(req,res) => {
         let values = arr.reduce((total,nVal) => {
           if (!nVal) return total;
           total.push(
-            {[nVal.split(':')[0].replace('\r\n','')]: nVal.split(':')[1].trim()}
+            {[nVal.split(': ')[0].replace('\r\n','')]: nVal.split(': ')[1].trim()}
           );
           return total;
         },[])
         val[key] = values;
       });
       return val;
+    });
+
+    sorted = sorted.map((val,index) => {
+      return val['SRE'];
     })
+
+
+    sorted[0] = {
+      Subject: sorted[0][0].Subject,
+      Instructor: sorted[0][1].Instructor,
+      ClassSenior: sorted[0][2].ClassSenior,
+      Note: sorted[0][3].Note,
+      CreditHours: sorted[0][4].CreditHours,
+    }
 
     console.log(sorted);
     res.render('abasyn.hbs',{
         sorted,
+        sre: 'active'
       });
   });
 
