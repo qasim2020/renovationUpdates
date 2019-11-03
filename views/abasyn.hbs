@@ -571,7 +571,7 @@
 
           <button type="button" name="button" class="collapse_all">Collapse All</button>
 
-          {{#if (pagerequest pagerequest 'TPL')}}
+          {{#if (matchValues pagerequest 'TPL')}}
           <p class="error">Sorry contents not updated yet.</p>
           {{/if}}
 
@@ -623,7 +623,7 @@
               </svg>
 
               <p>{{getObjectValue this 0}}</p>
-              <a href="/{{pagerequest}}/{{getObjectValue this 0}}" download>Download</a>
+              <a href="/{{../../pagerequest}}/{{getObjectValue this 0}}" download>Download</a>
             </div>
             {{/if}}
             {{#if (ifTopic this 'Books')}}
@@ -638,7 +638,7 @@
               </svg>
               <p>{{getObjectValue this 0}}</p>
               {{#if (checkValueExists this 1)}}
-              <a href="/{{pagerequest}}/{{getObjectValue this 1}}" download>Download</a>
+              <a href="/{{../../pagerequest}}/{{getObjectValue this 1}}" download>Download</a>
               {{else}}
               <button type="button" name="button" msg="Sorry books not found in pdf. If you have please share it with us. Thanks" style="color:red;border-color:red;">Not Aval</button>
               {{/if}}
@@ -668,7 +668,7 @@
 
               <p>{{getObjectValue this 0}}</p>
               {{#if (checkValueExists this 1)}}
-              <button type="button" name="button" img="">View</button>
+              <button type="button" name="button" img="{{getObjectValue this 1}}">View</button>
               {{else}}
               <button type="button" name="button" msg="Sorry quiz pictures are not available. If you have please share." style="color:red;border-color:red;">Not Aval</button>
               {{/if}}
@@ -684,7 +684,11 @@
               </svg>
 
               <p>{{getObjectValue this 0}}</p>
+              {{#if (checkValueExists this 1)}}
               <button type="button" name="button" img="{{getObjectValue this 1}}">View</button>
+              {{else}}
+              <button type="button" name="button" msg="Sorry assignment pictures are not available. If you have please share." style="color:red;border-color:red;">Not Aval</button>
+              {{/if}}
             </div>
             {{/if}}
           {{/each}}

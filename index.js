@@ -19,7 +19,7 @@ app.set('view engine','hbs');
 
 hbs.registerHelper("fixText",function (text) {
   if (!text) return;
-  console.log(typeof text);
+  // console.log(typeof text);
   text = text.toString().trim().replace(/\r\n/g,'').split(';');
   text = text.reduce((total,val) => {
     return total + `<p>` + val + `<p>`;
@@ -28,12 +28,12 @@ hbs.registerHelper("fixText",function (text) {
 })
 
 hbs.registerHelper("ifTopic",function (data, compareTo) {
-  console.log('*****',data,compareTo);
+  // console.log('*****',data,compareTo);
   return Object.keys(data).some(key => key == compareTo);
 })
 
-hbs.registerHelper("pagerequest", function(page, val) {
-  console.log({page,val});
+hbs.registerHelper("matchValues", function(page, val) {
+  // console.log({page,val});
   if (page == val) return true;
   return false;
 })
@@ -106,7 +106,7 @@ app.get('/',(req,res) => {
       return val[askedPage.toUpperCase()];
     })
 
-    console.log({pagerequest: req.query.pagerequest,sorted});
+    // console.log({pagerequest: req.query.pagerequest,sorted});
 
     sorted[0] = {
       Subject: sorted[0][0].Subject,
@@ -116,7 +116,9 @@ app.get('/',(req,res) => {
       CreditHours: sorted[0][4].CreditHours,
     }
 
-    console.log(sorted);
+    // console.log(sorted);
+
+    console.log(askedPage.toUpperCase());
 
     res.render('abasyn.hbs',{
         sorted,
