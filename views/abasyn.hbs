@@ -598,7 +598,11 @@
               </g>
               </svg>
               <p>{{getObjectValue this 1}}</p>
+              {{#if (checkValueExists this 0)}}
               <button link="{{getObjectValue this 0}}">{{getObjectValue this 2}} hrs</button>
+              {{else}}
+              <button link="{{getObjectValue this 0}}" style="color:red;border-color:red;">{{getObjectValue this 2}} hrs</button>
+              {{/if}}
             </div>
             {{/if}}
             {{#if (ifTopic this 'Slides')}}
