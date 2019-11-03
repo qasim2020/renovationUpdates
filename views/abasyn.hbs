@@ -252,6 +252,13 @@
       border-radius: 2px;
       padding: 16px;
       box-sizing: border-box;
+      border: 1px solid transparent;
+    }
+
+    .subj-card:hover {
+      opacity: 1;
+      cursor: pointer;
+      border:1px dashed #219653;
     }
 
     .subj-card.active {
@@ -325,6 +332,7 @@
       font-size: 15px;
       font-weight: bold;
       text-decoration: none;
+      font-family: system-ui;
     }
 
     button:hover, a:hover {
@@ -360,6 +368,10 @@
       z-index: 100;
     }
 
+    .overlay > img {
+      width: 100%;
+    }
+
     .overlay > p {
       position: absolute;
       top: 50%;
@@ -384,6 +396,20 @@
       right: 0;
       top: -46px;
       margin-right: 34px;
+    }
+
+    .content-block svg {
+      min-width: fit-content;
+    }
+
+    .d-none {
+      display: none;
+    }
+
+    .error {
+      text-align: center;
+      font-weight: bold;
+      color: red;
     }
 
     @media (max-width: 700px) {
@@ -443,6 +469,7 @@
   </head>
   <body>
     <div class="overlay">
+      <img src="" alt="">
       <iframe src="" width="100%" height="100%"></iframe>
       <p></p>
       <button type="button" name="button">Close</button>
@@ -451,19 +478,19 @@
 
       <div class="sticky-nav">
         <h2>Subjects</h2>
-        <div class="subj-card {{sre}}">
+        <div class="subj-card {{sre}}" onClick="window.location = '/?pagerequest=sre';">
           <p>01</p>
           <p>Software Requirements Engineering</p>
         </div>
 
-        <div class="subj-card {{tpl}}">
+        <div class="subj-card {{tpl}}" onClick="window.location = '/?pagerequest=tpl';">
           <p>02</p>
           <p>Theory of Programming Languages</p>
         </div>
 
-        <div class="subj-card {{algo}}">
+        <div class="subj-card {{algo}}" onClick="window.location = '/?pagerequest=algo';">
           <p>03</p>
-          <p>Advanced Design and Algorithums</p>
+          <p>Advanced Theory and Design of Algorithums</p>
         </div>
 
       </div>
@@ -535,6 +562,10 @@
 
           <button type="button" name="button" class="collapse_all">Collapse All</button>
 
+          {{#if (pagerequest pagerequest 'TPL')}}
+          <p class="error">Sorry contents not updated yet.</p>
+          {{/if}}
+
           {{#each sorted as |sorted indexNo|}}
           {{#each this}}
             {{#if (ifTopic this 'Topic')}}
@@ -579,7 +610,7 @@
               </svg>
 
               <p>{{getObjectValue this 0}}</p>
-              <a href="/SRE/{{getObjectValue this 0}}" download>Download</a>
+              <a href="/{{pagerequest}}/{{getObjectValue this 0}}" download>Download</a>
             </div>
             {{/if}}
             {{#if (ifTopic this 'Books')}}
@@ -593,7 +624,11 @@
               </g>
               </svg>
               <p>{{getObjectValue this 0}}</p>
-              <button type="button" name="button" msg="Sorry books not found in pdf. If you have please share it with us. Thanks">Download</button>
+              {{#if (checkValueExists this 1)}}
+              <a href="/{{pagerequest}}/{{getObjectValue this 1}}" download>Download</a>
+              {{else}}
+              <button type="button" name="button" msg="Sorry books not found in pdf. If you have please share it with us. Thanks" style="color:red;border-color:red;">Not Aval</button>
+              {{/if}}
             </div>
             {{/if}}
             {{#if (ifTopic this 'Topics')}}
@@ -622,15 +657,22 @@
               <button type="button" name="button" msg="Sorry quiz photo not found. If you have please share it with us. Thanks">View</button>
             </div>
             {{/if}}
+
+            {{#if (ifTopic this 'Assignment')}}
+            <div data-show="week{{@indexNo}}" class="lower-bar assignment">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g opacity="0.56">
+              <path d="M12 2.02C6.49002 2.02 2.02002 6.49 2.02002 12C2.02002 17.51 6.49002 21.98 12 21.98C17.51 21.98 21.98 17.51 21.98 12C21.98 6.49 17.51 2.02 12 2.02ZM12 19.98C7.60002 19.98 4.02002 16.4 4.02002 12C4.02002 7.6 7.60002 4.02 12 4.02C16.4 4.02 19.98 7.6 19.98 12C19.98 16.4 16.4 19.98 12 19.98ZM12.75 5L8.25002 13.5H11.39V19L15.75 10.5H12.75V5Z" fill="black"/>
+              </g>
+              </svg>
+
+              <p>{{getObjectValue this 0}}</p>
+              <button type="button" name="button" img="{{getObjectValue this 1}}">View</button>
+            </div>
+            {{/if}}
           {{/each}}
           <div class="partition"></div>
           {{/each}}
-
-          <style media="screen">
-            .d-none {
-              display: none;
-            }
-          </style>
 
         </div>
       </div>
@@ -638,10 +680,20 @@
 
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script type="text/javascript">
+
     $('.video button, .quiz button, .book button').on('click',function() {
       $('.overlay').addClass('show').find('p').html('');
       $('.overlay').addClass('show').find('iframe').attr({src:''});
+      $('.overlay').addClass('show').find('img').attr({src:''});
       if ($(this).attr('link')) return $('.overlay').addClass('show').find('iframe').attr({src:$(this).attr('link')});
+      return $('.overlay').addClass('show').find('p').html($(this).attr('msg'));
+    })
+
+    $('.assignment button').on('click',function() {
+      $('.overlay').addClass('show').find('p').html('');
+      $('.overlay').addClass('show').find('iframe').attr({src:''});
+      $('.overlay').addClass('show').find('img').attr({src:''});
+      if ($(this).attr('img')) return $('.overlay').addClass('show').find('img').attr({src:$(this).attr('img')});
       return $('.overlay').addClass('show').find('p').html($(this).attr('msg'));
     })
 
@@ -654,11 +706,11 @@
       let collapsedCheck = $('.lower-bar.d-none').length > 0;
       if (collapsedCheck) {
         $('.lower-bar').removeClass('d-none');
-        $('.title-bar').removeClass('not-collapsed');
+        $('.title-bar').addClass('not-collapsed');
         return $(this).html('Collapse All');
       }
       $('.lower-bar').addClass('d-none');
-      $('.title-bar').addClass('not-collapsed');
+      $('.title-bar').removeClass('not-collapsed');
       $(this).html('Show All');
     })
 

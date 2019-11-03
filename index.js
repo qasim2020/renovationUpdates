@@ -28,10 +28,29 @@ hbs.registerHelper("fixText",function (text) {
 })
 
 hbs.registerHelper("ifTopic",function (data, compareTo) {
-  // return 'true';
-  // console.log(data,'*****');
-  // console.log(Object.keys(data).some(key => key == compareTo), data, compareTo, '******');
+  console.log('*****',data,compareTo);
   return Object.keys(data).some(key => key == compareTo);
+})
+
+hbs.registerHelper("pagerequest", function(page, val) {
+  console.log({page,val});
+  if (page == val) return true;
+  return false;
+})
+
+hbs.registerHelper("checkValueExists", function(data, position) {
+  try {
+    for (var key in data) {
+      if (data.hasOwnProperty(key)) {
+        data[key].split(',')[position].split('- ')[1];
+      }
+    }
+    return true;
+  }
+  catch(e) {
+    return false;
+  }
+
 })
 
 hbs.registerHelper("getObjectValue", (data,position) => {
@@ -81,10 +100,13 @@ app.get('/',(req,res) => {
       return val;
     });
 
+    let askedPage = req.query.pagerequest && req.query.pagerequest.toUpperCase() || 'SRE';
+
     sorted = sorted.map((val,index) => {
-      return val['SRE'];
+      return val[askedPage.toUpperCase()];
     })
 
+    console.log({pagerequest: req.query.pagerequest,sorted});
 
     sorted[0] = {
       Subject: sorted[0][0].Subject,
@@ -95,9 +117,11 @@ app.get('/',(req,res) => {
     }
 
     console.log(sorted);
+
     res.render('abasyn.hbs',{
         sorted,
-        sre: 'active'
+        [askedPage.toLowerCase()]: 'active',
+        pagerequest: askedPage.toUpperCase()
       });
   });
 
