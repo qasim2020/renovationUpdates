@@ -200,6 +200,8 @@
     .title-bar > div > p, .lower-bar > p {
       display: inline-block;
       padding-left: 11px;
+      padding-right: 11px;
+      line-height: 22px;
     }
 
     .title-bar, .lower-bar {
@@ -333,6 +335,7 @@
       font-weight: bold;
       text-decoration: none;
       font-family: system-ui;
+      white-space: nowrap;
     }
 
     button:hover, a:hover {
@@ -400,6 +403,7 @@
 
     .content-block svg {
       min-width: fit-content;
+      width: auto;
     }
 
     .d-none {
@@ -463,6 +467,11 @@
 
       .subj-card > p:nth-child(1) {
         display: none;
+      }
+
+      .title-bar > div > p, .lower-bar > p {
+        padding-left: 4px;
+        padding-right: 4px;
       }
     }
     </style>
