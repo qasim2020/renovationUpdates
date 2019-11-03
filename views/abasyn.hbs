@@ -654,7 +654,11 @@
               </svg>
 
               <p>{{getObjectValue this 0}}</p>
-              <button type="button" name="button" msg="Sorry quiz photo not found. If you have please share it with us. Thanks">View</button>
+              {{#if (checkValueExists this 1)}}
+              <button type="button" name="button" img="">View</button>
+              {{else}}
+              <button type="button" name="button" msg="Sorry quiz pictures are not available. If you have please share." style="color:red;border-color:red;">Not Aval</button>
+              {{/if}}
             </div>
             {{/if}}
 
