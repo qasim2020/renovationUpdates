@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Abasyn - MCSC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Primary Meta Tags -->
     <title>abasyn.herokuapp.com MCSC Fall 2019 Course Outline</title>
@@ -345,11 +346,11 @@
       z-index: 10;
     }
 
-    .overlay > frame {
+    .overlay > iframe {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%);
+      transform: translate(-50%,-50%);
     }
 
     .overlay > button {
@@ -383,6 +384,56 @@
       right: 0;
       top: -46px;
       margin-right: 34px;
+    }
+
+    @media (max-width: 700px) {
+
+      h2 {
+        margin-top: 10px;
+      }
+
+      .container {
+        flex-wrap: wrap;
+      }
+
+      .sticky-nav {
+        width: 100%;
+        order: 0;
+        padding: 0 10px;
+      }
+
+      .sticky-nav > * {
+        max-width: 100%;
+      }
+
+      .content {
+        padding: 0 10px;
+        width: 100%;
+      }
+
+      .disc-block {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        padding: 0px;
+        width: 100%;
+      }
+
+      .disc-block>div:nth-last-child(2), .disc-block>div:nth-last-child(1) {
+        grid-column: auto;
+        grid-row: auto;
+      }
+
+      .title-bar, .lower-bar {
+        padding: 0px 2px;
+      }
+
+      .collapse_all {
+        margin-right: 0px;
+      }
+
+      .overlay>p {
+        text-align: center;
+      }
     }
     </style>
   </head>
@@ -584,12 +635,15 @@
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script type="text/javascript">
     $('.video button, .quiz button, .book button').on('click',function() {
+      $('.overlay').addClass('show').find('p').html('');
+      $('.overlay').addClass('show').find('iframe').attr({src:''});
       if ($(this).attr('link')) return $('.overlay').addClass('show').find('iframe').attr({src:$(this).attr('link')});
       return $('.overlay').addClass('show').find('p').html($(this).attr('msg'));
     })
 
-    $('.overlay, .overlay button').on('click',function() {
-      $(this).removeClass('show');
+    $('.overlay>button').on('click',function() {
+      console.log('hello');
+      $(this).closest('.overlay').removeClass('show');
     })
 
     $('.collapse_all').on('click',function() {
@@ -602,7 +656,6 @@
       $('.lower-bar').addClass('d-none');
       $('.title-bar').addClass('not-collapsed');
       $(this).html('Show All');
-
     })
 
     $('.title-bar').on('click',function() {
