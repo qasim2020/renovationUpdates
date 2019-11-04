@@ -222,7 +222,7 @@
       margin-left: auto;
     }
 
-    .lower-bar.topic {
+    .lower-bar.topic, .lower-bar.important {
       align-items: start;
       padding-top: 17px;
       padding-bottom: 14px;
@@ -318,6 +318,33 @@
     }
 
     .topics_list > *:nth-child(1) {
+      display: block;
+      background: none;
+      color: black;
+      padding: 0;
+      margin-bottom: 6px;
+      font-weight: normal;
+    }
+
+    .imp_list {
+      line-height: 30px;
+      padding-left: 11px;
+      margin-top: -3px;
+      width: fit-content;
+      margin-left: 0 !important;
+    }
+
+    .imp_list > *:not(:nth-child(1)) {
+      display: inline-flex;
+      background: lightcoral;
+      padding: 0px 12px;
+      margin: 2px;
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .imp_list > *:nth-child(1) {
       display: block;
       background: none;
       color: black;
@@ -571,9 +598,9 @@
 
           <button type="button" name="button" class="collapse_all">Collapse All</button>
 
-          {{#if (matchValues pagerequest 'TPL')}}
+          <!-- {{#if (matchValues pagerequest 'TPL')}}
           <p class="error">Sorry contents not updated yet.</p>
-          {{/if}}
+          {{/if}} -->
 
           {{#each sorted as |sorted indexNo|}}
           {{#each this}}
@@ -653,7 +680,7 @@
               </svg>
               <ol class="topics_list">
                 <p>Topics</p>
-                {{{getTopicsListed this}}}
+                {{{getTopicsListed this 'Topics'}}}
               </ol>
               <!-- <button type="button" name="button">Hide</button> -->
             </div>
@@ -672,6 +699,21 @@
               {{else}}
               <button type="button" name="button" msg="Sorry quiz pictures are not available. If you have please share." style="color:red;border-color:red;">Not Aval</button>
               {{/if}}
+            </div>
+            {{/if}}
+
+            {{#if (ifTopic this 'Important')}}
+            <div data-show="week{{@indexNo}}" class="lower-bar important">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g opacity="0.56">
+              <path d="M12 2.02C6.49002 2.02 2.02002 6.49 2.02002 12C2.02002 17.51 6.49002 21.98 12 21.98C17.51 21.98 21.98 17.51 21.98 12C21.98 6.49 17.51 2.02 12 2.02ZM12 19.98C7.60002 19.98 4.02002 16.4 4.02002 12C4.02002 7.6 7.60002 4.02 12 4.02C16.4 4.02 19.98 7.6 19.98 12C19.98 16.4 16.4 19.98 12 19.98ZM12.75 5L8.25002 13.5H11.39V19L15.75 10.5H12.75V5Z" fill="black"/>
+              </g>
+              </svg>
+
+              <ol class="imp_list">
+                <p>Important Points</p>
+                {{{getTopicsListed this 'Important'}}}
+              </ol>
             </div>
             {{/if}}
 

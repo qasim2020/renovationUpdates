@@ -62,8 +62,8 @@ hbs.registerHelper("getObjectValue", (data,position) => {
   }
 })
 
-hbs.registerHelper("getTopicsListed", (data) => {
-  return data['Topics'].split(',').reduce((total,val) => {
+hbs.registerHelper("getTopicsListed", (data, key) => {
+  return data[key].split(',').reduce((total,val) => {
     return total += `<li>${val}</li>`;
   },'');
 })
