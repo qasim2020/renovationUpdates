@@ -40,12 +40,9 @@ hbs.registerHelper("matchValues", function(page, val) {
 
 hbs.registerHelper("checkValueExists", function(data, position) {
   try {
-    for (var key in data) {
-      if (data.hasOwnProperty(key)) {
-        data[key].split(',')[position].split('- ')[1];
-      }
-    }
-    return true;
+    // console.log(Object.keys(data)[0]);
+    let value = Object.keys(data)[0];
+    return data[value].split(',')[position].split('- ')[1].length > 0
   }
   catch(e) {
     return false;
