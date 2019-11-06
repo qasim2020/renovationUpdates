@@ -763,6 +763,10 @@
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script type="text/javascript">
 
+    $(document).ready(() => {
+      $('.collapse_all').trigger('click');
+    })
+
     $('.video button, .quiz button, .book button').on('click',function() {
       $('.overlay').addClass('show').find('p').html('');
       $('.overlay').addClass('show').find('iframe').attr({src:''});
