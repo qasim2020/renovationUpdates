@@ -602,12 +602,12 @@
         <h2>Course Content</h2>
         <div class="content-block" style="position:relative">
 
-          <button type="button" name="button" class="collapse_all">Collapse All</button>
+          <button type="button" name="button" class="collapse_all">Show All</button>
 
           {{#each sorted as |sorted indexNo|}}
           {{#each this}}
             {{#if (ifTopic this 'Topic')}}
-            <div data-target="week{{@indexNo}}" class="title-bar not-collapsed">
+            <div data-target="week{{@indexNo}}" class="title-bar">
 
               <div class="">
                 <svg class="opened" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -629,7 +629,7 @@
             </div>
             {{/if}}
             {{#if (ifTopic this 'Video')}}
-            <div data-show="week{{@indexNo}}" class="lower-bar video">
+            <div data-show="week{{@indexNo}}" class="lower-bar d-none video">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g opacity="0.56">
               <path d="M10 16.5L16 12L10 7.5V16.5ZM12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="black"/>
@@ -644,7 +644,7 @@
             </div>
             {{/if}}
             {{#if (ifTopic this 'Slides')}}
-            <div data-show="week{{@indexNo}}" class="lower-bar slides">
+            <div data-show="week{{@indexNo}}" class="lower-bar d-none slides">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g opacity="0.56">
               <path d="M16.5 6V17.5C16.5 19.71 14.71 21.5 12.5 21.5C10.29 21.5 8.5 19.71 8.5 17.5V5C8.5 3.62 9.62 2.5 11 2.5C12.38 2.5 13.5 3.62 13.5 5V15.5C13.5 16.05 13.05 16.5 12.5 16.5C11.95 16.5 11.5 16.05 11.5 15.5V6H10V15.5C10 16.88 11.12 18 12.5 18C13.88 18 15 16.88 15 15.5V5C15 2.79 13.21 1 11 1C8.79 1 7 2.79 7 5V17.5C7 20.54 9.46 23 12.5 23C15.54 23 18 20.54 18 17.5V6H16.5Z" fill="black"/>
@@ -656,7 +656,7 @@
             </div>
             {{/if}}
             {{#if (ifTopic this 'Books')}}
-            <div data-show="week{{@indexNo}}" class="lower-bar book">
+            <div data-show="week{{@indexNo}}" class="lower-bar d-none book">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g opacity="0.56">
               <path d="M21 5C19.89 4.65 18.67 4.5 17.5 4.5C15.55 4.5 13.45 4.9 12 6C10.55 4.9 8.45 4.5 6.5 4.5C4.55 4.5 2.45 4.9 1 6V20.65C1 20.9 1.25 21.15 1.5 21.15C1.6 21.15 1.65 21.1 1.75 21.1C3.1 20.45 5.05 20 6.5 20C8.45 20 10.55 20.4 12 21.5C13.35 20.65 15.8 20 17.5 20C19.15 20 20.85 20.3 22.25 21.05C22.35 21.1 22.4 21.1 22.5 21.1C22.75 21.1 23 20.85 23 20.6V6C22.4 5.55 21.75 5.25 21 5ZM21 18.5C19.9 18.15 18.7 18 17.5 18C15.8 18 13.35 18.65 12 19.5V8C13.35 7.15 15.8 6.5 17.5 6.5C18.7 6.5 19.9 6.65 21 7V18.5Z" fill="black"/>
@@ -674,7 +674,7 @@
             </div>
             {{/if}}
             {{#if (ifTopic this 'Topics')}}
-            <div data-show="week{{@indexNo}}" class="lower-bar topic">
+            <div data-show="week{{@indexNo}}" class="lower-bar d-none topic">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g opacity="0.56">
               <path d="M6 17H9L11 13V7H5V13H8L6 17ZM14 17H17L19 13V7H13V13H16L14 17Z" fill="black"/>
@@ -688,7 +688,7 @@
             </div>
             {{/if}}
             {{#if (ifTopic this 'Quiz')}}
-            <div data-show="week{{@indexNo}}" class="lower-bar quiz">
+            <div data-show="week{{@indexNo}}" class="lower-bar d-none quiz">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g opacity="0.56">
               <path d="M12 2.02C6.49002 2.02 2.02002 6.49 2.02002 12C2.02002 17.51 6.49002 21.98 12 21.98C17.51 21.98 21.98 17.51 21.98 12C21.98 6.49 17.51 2.02 12 2.02ZM12 19.98C7.60002 19.98 4.02002 16.4 4.02002 12C4.02002 7.6 7.60002 4.02 12 4.02C16.4 4.02 19.98 7.6 19.98 12C19.98 16.4 16.4 19.98 12 19.98ZM12.75 5L8.25002 13.5H11.39V19L15.75 10.5H12.75V5Z" fill="black"/>
@@ -705,7 +705,7 @@
             {{/if}}
 
             {{#if (ifTopic this 'Important')}}
-            <div data-show="week{{@indexNo}}" class="lower-bar important">
+            <div data-show="week{{@indexNo}}" class="lower-bar d-none important">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g opacity="0.56">
               <path d="M12 2.02C6.49002 2.02 2.02002 6.49 2.02002 12C2.02002 17.51 6.49002 21.98 12 21.98C17.51 21.98 21.98 17.51 21.98 12C21.98 6.49 17.51 2.02 12 2.02ZM12 19.98C7.60002 19.98 4.02002 16.4 4.02002 12C4.02002 7.6 7.60002 4.02 12 4.02C16.4 4.02 19.98 7.6 19.98 12C19.98 16.4 16.4 19.98 12 19.98ZM12.75 5L8.25002 13.5H11.39V19L15.75 10.5H12.75V5Z" fill="black"/>
@@ -720,7 +720,7 @@
             {{/if}}
 
             {{#if (ifTopic this 'Assignment')}}
-            <div data-show="week{{@indexNo}}" class="lower-bar assignment">
+            <div data-show="week{{@indexNo}}" class="lower-bar d-none assignment">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g opacity="0.56">
               <path d="M12 2.02C6.49002 2.02 2.02002 6.49 2.02002 12C2.02002 17.51 6.49002 21.98 12 21.98C17.51 21.98 21.98 17.51 21.98 12C21.98 6.49 17.51 2.02 12 2.02ZM12 19.98C7.60002 19.98 4.02002 16.4 4.02002 12C4.02002 7.6 7.60002 4.02 12 4.02C16.4 4.02 19.98 7.6 19.98 12C19.98 16.4 16.4 19.98 12 19.98ZM12.75 5L8.25002 13.5H11.39V19L15.75 10.5H12.75V5Z" fill="black"/>
@@ -737,7 +737,7 @@
             {{/if}}
 
             {{#if (ifTopic this 'Attachment')}}
-            <div data-show="week{{@indexNo}}" class="lower-bar attachment">
+            <div data-show="week{{@indexNo}}" class="lower-bar d-none attachment">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g opacity="0.56">
               <path d="M12 2.02C6.49002 2.02 2.02002 6.49 2.02002 12C2.02002 17.51 6.49002 21.98 12 21.98C17.51 21.98 21.98 17.51 21.98 12C21.98 6.49 17.51 2.02 12 2.02ZM12 19.98C7.60002 19.98 4.02002 16.4 4.02002 12C4.02002 7.6 7.60002 4.02 12 4.02C16.4 4.02 19.98 7.6 19.98 12C19.98 16.4 16.4 19.98 12 19.98ZM12.75 5L8.25002 13.5H11.39V19L15.75 10.5H12.75V5Z" fill="black"/>
@@ -763,9 +763,9 @@
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script type="text/javascript">
 
-    $(document).ready(() => {
-      $('.collapse_all').trigger('click');
-    })
+    // $(document).ready(() => {
+    //   $('.collapse_all').trigger('click');
+    // })
 
     $('.video button, .quiz button, .book button').on('click',function() {
       $('.overlay').addClass('show').find('p').html('');
