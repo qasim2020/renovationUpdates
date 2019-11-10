@@ -808,15 +808,20 @@
     })
 
     $('.video button, .quiz button, .book button').on('click',function() {
+      $('.overlay').find('h6').html('');
       $('.overlay').addClass('show').find('p').html('');
       $('.overlay').addClass('show').find('iframe').attr({src:''});
       $('.overlay').addClass('show').find('img').attr({src:''});
-      if ($(this).attr('link')) return $('.overlay').addClass('show').find('iframe').attr({src:$(this).attr('link')});
+      if ($(this).attr('link')) {
+        $('.overlay').find('h6').html(`${$(this).closest('div').find('p:eq(0)').html()}`);
+        return $('.overlay').addClass('show').find('iframe').attr({src:$(this).attr('link')});
+      }
       return $('.overlay').addClass('show').find('p').html($(this).attr('msg'));
     })
 
     $('.assignment button').on('click',function() {
       $('.overlay').addClass('show').find('p').html('');
+      $('.overlay').find('h6').html('');
       $('.overlay').addClass('show').find('iframe').attr({src:''});
       $('.overlay').addClass('show').find('img').attr({src:''});
       if ($(this).attr('img')) {
@@ -824,7 +829,7 @@
         console.log(imgs.length);
         $('.overlay').data({imgs,currentValue: 0});
         let currentimgtag = $('.overlay').find('img').attr({src: imgs[0]});
-        $('.overlay').find('h6').html(`Showing ${$('.overlay').data().currentValue + 1} / ${$('.overlay').data().imgs.length} image(s)`);
+        $('.overlay').find('h6').html(`${$('.overlay').data().currentValue + 1} / ${$('.overlay').data().imgs.length} image(s)`);
         return $('.overlay').addClass('show')
       }
       return $('.overlay').addClass('show').find('p').html($(this).attr('msg'));
@@ -837,7 +842,7 @@
       let index = $('.overlay').data().currentValue;
       console.log({currentValue:$('.overlay').data().currentValue, imgs: $('.overlay').data().imgs,length:$('.overlay').data().imgs.length});
       $('.overlay').find('img').attr({src: $('.overlay').data().imgs[index]});
-      $('.overlay').find('h6').html(`Showing ${$('.overlay').data().currentValue + 1} / ${$('.overlay').data().imgs.length} image(s)`);
+      $('.overlay').find('h6').html(`${$('.overlay').data().currentValue + 1} / ${$('.overlay').data().imgs.length} image(s)`);
     })
 
     $('.overlay>button').on('click',function() {
