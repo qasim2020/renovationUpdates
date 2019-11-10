@@ -790,8 +790,21 @@
       $('.overlay').addClass('show').find('p').html('');
       $('.overlay').addClass('show').find('iframe').attr({src:''});
       $('.overlay').addClass('show').find('img').attr({src:''});
-      if ($(this).attr('img')) return $('.overlay').addClass('show').find('img').attr({src:$(this).attr('img')});
+      if ($(this).attr('img')) {
+        let imgs = $(this).attr('img').split('*');
+        let firstItem = imgs.shift();
+        let currentimgtag = $('.overlay').find('img').attr({src: firstItem});
+        console.log({imgs,firstItem,currentimgtag});
+        $.each(imgs,(key,val) => {
+          // $('.overlay>img:eq(0)').clone().insertAfter($('.overlay>img:eq(-1)')).attr({src:val}).addClass('d-none');
+        })
+        return $('.overlay').addClass('show')
+      }
       return $('.overlay').addClass('show').find('p').html($(this).attr('msg'));
+    })
+
+    $('.next,.prev').on('click',function() {
+
     })
 
     $('.overlay>button').on('click',function() {
