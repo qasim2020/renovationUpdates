@@ -426,7 +426,6 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%,-50%);
-      z-index: 200;
     }
 
     .overlay > p {
@@ -809,6 +808,7 @@
 
     $('.video button, .quiz button, .book button').on('click',function() {
       $('.overlay').find('h6').html('');
+      $('.overlay').find('svg').addClass('d-none');
       $('.overlay').addClass('show').find('p').html('');
       $('.overlay').addClass('show').find('iframe').attr({src:''});
       $('.overlay').addClass('show').find('img').attr({src:''});
@@ -821,6 +821,7 @@
 
     $('.assignment button').on('click',function() {
       $('.overlay').addClass('show').find('p').html('');
+      $('.overlay').find('svg').removeClass('d-none');
       $('.overlay').find('h6').html('');
       $('.overlay').addClass('show').find('iframe').attr({src:''});
       $('.overlay').addClass('show').find('img').attr({src:''});
