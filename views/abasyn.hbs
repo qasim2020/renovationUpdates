@@ -96,6 +96,7 @@
       margin: 0 auto;
       /* border: 1px solid red; */
       display: flex;
+      flex-wrap: wrap;
     }
 
     .content {
@@ -543,9 +544,103 @@
         padding-right: 4px;
       }
     }
+
+    .getPassword {
+      position: absolute;
+      background: white;
+      display: flex;
+      z-index: 300;
+      flex-direction: column;
+      width: fit-content;
+      text-align: left;
+      align-items: start;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      padding: 1rem;
+      border: 1px solid green;
+      max-width: 81vw;
+      line-height: 30px;
+    }
+
+    .getPassword.d-none {
+      display: none;
+    }
+
+    .getPassword > * {
+      font-family: system-ui;
+      color: green;
+      box-sizing: border-box;
+      margin-top: 10px;
+    }
+
+    .getPassword > h1 {
+      font-weight: bold;
+      color: #219653;
+      border-bottom: 1px solid;
+      font-size: 20px;
+    }
+
+    .getPassword > a {
+      line-height: initial;
+    }
+
+    .getPassword > *:nth-child(1), {
+      margin-top: 0px;
+    }
+
+    .getPassword > *:nth-last-child(1) {
+      margin-bottom: 0;
+    }
+
+    .getPassword > input {
+      width: 100%;
+      height: 40px;
+      max-width: 90vw;
+      font-size: 15px;
+      font-family: system-ui;
+      text-align: center;
+    }
+
+    .locked-btn {
+      margin-right: 50vw;
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 2px 5px;
+    }
+
+    .locked-btn:not(.locked-btn.active) > svg:nth-child(1) {
+      display: none;
+    }
+
+    .locked-btn.active > svg:nth-child(2) {
+      display: none;
+    }
+
+    button.secondary {
+      background: darkcyan;
+      color: white;
+    }
+
+    @media (max-width: 700px) {
+      .locked-btn {
+        margin-left: 10px;
+      }
+    }
     </style>
   </head>
   <body>
+
+    <div class="getPassword d-none">
+      <h1>Unlock website</h1>
+      <label for="">Some features are locked. Please unlock to view all content.</label>
+      <input type="text" name="" value="" placeholder="Your password">
+      <button type="button" name="button">Submit</button>
+      <a type="button" name="button" class="secondary" href="mailto:qasimali24@gmail.com">Ask for password</a>
+    </div>
+
     <div class="overlay">
       <h6></h6>
       <img src="" alt="">
@@ -555,7 +650,15 @@
       <svg class="next" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="white"/><path d="M0 0h24v24H0z" fill="none"/></svg>
       <svg class="prev" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="white"/><path d="M0 0h24v24H0z" fill="none"/></svg>
     </div>
+
+
     <div class="container">
+
+      <button class="locked-btn active" type="button" name="button">
+        <svg style="padding-right: 4px" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" fill="green"/></svg>
+        <svg style="padding-right: 4px" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z" fill="green"/></svg>
+        Unlock website
+      </button>
 
       <div class="sticky-nav">
         <h2>Subjects</h2>
@@ -797,6 +900,7 @@
 
         </div>
       </div>
+
     </div>
 
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -869,6 +973,11 @@
       $(this).toggleClass('not-collapsed');
       if ($('.lower-bar.d-none').length > 0) $('.collapse_all').html('Show All');
       else $('.collapse_all').html('Collapse All');
+    })
+
+    $('.locked-btn').on('click',function() {
+      $('.getPassword').toggleClass('d-none');
+      $(this).toggleClass('active');
     })
   </script>
 
