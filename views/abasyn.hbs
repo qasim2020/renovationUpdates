@@ -336,9 +336,9 @@
       font-weight: normal;
     }
 
-    .imp_list {
+    .imp_list, .questions_list {
       line-height: 30px;
-      padding-left: 11px;
+      padding-left: 9px;
       margin-top: -3px;
       width: fit-content;
       margin-left: 0 !important;
@@ -354,13 +354,27 @@
       font-size: 12px;
     }
 
-    .imp_list > *:nth-child(1) {
+    .imp_list > *:nth-child(1), .questions_list > *:nth-child(1) {
       display: block;
       background: none;
       color: black;
       padding: 0;
+      padding-left: 3px;
       margin-bottom: 6px;
       font-weight: normal;
+    }
+
+    .questions_list > *:not(:nth-child(1)) {
+      align-content: normal;
+      display: inline-flex;
+      padding: 2px 12px;
+      margin: 3px;
+      color: white;
+      font-weight: normal;
+      font-size: 15px;
+      background: #219653;
+      width: fit-content;
+      display: block;
     }
 
     button, a {
@@ -754,6 +768,21 @@
               <ol class="imp_list">
                 <p>Important Points</p>
                 {{{getTopicsListed this 'Important'}}}
+              </ol>
+            </div>
+            {{/if}}
+
+            {{#if (ifTopic this 'Questions')}}
+            <div data-show="week{{@indexNo}}" class="lower-bar d-none important">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g opacity="0.56">
+              <path d="M12 2.02C6.49002 2.02 2.02002 6.49 2.02002 12C2.02002 17.51 6.49002 21.98 12 21.98C17.51 21.98 21.98 17.51 21.98 12C21.98 6.49 17.51 2.02 12 2.02ZM12 19.98C7.60002 19.98 4.02002 16.4 4.02002 12C4.02002 7.6 7.60002 4.02 12 4.02C16.4 4.02 19.98 7.6 19.98 12C19.98 16.4 16.4 19.98 12 19.98ZM12.75 5L8.25002 13.5H11.39V19L15.75 10.5H12.75V5Z" fill="black"/>
+              </g>
+              </svg>
+
+              <ol class="questions_list">
+                <p>Important Questions for Revision before paper</p>
+                {{{getTopicsListed this 'Questions'}}}
               </ol>
             </div>
             {{/if}}
