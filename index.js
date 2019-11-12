@@ -61,6 +61,7 @@ hbs.registerHelper("getObjectValue", (data,position) => {
 
 hbs.registerHelper("getTopicsListed", (data, key) => {
   return data[key].split(',').reduce((total,val) => {
+    if (val.indexOf('Chapter') != -1) return total += `<li class="section">${val}</li>`;
     return total += `<li>${val}</li>`;
   },'');
 })
