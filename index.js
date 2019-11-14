@@ -51,7 +51,7 @@ hbs.registerHelper("checkValueExists", function(data, position) {
 })
 
 hbs.registerHelper("getObjectValue", (data,position) => {
-  // console.log(data[0]);
+  console.log(data);
   for (var key in data) {
     if (data.hasOwnProperty(key)) {
       return data[key].split(',')[position].split('- ')[1];
