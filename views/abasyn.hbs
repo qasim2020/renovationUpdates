@@ -561,6 +561,10 @@
         padding-right: 4px;
       }
     }
+
+    b {
+      font-weight: bold;
+    }
     </style>
   </head>
   <body>
@@ -796,6 +800,20 @@
             </div>
             {{/if}}
 
+            {{#if (ifTopic this 'Note')}}
+            <div data-show="week{{@indexNo}}" class="lower-bar d-none important">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" opacity="0.56">
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M17 10H7v2h10v-2zm2-7h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zm-5-5H7v2h7v-2z"/>
+              </svg>
+
+              <ol class="" style="margin-left: 0 !important; padding-left: 10px; margin-top: -4px; line-height: 24px;">
+                <b>{{getObjectUsingKey this 'heading'}}</b>
+                <p>{{{getObjectUsingKey this 'text'}}}</p>
+              </ol>
+            </div>
+            {{/if}}
+
             {{#if (ifTopic this 'Assignment')}}
             <div data-show="week{{@indexNo}}" class="lower-bar d-none assignment">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -806,7 +824,12 @@
 
               <p>{{getObjectValue this 0}}</p>
               {{#if (checkValueExists this 1)}}
+              {{#if (matchValues this 'img')}}
               <button type="button" name="button" img="{{getObjectValue this 1}}">View</button>
+              {{/if}}
+              {{#if (matchValues this 'link')}}
+              <a href="/{{../../pagerequest}}/{{getObjectValue this 1}}" download>Download</a>
+              {{/if}}
               {{else}}
               <button type="button" name="button" msg="Sorry assignment pictures are not available. If you have please share." style="color:red;border-color:red;">Not Aval</button>
               {{/if}}

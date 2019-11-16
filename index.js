@@ -28,19 +28,28 @@ hbs.registerHelper("fixText",function (text) {
 })
 
 hbs.registerHelper("ifTopic",function (data, compareTo) {
-  // console.log('*****',data,compareTo);
   return Object.keys(data).some(key => key == compareTo);
 })
 
 hbs.registerHelper("matchValues", function(page, val) {
-  // console.log({page,val});
-  if (page == val) return true;
-  return false;
+  try {
+    if (page == val) return true;
+    let object = page[Object.keys(page)[0]].split(',').reduce((total,value) => {
+      Object.assign(total,{
+        [value.split('- ')[0].trim()]: value.split('- ')[1].trim()
+      });
+      return total;
+    },{})
+    // console.log({val,value: object[val], length: object[val].length});
+    if (object[val].length > 0) return true;
+    return false;
+  } catch (e) {
+    return false;
+  }
 })
 
 hbs.registerHelper("checkValueExists", function(data, position) {
   try {
-    // console.log(Object.keys(data)[0]);
     let value = Object.keys(data)[0];
     return data[value].split(',')[position].split('- ')[1].length > 0
   }
@@ -51,7 +60,7 @@ hbs.registerHelper("checkValueExists", function(data, position) {
 })
 
 hbs.registerHelper("getObjectValue", (data,position) => {
-  console.log(data);
+  // console.log(data);
   for (var key in data) {
     if (data.hasOwnProperty(key)) {
       return data[key].split(',')[position].split('- ')[1];
@@ -66,9 +75,19 @@ hbs.registerHelper("getTopicsListed", (data, key) => {
   },'');
 })
 
+hbs.registerHelper("getObjectUsingKey", (data, key) => {
+  // let value = Object.keys(data)[0];
+  let object = data[Object.keys(data)[0]].split(',').reduce((total,value) => {
+    Object.assign(total,{
+      [value.split('- ')[0].trim()]: value.split('- ')[1].trim()
+    });
+    return total;
+  },{});
+  return object[key];
+})
+
 app.get('/',(req,res) => {
 
-  console.log('home page opened');
   let dateToday = moment().format('YYYY-MM-DD');
 
   readXlsxFile(__dirname+'/server/life.xlsx').then((rows) => {
