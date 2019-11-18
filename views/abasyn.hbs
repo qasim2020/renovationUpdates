@@ -1051,7 +1051,7 @@
     $(document).on('click','.submit-feedback',function() {
       console.log('her');
       $(this).siblings('.error').addClass('d-none').siblings('.success').addClass('d-none');
-      if ($('textarea').val() < 1) return $(this).siblings('.error').removeClass('d-none').html('Please fill above field.');
+      if ($(this).siblings('textarea').val() < 1) return $(this).siblings('.error').removeClass('d-none').html('Please fill above field.');
       let data = {val: $('textarea').val()};
       data = JSON.stringify(data);
       console.log(data);
