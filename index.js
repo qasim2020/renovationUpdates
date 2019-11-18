@@ -3,10 +3,13 @@ require('./config/config');
 const express = require('express');
 const bodyParser = require('body-parser');
 const hbs = require('hbs');
+// const hbs = {};
+hbs.handlebars === require('handlebars');
 const _ = require('lodash');
 const moment = require('moment');
 const readXlsxFile = require('read-excel-file/node');
 
+const {sendmail} = require('./js/sendmail');
 const {sheet} = require('./server/sheets.js');
 
 var app = express();
@@ -205,6 +208,19 @@ app.post('/oldDataUpload',(req,res) => {
     res.status(400).send(e);
   })
 });
+
+app.post('/sendmail',(req,res) => {
+  // return console.log(req);
+  // console.log(JSON.parse(req.body));
+  console.log(req.body.val);
+  sendmail('qasimali24@gmail.com',req.body.val,'Feedback from Abasyn').then((msg) => {
+    res.status(200).send(msg)
+  }).catch(e => {
+    // console.log('asdfas');
+    console.log(e);
+    res.status(400).send(e);
+  });
+})
 
 app.listen(port, () => {
   console.log(`listening on port ${port}...`);

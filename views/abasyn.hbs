@@ -202,6 +202,10 @@
       cursor: pointer;
     }
 
+    .title-bar:not(:nth-child(1)) {
+      margin-top: 10px;
+    }
+
     .title-bar > div {
       display: flex;
       align-items: center;
@@ -503,7 +507,82 @@
       background: lightcoral !important;
     }
 
+    .my-sticker {
+      width: 100%;
+      max-width: 243px;
+      height: auto;
+      background: #F2F2F2;
+      color: #219653;
+      opacity: 1;
+
+      margin-bottom: 20px;
+      border-radius: 2px;
+      padding: 16px;
+      box-sizing: border-box;
+      border: 1px solid transparent;
+    }
+
+    .my-sticker > p {
+      font-family: Montserrat;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 15px;
+      line-height: 27px;
+    }
+
+    .my-sticker > button {
+      padding: 7px 13px;
+      border: 1px solid transparent;
+      border: 1;
+      font-family: Montserrat;
+      color: #F2F2F2;
+      background: #27AE60;
+      margin: 10px 0px;
+    }
+
+    small {
+      font-size: 12px;
+    }
+
+    .my-sticker > textarea {
+      width: 100%;
+      border: 1px solid #27AE60;
+      margin-top: 10px;
+      font-family: Montserrat;
+      font-size: 15px;
+      line-height: 27px;
+      padding: 10px;
+      box-sizing: border-box;
+      color: darkgreen;
+      font-weight: bold;
+    }
+
+    .my-sticker > textarea::placeholder {
+      opacity: 0.5;
+    }
+
+    .mobile {
+      display: none;
+    }
+
+    .desktop {
+      display: block;
+    }
+
     @media (max-width: 700px) {
+
+
+      .mobile {
+        display: block;
+      }
+
+      .sticky-nav.mobile {
+        margin-top: 10px;
+      }
+
+      .desktop {
+        display: none;
+      }
 
       h2 {
         margin-top: 10px;
@@ -552,19 +631,22 @@
         text-align: center;
       }
 
-      .subj-card > p:nth-child(1) {
+      .subj-card > p:nth-child(1), .my-sticker > p:nth-child(1) {
         display: none;
       }
 
       .title-bar > div > p, .lower-bar > p {
         padding-left: 4px;
         padding-right: 4px;
+        word-break: break-all;
       }
     }
 
     b {
       font-weight: bold;
     }
+
+
     </style>
   </head>
   <body>
@@ -599,6 +681,29 @@
         <div class="subj-card {{is}}" onClick="window.location = '/?pagerequest=is';">
           <p>04</p>
           <p>Information Security</p>
+        </div>
+
+        <div class="my-sticker desktop">
+          <p>
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M33.0002 29.3333V20.1667C33.0002 14.5383 29.9935 9.82666 24.7502 8.57999V7.33333C24.7502 5.81166 23.5218 4.58333 22.0002 4.58333C20.4785 4.58333 19.2502 5.81166 19.2502 7.33333V8.57999C13.9885 9.82666 11.0002 14.52 11.0002 20.1667V29.3333L7.3335 33V34.8333H36.6668V33L33.0002 29.3333ZM23.8335 29.3333H20.1668V25.6667H23.8335V29.3333ZM23.8335 22H20.1668V14.6667H23.8335V22ZM22.0002 40.3333C24.0168 40.3333 25.6668 38.6833 25.6668 36.6667H18.3335C18.3335 38.6833 19.9652 40.3333 22.0002 40.3333Z" fill="#27AE60"/>
+            </svg>
+          </p>
+          <p>This site needs help in staying <b>Live</b>. If it is helping you and you think it should continue, <b>kindly help me</b>. It costs me <b>7.00 USD</b> a month to keep it running.</p>
+          <button class="toggler" target-class="toggle" type="button" name="button" style="background:#F2994A;">Support</button>
+          <p class="toggle d-none">Thank you.</p>
+          <p class="toggle d-none"><b>My account details</b></p>
+          <p class="toggle d-none"><small><b>Account Title:</b> </small> Qasim Ali</p>
+          <p class="toggle d-none"><small><b>Bank:</b> </small> Askari Bank Haider Road Rawalpindi</p>
+          <p class="toggle d-none"><small><b>Account Number:</b> </small> ‭00 47 0210109039‬</p>
+          <p class="toggle d-none"><b>Or Easypaisa</b></p>
+          <p class="toggle d-none"><small><b>Mobile:</b> </small> 0323 5168638</p>
+          <p class="toggle d-none"><small><b>CNIC:</b> </small> 37301 0101375 3</p>
+          <p class="toggle d-none"><b>Leave Feedback</b></p>
+          <textarea class="toggle d-none" name="name" rows="7" cols="auto" placeholder="How can I improve this project?"></textarea>
+          <button class="toggle d-none submit-feedback" type="button" name="button">Submit</button>
+          <p class="error d-none" style="text-align: left">Sorry something went wrong</p>
+          <p class="success d-none">Successfully submitted your feedback.</p>
         </div>
 
       </div>
@@ -673,7 +778,7 @@
           {{#each sorted as |sorted indexNo|}}
           {{#each this}}
             {{#if (ifTopic this 'Topic')}}
-            <div data-target="week{{@indexNo}}" class="title-bar">
+            <div data-target="week{{@indexNo}}" class="title-bar" style="">
 
               <div class="">
                 <svg class="opened" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -853,18 +958,29 @@
             </div>
             {{/if}}
           {{/each}}
-          <div class="partition"></div>
+
           {{/each}}
 
         </div>
       </div>
+
+      <div class="sticky-nav mobile">
+        <div class="my-sticker mobile">
+
+        </div>
+      </div>
+
     </div>
 
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
   <script type="text/javascript">
 
     $(document).ready(() => {
       $('.title-bar:eq(-1)').trigger('click');
+
+      if ($(window).width() < 700) $('.my-sticker.desktop > *').clone().appendTo('.my-sticker.mobile');
+
     })
 
     $('.video button, .quiz button, .book button').on('click',function() {
@@ -930,6 +1046,38 @@
       $(this).toggleClass('not-collapsed');
       if ($('.lower-bar.d-none').length > 0) $('.collapse_all').html('Show All');
       else $('.collapse_all').html('Collapse All');
+    })
+
+    $(document).on('click','.submit-feedback',function() {
+      console.log('her');
+      $(this).siblings('.error').addClass('d-none').siblings('.success').addClass('d-none');
+      if ($('textarea').val() < 1) return $(this).siblings('.error').removeClass('d-none').html('Please fill above field.');
+      let data = {val: $('textarea').val()};
+      data = JSON.stringify(data);
+      console.log(data);
+      $.ajax({
+          url: '/sendmail',
+          type: 'post',
+          data: data,
+          headers: {
+              'content-type': 'application/json',
+          }
+        }).done((res) => {
+          console.log(res);
+          $(this).siblings('.success').removeClass('d-none').html(res);
+        }).fail((e) => {
+          console.log(e.responseText);
+          $(this).siblings('.error').removeClass('d-none').html(e.responseText);
+        });
+    })
+
+    $(document).on('click','.toggler',function() {
+      console.log('asdfas');
+      let target = $(this).attr('target-class');
+      $(`.${target}`).toggleClass('d-none');
+      console.log($(`.${target}.d-none`).length);
+      if ($(`.${target}.d-none`).length > 0) return $(this).html('Support');
+      $(this).html('x Close')
     })
   </script>
 
