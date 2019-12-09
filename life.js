@@ -60,18 +60,18 @@ function startcalc(sorted, day) {
 
   // Days since last M > 90 Days ?
   let daysSinceMajArrival = Math.floor((thisDate - sorted[0]['Last Maj Lve'])/1000/60/60/24);
-  if (daysSinceMajArrival < 90) {
+  if (daysSinceMajArrival < 90 && sorted[0]['daysSinceArrival'] > 30) {
     // console.log({daysSinceArrival: sorted[0].daysSinceArrival, daysSinceMajArrival});
     let R = sorted[0].daysSinceArrival;
     let M = daysSinceMajArrival;
     if (R < M + 30) {
-      console.log('give 3 days weekend');
+      console.log('give 3 days weekend to '+ sorted[0].Name + ' on ' + thisDate);
       if (!sorted[0]['leave']) sorted[0]['leave'] = [];
       let tempDate = new Date();
       sorted[0]['leave'].push({
         leave: 'W1',
-        dateStart: thisDate,
-        dateEnd: new Date(tempDate.setDate(thisDate.getDate() + 3 + (Number(sorted[0]['Addl Days']) || 0)))
+        start: thisDate,
+        end: new Date(tempDate.setDate(thisDate.getDate() + 3 + (Number(sorted[0]['Addl Days']) || 0)))
       });
       sorted[0]['Returned(ing)'] = new Date(tempDate);
       return startcalc(sorted, day);
@@ -82,8 +82,8 @@ function startcalc(sorted, day) {
       let tempDate = new Date();
       sorted[0]['leave'].push({
         leave: 'W2',
-        dateStart: thisDate,
-        dateEnd: new Date(tempDate.setDate(thisDate.getDate() + 2 + (Number(sorted[0]['Addl Days']) || 0)))
+        start: thisDate,
+        end: new Date(tempDate.setDate(thisDate.getDate() + 2 + (Number(sorted[0]['Addl Days']) || 0)))
       });
       sorted[0]['Returned(ing)'] = new Date(tempDate);
       return startcalc(sorted, day);
@@ -98,8 +98,8 @@ function startcalc(sorted, day) {
     let tempDate = new Date();
     sorted[0]['leave'].push({
       leave: 'P Lve',
-      dateStart: thisDate,
-      dateEnd: new Date(tempDate.setDate(thisDate.getDate() + 30 + (Number(sorted[0]['Addl Days']) || 0)))
+      start: thisDate,
+      end: new Date(tempDate.setDate(thisDate.getDate() + 30 + (Number(sorted[0]['Addl Days']) || 0)))
     });
 
     sorted[0]['Last Maj Lve'] = new Date(tempDate);
@@ -110,17 +110,18 @@ function startcalc(sorted, day) {
     console.log('give him c leave');
     if (!sorted[0]['leave']) sorted[0]['leave'] = [];
     let tempDate = new Date();
+    tempDate.setDate(thisDate.getDate() + 13 + (Number(sorted[0]['Addl Days']) || 0));
     sorted[0]['leave'].push({
       leave: 'C Lve',
-      dateStart: thisDate,
-      dateEnd: new Date(tempDate.setDate(thisDate.getDate() + 13 + (Number(sorted[0]['Addl Days']) || 0)))
+      start: thisDate,
+      end: new Date(tempDate)
     });
 
     sorted[0]['Last Maj Lve'] = new Date(tempDate);
     sorted[0]['Returned(ing)'] = new Date(tempDate);
     return startcalc(sorted, day);
   }
-  
+
   console.log(JSON.stringify(sorted, null, 4));
 
 }
