@@ -147,26 +147,6 @@ app.get('/',(req,res) => {
       });
   });
 
-  // THIS IS OFFICE DATA - NOW NOT IN USE
-  // res.render('index.hbs',{
-  //   dateToday,
-  // });
-  // readXlsxFile(__dirname+'/server/life.xlsx').then((rows) => {
-  //   let sorted = rows.map((val) =>
-  //     val.reduce((total,inner,index) => {
-  //
-  //       if (inner) Object.assign(total,{
-  //         [rows[0][index]]: inner
-  //       })
-  //       return total;
-  //     },{})
-  //   ).filter((val,index) => Object.keys(val).length > 2 && index != 0);
-  //   console.log(sorted);
-  //   res.render('abasyn.hbs',{
-  //     sorted,
-  //   });
-  // });
-
 });
 
 app.get('/getSuggestions',(req,res) => {
