@@ -3,7 +3,7 @@ require('./config/config');
 const express = require('express');
 const bodyParser = require('body-parser');
 const hbs = require('hbs');
-// const hbs = {};
+
 hbs.handlebars === require('handlebars');
 const _ = require('lodash');
 const moment = require('moment');
@@ -11,6 +11,7 @@ const readXlsxFile = require('read-excel-file/node');
 
 const {sendmail} = require('./js/sendmail');
 const {sheet} = require('./server/sheets.js');
+const {startcalc} = require('./life.js');
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -190,16 +191,37 @@ app.post('/oldDataUpload',(req,res) => {
 });
 
 app.post('/sendmail',(req,res) => {
-  // return console.log(req);
-  // console.log(JSON.parse(req.body));
   console.log(req.body.val);
   sendmail('qasimali24@gmail.com',req.body.val,'Feedback from Abasyn').then((msg) => {
     res.status(200).send(msg)
   }).catch(e => {
-    // console.log('asdfas');
     console.log(e);
     res.status(400).send(e);
   });
+})
+
+app.get('/office', (req,res) => {
+
+  // readXlsxFile(__dirname+'/server/leaveplan.xlsm').then((rows) => {
+  //   // console.log(rows);
+  //   let sorted = rows.map((val) =>
+  //     val.reduce((total,inner,index) => {
+  //       if (inner) Object.assign(total,{
+  //         [rows[0][index]]: inner
+  //       })
+  //       return total;
+  //     },{})
+  //   ).filter((val,index) => Object.keys(val).length > 2 && index != 0);
+  //
+  //   sorted = startcalc(sorted, 0);
+  //
+  //   console.log(sorted);
+
+    res.render('office.hbs',{
+      // data: sorted
+    });
+
+  // });
 })
 
 app.listen(port, () => {

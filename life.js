@@ -1,32 +1,12 @@
 const readXlsxFile = require('read-excel-file/node');
 
-readXlsxFile(__dirname+'/server/leaveplan.xlsm').then((rows) => {
-  // console.log(rows);
-  let sorted = rows.map((val) =>
-    val.reduce((total,inner,index) => {
-      if (inner) Object.assign(total,{
-        [rows[0][index]]: inner
-      })
-      return total;
-    },{})
-  ).filter((val,index) => Object.keys(val).length > 2 && index != 0);
-
-  sorted = startcalc(sorted, day);
-
-  // Is it P lve ?
-
-  // Allot C Lve || P Lve || Weekend
-});
-
 let slot = 2,
-    today = new Date(),
-    day = 0,
-    counter = ['M','W1','W2'];
-
+    today = new Date();
 
 function startcalc(sorted, day) {
-  if (day > 50) {
-    return console.log(JSON.stringify(sorted, null, 4));
+  if (day > 200) {
+    return sorted;
+    // return console.log(JSON.stringify(sorted, null, 4));
   }
   var thisDate = new Date();
   thisDate.setDate(today.getDate() + day);
@@ -65,27 +45,25 @@ function startcalc(sorted, day) {
     let R = sorted[0].daysSinceArrival;
     let M = daysSinceMajArrival;
     if (R < M + 30) {
-      console.log('give 3 days weekend to '+ sorted[0].Name + ' on ' + thisDate);
+      console.log('give 3 days weekend');
       if (!sorted[0]['leave']) sorted[0]['leave'] = [];
-      let tempDate = new Date();
       sorted[0]['leave'].push({
         leave: 'W1',
-        start: thisDate,
-        end: new Date(tempDate.setDate(thisDate.getDate() + 3 + (Number(sorted[0]['Addl Days']) || 0)))
+        start: addDays(thisDate,1),
+        end: addDays(thisDate,3 + (Number(sorted[0]['Addl Days']) || 0))
       });
-      sorted[0]['Returned(ing)'] = new Date(tempDate);
+      sorted[0]['Returned(ing)'] = addDays(thisDate,3 + (Number(sorted[0]['Addl Days']) || 0));
       return startcalc(sorted, day);
     }
     else {
       console.log('give 2 days weekend');
       if (!sorted[0]['leave']) sorted[0]['leave'] = [];
-      let tempDate = new Date();
       sorted[0]['leave'].push({
         leave: 'W2',
-        start: thisDate,
-        end: new Date(tempDate.setDate(thisDate.getDate() + 2 + (Number(sorted[0]['Addl Days']) || 0)))
+        start: addDays(thisDate,1),
+        end: addDays(thisDate,2 + (Number(sorted[0]['Addl Days']) || 0))
       });
-      sorted[0]['Returned(ing)'] = new Date(tempDate);
+      sorted[0]['Returned(ing)'] = addDays(thisDate,2 + (Number(sorted[0]['Addl Days']) || 0));
       return startcalc(sorted, day);
     }
   }
@@ -95,35 +73,38 @@ function startcalc(sorted, day) {
   if (daysinPleave < 90) {
     console.log('give him p leave');
     if (!sorted[0]['leave']) sorted[0]['leave'] = [];
-    let tempDate = new Date();
     sorted[0]['leave'].push({
       leave: 'P Lve',
-      start: thisDate,
-      end: new Date(tempDate.setDate(thisDate.getDate() + 30 + (Number(sorted[0]['Addl Days']) || 0)))
+      start: addDays(thisDate,1),
+      end: addDays(thisDate,30 + (Number(sorted[0]['Addl Days']) || 0))
     });
 
-    sorted[0]['Last Maj Lve'] = new Date(tempDate);
-    sorted[0]['Returned(ing)'] = new Date(tempDate);
-    sorted[0]['P Lve'] = new Date(tempDate.setDate(thisDate.getDate() + 30 * 11));
+    sorted[0]['Last Maj Lve'] = addDays(thisDate,30 + (Number(sorted[0]['Addl Days']) || 0));
+    sorted[0]['Returned(ing)'] = sorted[0]['Last Maj Lve'];
+    sorted[0]['P Lve'] = addDays(thisDate, 30 * 11);
     return startcalc(sorted, day);
   } else {
     console.log('give him c leave');
     if (!sorted[0]['leave']) sorted[0]['leave'] = [];
-    let tempDate = new Date();
-    tempDate.setDate(thisDate.getDate() + 13 + (Number(sorted[0]['Addl Days']) || 0));
     sorted[0]['leave'].push({
       leave: 'C Lve',
-      start: thisDate,
-      end: new Date(tempDate)
+      start: addDays(thisDate,1),
+      end: addDays(thisDate,13 + (Number(sorted[0]['Addl Days']) || 0))
     });
 
-    sorted[0]['Last Maj Lve'] = new Date(tempDate);
-    sorted[0]['Returned(ing)'] = new Date(tempDate);
+    sorted[0]['Last Maj Lve'] = addDays(thisDate,13 + (Number(sorted[0]['Addl Days']) || 0));
+    sorted[0]['Returned(ing)'] = sorted[0]['Last Maj Lve'];
     return startcalc(sorted, day);
   }
 
-  console.log(JSON.stringify(sorted, null, 4));
+  // console.log(JSON.stringify(sorted, null, 4));
 
 }
 
-// module.exports = {getLifeData}
+function addDays(date, days) {
+  var result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+module.exports = {startcalc}
