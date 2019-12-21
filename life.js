@@ -1,6 +1,6 @@
 const readXlsxFile = require('read-excel-file/node');
 
-let slot = 2,
+let slot = 7,
     today = new Date();
 
 function startcalc(sorted, day) {
@@ -40,64 +40,35 @@ function startcalc(sorted, day) {
 
   // Days since last M > 90 Days ?
   let daysSinceMajArrival = Math.floor((thisDate - sorted[0]['Last Maj Lve'])/1000/60/60/24);
-  if (daysSinceMajArrival < 90 && sorted[0]['daysSinceArrival'] > 30) {
+  // console.log({daysSinceMajArrival, daysSinceArrival: sorted[0]['daysSinceArrival']});
+  if (daysSinceMajArrival < 90 && sorted[0]['daysSinceArrival'] > 29) {
     // console.log({daysSinceArrival: sorted[0].daysSinceArrival, daysSinceMajArrival});
     let R = sorted[0].daysSinceArrival;
     let M = daysSinceMajArrival;
-    if (R < M + 30) {
+    if (R == M) {
       console.log('give 3 days weekend');
-      if (!sorted[0]['leave']) sorted[0]['leave'] = [];
-      sorted[0]['leave'].push({
-        leave: 'W1',
-        start: addDays(thisDate,1),
-        end: addDays(thisDate,3 + (Number(sorted[0]['Addl Days']) || 0))
-      });
-      sorted[0]['Returned(ing)'] = addDays(thisDate,3 + (Number(sorted[0]['Addl Days']) || 0));
+      sorted[0] = allotLeave('W1',sorted[0],thisDate);
       return startcalc(sorted, day);
     }
     else {
       console.log('give 2 days weekend');
-      if (!sorted[0]['leave']) sorted[0]['leave'] = [];
-      sorted[0]['leave'].push({
-        leave: 'W2',
-        start: addDays(thisDate,1),
-        end: addDays(thisDate,2 + (Number(sorted[0]['Addl Days']) || 0))
-      });
-      sorted[0]['Returned(ing)'] = addDays(thisDate,2 + (Number(sorted[0]['Addl Days']) || 0));
+      sorted[0] = allotLeave('W2',sorted[0],thisDate);
       return startcalc(sorted, day);
     }
   }
 
   // P leave in previous 3 months or next 3 months?
   let daysinPleave = Math.abs(Math.floor((sorted[0]['P Lve'] - thisDate)/1000/60/60/24));
-  if (daysinPleave < 90) {
+  if (daysinPleave < 60) {
     console.log('give him p leave');
-    if (!sorted[0]['leave']) sorted[0]['leave'] = [];
-    sorted[0]['leave'].push({
-      leave: 'P Lve',
-      start: addDays(thisDate,1),
-      end: addDays(thisDate,30 + (Number(sorted[0]['Addl Days']) || 0))
-    });
-
-    sorted[0]['Last Maj Lve'] = addDays(thisDate,30 + (Number(sorted[0]['Addl Days']) || 0));
-    sorted[0]['Returned(ing)'] = sorted[0]['Last Maj Lve'];
+    sorted[0] = allotLeave('P Lve',sorted[0],thisDate);
     sorted[0]['P Lve'] = addDays(thisDate, 30 * 11);
     return startcalc(sorted, day);
   } else {
     console.log('give him c leave');
-    if (!sorted[0]['leave']) sorted[0]['leave'] = [];
-    sorted[0]['leave'].push({
-      leave: 'C Lve',
-      start: addDays(thisDate,1),
-      end: addDays(thisDate,13 + (Number(sorted[0]['Addl Days']) || 0))
-    });
-
-    sorted[0]['Last Maj Lve'] = addDays(thisDate,13 + (Number(sorted[0]['Addl Days']) || 0));
-    sorted[0]['Returned(ing)'] = sorted[0]['Last Maj Lve'];
+    sorted[0] = allotLeave('C Lve',sorted[0],thisDate);
     return startcalc(sorted, day);
   }
-
-  // console.log(JSON.stringify(sorted, null, 4));
 
 }
 
@@ -107,4 +78,52 @@ function addDays(date, days) {
   return result;
 }
 
-module.exports = {startcalc}
+function allotLeave(leaveType,person,thisDate) {
+  if (!person['leave']) person['leave'] = [];
+  if (!person['MC']) person['MC'] = 0;
+  switch (leaveType) {
+    case 'P Lve':
+      person['leave'].push({
+        leave: 'P Lve',
+        start: addDays(thisDate,1),
+        end: addDays(thisDate,30 + (Number(person['Addl Days']) || 0) + (person.MC || 0)),
+        specialDays: person.MC
+      });
+      person['Last Maj Lve'] = addDays(thisDate,30 + (Number(person['Addl Days']) || 0) + (person.MC || 0));
+      person['Returned(ing)'] = person['Last Maj Lve'];
+      break;
+    case 'C Lve':
+      person['leave'].push({
+        leave: 'C Lve',
+        start: addDays(thisDate,1),
+        end: addDays(thisDate,13 + (Number(person['Addl Days']) || 0) + (person.MC || 0)),
+        specialDays: person.MC
+      });
+      person['Last Maj Lve'] = addDays(thisDate,13 + (Number(person['Addl Days']) || 0) + (person.MC || 0));
+      person['Returned(ing)'] = person['Last Maj Lve'];
+      break;
+    case 'W1':
+      person['leave'].push({
+        leave: 'W1',
+        start: addDays(thisDate,1),
+        end: addDays(thisDate,4 + (Number(person['Addl Days']) || 0) + (person.MC || 0)),
+        specialDays: person.MC
+      });
+      person['Returned(ing)'] = addDays(thisDate,4 + (Number(person['Addl Days']) || 0) + (person.MC || 0));
+      break;
+    case 'W2':
+      person['leave'].push({
+        leave: 'W2',
+        start: addDays(thisDate,1),
+        end: addDays(thisDate,3 + (Number(person['Addl Days']) || 0) + (person.MC || 0)),
+        specialDays: person.MC
+      });
+      person['Returned(ing)'] = addDays(thisDate,3 + (Number(person['Addl Days']) || 0) + (person.MC || 0));
+      break;
+    default: break;
+  }
+  person.MC = 0;
+  return person;
+}
+
+module.exports = {startcalc, addDays}
