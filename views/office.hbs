@@ -4,6 +4,33 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="/reset.css">
     <style media="screen">
+
+      .popover {
+        position: absolute;
+        background: #009688;
+        color: white;
+        font-size: 15px;
+        font-weight: normal;
+        width: 300px;
+        padding: 1rem;
+        z-index: 100;
+        line-height: 24px;
+        pointer-events: none;
+        opacity: 0;
+      }
+
+      .shadow {
+        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+      }
+
+      .opacity-1 {
+        opacity: 1 !important;
+      }
+
+      body {
+        font-family: sans-serif;
+        padding-bottom: 5rem;
+      }
       .brand {
 
       }
@@ -24,6 +51,10 @@
         align-items: center;
         justify-content: center;
         width: 100%;
+        position: fixed;
+        top: 0px;
+        background: white;
+        z-index: 10;
       }
 
       nav > button {
@@ -33,6 +64,109 @@
 
       nav > button > svg {
 
+      }
+
+      table {
+        min-width: 100%;
+        border-collapse: collapse;
+      }
+
+      td {
+        padding: 8px;
+        position: relative;
+      }
+
+      td > div {
+        position: absolute;
+        height: 20px;
+        background: darkcyan;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+      }
+
+      td > div.active {
+        width: 31px;
+        height: 33px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 50%;
+      }
+
+      td > div.P {
+        background: #F2C94C;
+      }
+
+      td > div.C {
+        background: #6FCF97;
+      }
+
+      td > div.W {
+        background: #56CCF2;
+      }
+
+      tr:nth-child(even) {
+        /* background-color: #dddddd; */
+      }
+
+      td:not(:nth-child(1)) {
+        text-align: center;
+        box-sizing: border-box;
+      }
+
+      td, th {
+        border: 1px solid #dddddd;
+      }
+
+      th.rotate {
+        transform: rotate(-45deg);
+        padding: 15px 4px;
+        white-space: nowrap;
+        height: 111px;
+        width: 30px;
+      }
+
+      th.rotate > div {
+        transform:/* Magic Numbers */
+          translate(-23px, 71px)
+          /* 45 is really 360 - 45 */
+          rotate(315deg);
+        width: 22px;
+      }
+
+      th.rotate > div > span {
+        /* padding: 5px 10px; */
+      }
+
+      td:nth-child(1), th:nth-child(1) {
+        white-space: nowrap;
+      }
+
+      .table {
+        overflow: scroll;
+        max-width: 100%;
+        margin-top: 2rem;
+      }
+
+      .addBonusModal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        z-index: 100;
+        flex-wrap: wrap;
+        flex-direction: column;
+      }
+
+      .d-none {
+        display: none !important;
       }
 
     </style>
@@ -47,14 +181,14 @@
         </svg>
         <input type="text" name="" value="" placeholder="Search">
       </div>
-      <button type="button" name="button">
+      <button type="button" name="button" onclick="">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 5V1L7 6L12 11V7C15.31 7 18 9.69 18 13C18 16.31 15.31 19 12 19C8.69 19 6 16.31 6 13H4C4 17.42 7.58 21 12 21C16.42 21 20 17.42 20 13C20 8.58 16.42 5 12 5Z" fill="#828282"/>
         </svg>
 
         <p>Re Calculate Leave</p>
       </button>
-      <button type="button" name="button">
+      <button type="button" name="button" onclick="$('.addBonusModal').toggleClass('d-none');">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#828282"/>
         </svg>
@@ -75,5 +209,134 @@
         <p>Write Policies</p>
       </button>
     </nav>
+    <div class="table">
+      <table style="">
+        <tr>
+          <th><div class="">
+            <!-- Name / Date -->
+          </div> </th>
+          {{#each cols}}
+          <th class="rotate"><div><span>{{getDateForCol this}}</span></div></th>
+          {{/each}}
+        </tr>
+        {{#each sorted as |person|}}
+        <tr>
+          <td id="{{person._id}}">{{person.Name}}</td>
+
+          {{{drawTableRows ../cols person}}}
+        </tr>
+        {{/each}}
+      </table>
+    </div>
+    <div class="addBonusModal">
+      <p>
+        <span>Give</span>
+        <input id="extraDaysBonus" type="text" name="" value="10">
+        <span>days extra to entire unit from</span>
+        <input id="dateBonus" type="date" name="" value="2019-12-20">
+        <span>onwards!</span>
+      </p>
+      <div class="">
+        <button type="button" name="button" id="uploadBonus">Upload</button>
+        <button type="button" name="button" onclick="$('.addBonusModal').toggleClass('d-none');">Close</button>
+        <p class="error"></p>
+      </div>
+    </div>
+    <div class="popover shadow"></div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
+    <script type="text/javascript">
+
+
+      $('.active').on('mouseenter mouseleave', function() {
+
+        let posn = {
+          left: $(this).offset().left,
+          top: $(this).offset().top,
+          right: $(this).offset().right,
+          bottom: $(this).offset().bottom
+        };
+        let data = $(this).attr('my-data');
+        $('.popover').html(data);
+        $(this).toggleClass('hovered');
+        $('.popover').toggleClass('opacity-1');
+
+        if ((posn.left + $('.popover').width()/2) > $(window).width()) {
+          console.log('cond 1');
+          return $('.popover').css({
+            right: 20,
+            top: posn.top - $('.popover').height() - $(this).height() - 20,
+          });
+        }
+
+        if ((posn.left < $('.popover').width()/2)) {
+          console.log('cond 2');
+          return $('.popover').css({
+            left: posn.left,
+            top: posn.top - $('.popover').height() - $(this).height() - 20,
+          });
+        }
+
+        $('.popover').css({
+          left: posn.left - ($('.popover').width()/2),
+          top: posn.top - $('.popover').height() - $(this).height() - 20,
+        });
+
+      });
+
+      $('#uploadBonus').on('click',function() {
+
+        if (!$('#extraDaysBonus').val() || !$('#dateBonus').val()) return $(this).closest('div').find('.error').html('Please enter something above.');
+
+        // all people who are not on leave right now
+
+        let date = new Date($('#dateBonus').val()).toString().trim().split(' ').slice(1,4).join('-');
+
+        let peopleOnLeave= $(`.${date}`).filter((val,elem) => $(elem).attr('class').indexOf('active') != -1);
+
+        let onLeave = Object.keys(peopleOnLeave).map((index) => {
+          return {
+            id: $(peopleOnLeave[index]).closest('tr').find('td:eq(0)').attr('id'),
+            returning: $(peopleOnLeave[index]).attr('leave-ending')
+          };
+        }).slice(0,-2);
+
+        // give 4 days leave to all people already on leaveplan
+
+        let peopleNotOnLeave= $(`.${date}`).filter((val,elem) => $(elem).attr('class').indexOf('active') == -1);
+
+        let notOnLeave = Object.keys(peopleNotOnLeave).map((index) => $(peopleNotOnLeave[index]).closest('tr').find('td:eq(0)').attr('id')).slice(0,-2);
+
+        console.log({onLeave: onLeave, notonLeave: notOnLeave});
+
+        // set counter to 4 for those who are not on leave
+
+        $(this).closest('div').find('.error').html('');
+
+        let data = {
+          "extraDaysBonus": $('#extraDaysBonus').val(),
+          "dateBonus": $('#dateBonus').val(),
+          onLeave,
+          notOnLeave
+        };
+
+        data = JSON.stringify(data);
+
+        $.ajax({
+            url: '/updateManualCtr',
+            type: 'post',
+            data,
+            headers: {
+                'content-type': 'application/json',
+            }
+          }).done((msg) => {
+            return console.log(msg);
+          }).fail((e) => {
+            console.log('error here', e);
+            return $(this).closest('div').find('.error').html(e.responseText);
+          });
+      })
+
+
+    </script>
   </body>
 </html>

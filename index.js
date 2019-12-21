@@ -9,9 +9,11 @@ const _ = require('lodash');
 const moment = require('moment');
 const readXlsxFile = require('read-excel-file/node');
 
+const {People} = require('./models/people');
+const {mongoose} = require('./db/mongoose');
 const {sendmail} = require('./js/sendmail');
 const {sheet} = require('./server/sheets.js');
-const {startcalc} = require('./life.js');
+const {startcalc,addDays} = require('./life.js');
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -200,28 +202,77 @@ app.post('/sendmail',(req,res) => {
   });
 })
 
+hbs.registerHelper("getDateForCol", (date) => {
+  return date.toString().trim().split(' ').slice(1,4).join(' ');
+})
+
+hbs.registerHelper("drawTableRows", (cols,person) => {
+  cols = cols.map(val => {
+    let found = person.leave.find(elem => {
+      return val >= elem.start && val <= elem.end;
+    });
+    if (found) return `<td><div data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leave.slice(0,1).toUpperCase()} active" leave-ending="${found.end}" my-data="
+		<p>${person.Rank} ${person.Name}</p>
+		<p>Leave: ${found.leave}</p>
+		<p>Starts: ${found.start.toString().trim().split(' ').slice(0,4).join(' ')}</p>
+		<p>Ends: ${found.end.toString().trim().split(' ').slice(0,4).join(' ')}</p>">${found.leave.slice(0,1)}</div></td>`
+    return `<td><div class="${val.toString().trim().split(' ').slice(1,4).join('-')}"></div></td>`;
+  })
+  return cols.join('');
+})
+
+app.get('/updateFromExcel', (req,res) => {
+	readXlsxFile(__dirname+'/server/leaveplan.xlsm').then((row) => {
+    let sorted = row.map((val) =>
+      val.reduce((total,inner,index) => {
+        if (inner) Object.assign(total,{
+          [row[0][index]]: inner
+        })
+        return total;
+      },{})
+    ).filter((val,index) => Object.keys(val).length > 2 && index != 0);
+
+		sorted = startcalc(sorted, 0);
+
+		People.insertMany(sorted).then(msg => res.status(200).send(msg)).catch(e => res.status(400).send(e));
+	})
+
+})
+
+
 app.get('/office', (req,res) => {
 
-  // readXlsxFile(__dirname+'/server/leaveplan.xlsm').then((rows) => {
-  //   // console.log(rows);
-  //   let sorted = rows.map((val) =>
-  //     val.reduce((total,inner,index) => {
-  //       if (inner) Object.assign(total,{
-  //         [rows[0][index]]: inner
-  //       })
-  //       return total;
-  //     },{})
-  //   ).filter((val,index) => Object.keys(val).length > 2 && index != 0);
-  //
-  //   sorted = startcalc(sorted, 0);
-  //
-  //   console.log(sorted);
+  let cols = [], rows = [];
+  for (var i = 0; i < 200; i++) {
+    let date = addDays(new Date(), i);
+    cols.push(date);
+  }
+  for (var i = 0; i < 30; i++) {
+    rows.push(i);
+  }
 
-    res.render('office.hbs',{
-      // data: sorted
-    });
+  People.find().then((sorted) => {
+		res.render('office.hbs',{
+			rows,cols,sorted
+		})
+	}).catch(e => res.status(400).send(e));
 
-  // });
+})
+
+app.post('/updateManualCtr', (req,res) => {
+
+	People.bulkWrite(req.body.onLeave.map(val => {
+			return {
+				updateOne: {
+					"filter" : {_id: val.id},
+					"update": {$set: {leave: '', 'Returned(ing)': val.returning}}
+				}
+			}
+	})).then(msg => console.log(msg));
+
+	People.updateMany({_id: {$in: req.body.notOnLeave}},{$set: {leave: '', 'manualCtr': req.body.extraDaysBonus}}).then(msg => console.log(msg));
+	return res.status(200).send(req.body);
+
 })
 
 app.listen(port, () => {
