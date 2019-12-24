@@ -244,7 +244,7 @@ app.get('/office', (req,res) => {
 
   let cols = [], rows = [];
   for (var i = 0; i < 200; i++) {
-    let date = addDays(new Date(), i);
+    let date = addDays(new Date('1 Dec 2019'), i);
     cols.push(date);
   }
   for (var i = 0; i < 30; i++) {
