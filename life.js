@@ -129,15 +129,6 @@ function allotLeave(leaveType,person,thisDate) {
   return person;
 }
 
-function updatecalc(slotArray, day, sorted, daysToCalc) {
-  if (day > daysToCalc) return sorted;
-
-  var thisDate = addDays(new Date(), day);
-
-  // 
-
-}
-
 People.find({}).then(sorted => {
   let slotArray = [],
       daysToCalc = 100;
@@ -152,6 +143,26 @@ People.find({}).then(sorted => {
   updatecalc(slotArray, 0, sorted, daysToCalc);
 
 }).catch(e => console.log(e));
+
+function updatecalc(slotArray, day, sorted, daysToCalc) {
+
+  if (day > daysToCalc - 1) return sorted;
+
+  // is slot available
+
+  var thisDate = addDays(new Date(), day);
+
+  let onLeave = sorted.map(val => {
+    return val.leave.some(val => thisDate >= val.start && thisDate <= val.end ); // true if in between
+  }).filter(val => val).length;
+
+  let todaysSlot = slotArray.find(val => `${val.date.getDate()}, ${val.date.getMonth()}, ${val.date.getMonth()}` == `${thisDate.getDate()}, ${thisDate.getMonth()}, ${thisDate.getMonth()}` )
+
+  if (todaysSlot.slot >= onLeave) return updatecalc(slotArray, day + 1, sorted, daysToCalc);
+
+  // sort list with daysSinceArrival
+
+}
 
 
 
