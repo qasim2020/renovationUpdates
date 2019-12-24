@@ -158,9 +158,15 @@ function updatecalc(slotArray, day, sorted, daysToCalc) {
 
   let todaysSlot = slotArray.find(val => `${val.date.getDate()}, ${val.date.getMonth()}, ${val.date.getMonth()}` == `${thisDate.getDate()}, ${thisDate.getMonth()}, ${thisDate.getMonth()}` )
 
-  if (todaysSlot.slot >= onLeave) return updatecalc(slotArray, day + 1, sorted, daysToCalc);
+  if (onLeave >= todaysSlot.slot) return updatecalc(slotArray, day + 1, sorted, daysToCalc);
 
   // sort list with daysSinceArrival
+
+  // get day between two dates (end - start)
+
+  let distance = thisDate - sorted.map(val => val.leave.filter(val => thisDate > val.end).sort((a,b) => a.end - b.end)[0]).sort((a,b) => a.end - b.end)[0].end;
+
+  console.log(distance / 1000 / 60 / 60 / 24);
 
 }
 
