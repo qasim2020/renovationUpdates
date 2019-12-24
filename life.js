@@ -1,4 +1,7 @@
+require('./config/config');
 const readXlsxFile = require('read-excel-file/node');
+const {People} = require('./models/people');
+const {mongoose} = require('./db/mongoose');
 
 let slot = 7,
     today = new Date();
@@ -126,4 +129,38 @@ function allotLeave(leaveType,person,thisDate) {
   return person;
 }
 
-module.exports = {startcalc, addDays}
+function updatecalc(slotArray, day, sorted, daysToCalc) {
+  if (day > daysToCalc) return sorted;
+
+  var thisDate = addDays(new Date(), day);
+
+  // 
+
+}
+
+People.find({}).then(sorted => {
+  let slotArray = [],
+      daysToCalc = 100;
+
+  for (var i = 0; i < daysToCalc; i++) {
+    slotArray[i] = {
+      date: addDays(new Date(), i),
+      slot: 8
+    };
+  }
+
+  updatecalc(slotArray, 0, sorted, daysToCalc);
+
+}).catch(e => console.log(e));
+
+
+
+
+
+
+
+
+
+
+
+module.exports = {startcalc, addDays, allotLeave, updatecalc}

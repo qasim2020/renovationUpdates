@@ -183,7 +183,6 @@ app.post('/data',(req,res) => {
 });
 
 app.post('/oldDataUpload',(req,res) => {
-  // console.log(req.body);
   sheet('oldformatted','batchUpdate',req.body).then((msg) => {
     return res.status(200).send(msg);
   }).catch((e) => {
@@ -211,11 +210,13 @@ hbs.registerHelper("drawTableRows", (cols,person) => {
     let found = person.leave.find(elem => {
       return val >= elem.start && val <= elem.end;
     });
-    if (found) return `<td><div data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leave.slice(0,1).toUpperCase()} active" leave-ending="${found.end}" my-data="
-		<p>${person.Rank} ${person.Name}</p>
-		<p>Leave: ${found.leave}</p>
+
+    let data = `<p>${person.Rank} ${person.Name}</p>
+		<p>Leave: ${found.leaveType}</p>
 		<p>Starts: ${found.start.toString().trim().split(' ').slice(0,4).join(' ')}</p>
-		<p>Ends: ${found.end.toString().trim().split(' ').slice(0,4).join(' ')}</p>">${found.leave.slice(0,1)}</div></td>`
+		<p>Ends: ${found.end.toString().trim().split(' ').slice(0,4).join(' ')}</p>`;
+    
+    if (found) return `<td><div data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leaveType.slice(0,1).toUpperCase()} active" leave-ending="${found.end}" my-data="${data}">${found.leaveType.slice(0,1)}</div></td>`
     return `<td><div class="${val.toString().trim().split(' ').slice(1,4).join('-')}"></div></td>`;
   })
   return cols.join('');
@@ -244,7 +245,7 @@ app.get('/office', (req,res) => {
 
   let cols = [], rows = [];
   for (var i = 0; i < 200; i++) {
-    let date = addDays(new Date('1 Dec 2019'), i);
+    let date = addDays(new Date('1 Oct 2019'), i);
     cols.push(date);
   }
   for (var i = 0; i < 30; i++) {
@@ -252,6 +253,16 @@ app.get('/office', (req,res) => {
   }
 
   People.find().then((sorted) => {
+
+    // let minDate = sorted.map(val => {
+    //   // return Math.max(...val.leave.start);
+    //   return val.leave.reduce((total, val) => {
+    //     if (val.start - 0 < total) return val.start - 0; // 6 < 10 return 10;
+    //     total = val.start - 0; // 10
+    //     return total;
+    //   },0);
+    // }).sort((a,b) => a - b);
+
 		res.render('office.hbs',{
 			rows,cols,sorted
 		})

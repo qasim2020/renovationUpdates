@@ -7,22 +7,18 @@ var People = mongoose.model('people', {
   Name: {
     type: String,
   },
-  'Last Maj Lve': {
-    type: Date
-  },
-  'Returned(ing)': {
-    type: Date
-  },
   'P Lve': {
     type: Date
   },
-  daysSinceArrival: {
+  addlDays: {
     type: Number
   },
-  manualCtr: {
-    type: Number
-  },
-  leave: []
+  leave: [{
+    leaveType: String,
+    start: Date,
+    end: Date,
+    specialDays: String
+  }]
 });
 
 module.exports = {People};
