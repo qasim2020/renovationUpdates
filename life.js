@@ -129,20 +129,20 @@ function allotLeave(leaveType,person,thisDate) {
   return person;
 }
 
-People.find({}).then(sorted => {
-  let slotArray = [],
-      daysToCalc = 100;
-
-  for (var i = 0; i < daysToCalc; i++) {
-    slotArray[i] = {
-      date: addDays(new Date(), i),
-      slot: 8
-    };
-  }
-
-  updatecalc(slotArray, 0, sorted, daysToCalc);
-
-}).catch(e => console.log(e));
+// People.find({}).then(sorted => {
+//   let slotArray = [],
+//       daysToCalc = 100;
+//
+//   for (var i = 0; i < daysToCalc; i++) {
+//     slotArray[i] = {
+//       date: addDays(new Date(), i),
+//       slot: 8
+//     };
+//   }
+//
+//   updatecalc(slotArray, 0, sorted, daysToCalc);
+//
+// }).catch(e => console.log(e));
 
 function updatecalc(slotArray, day, sorted, daysToCalc) {
 
