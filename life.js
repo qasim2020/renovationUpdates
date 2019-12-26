@@ -129,20 +129,20 @@ function allotLeave(leaveType,person,thisDate) {
   return person;
 }
 
-// People.find({}).then(sorted => {
-//   let slotArray = [],
-//       daysToCalc = 100;
-//
-//   for (var i = 0; i < daysToCalc; i++) {
-//     slotArray[i] = {
-//       date: addDays(new Date(), i),
-//       slot: 8
-//     };
-//   }
-//
-//   updatecalc(slotArray, 0, sorted, daysToCalc);
-//
-// }).catch(e => console.log(e));
+People.find({}).lean().then(sorted => {
+  let slotArray = [],
+      daysToCalc = 100;
+
+  for (var i = 0; i < daysToCalc; i++) {
+    slotArray[i] = {
+      date: addDays(new Date(), i),
+      slot: 8
+    };
+  }
+
+  updatecalc(slotArray, 0, sorted, daysToCalc);
+
+}).catch(e => console.log(e));
 
 function updatecalc(slotArray, day, sorted, daysToCalc) {
 
@@ -160,17 +160,32 @@ function updatecalc(slotArray, day, sorted, daysToCalc) {
 
   if (onLeave >= todaysSlot.slot) return updatecalc(slotArray, day + 1, sorted, daysToCalc);
 
-  // sort list with daysSinceArrival
+  // get fwd and back distance
 
-  // get day between two dates (end - start)
+  sorted = sorted.map(val => Object.assign(val,{
+    back: val.leave.filter(val => thisDate > val.end).sort((a,b) => b.end - a.end)[0].end,
+    backMaj: val.leave.filter(val => thisDate > val.end && /C|P/g.test(val.leaveType)).sort((a,b) => a.end - b.end)[0].end,
+    fwd: getFwdDistance(val, thisDate, 'C|P|W1|W2'),
+    fwdMaj: getFwdDistance(val, thisDate, 'C|P')
+  }));
 
-  let distance = thisDate - sorted.map(val => val.leave.filter(val => thisDate > val.end).sort((a,b) => a.end - b.end)[0]).sort((a,b) => a.end - b.end)[0].end;
-
-  console.log(distance / 1000 / 60 / 60 / 24);
+  console.log(JSON.stringify(sorted, 0,2));
 
 }
 
-
+function getFwdDistance(val, thisDate, regex) {
+  try {
+    console.log('----');
+    var regex = new RegExp(regex);
+    return val.leave.filter(val => {
+      console.log(thisDate, val.start, thisDate < val.start && regex.test(val.leaveType));
+      return thisDate < val.start && regex.test(val.leaveType);
+    }).sort((a,b) => a.start - b.start)[0].start
+  } catch (e) {
+    // console.log(e);
+    return addDays(thisDate, 365);
+  }
+}
 
 
 

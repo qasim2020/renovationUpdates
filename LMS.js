@@ -36,6 +36,6 @@ readXlsxFile(__dirname+'/server/LMS.xlsx').then((row) => {
 
   console.log(JSON.stringify(sorted, 0, 2));
 
-  People.insertMany(sorted).then(msg => console.log(msg)).catch(e => console.log(e));
+  People.insertMany(sorted).then(msg => console.log(JSON.stringify(msg,0,2))).catch(e => console.log(e));
 
 });
