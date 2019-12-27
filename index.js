@@ -245,7 +245,7 @@ app.get('/updateFromExcel', (req,res) => {
 app.get('/office', (req,res) => {
 
   let cols = [], rows = [];
-  for (var i = 0; i < 200; i++) {
+  for (var i = 0; i < 300; i++) {
     let date = addDays(new Date('1 Sep 2019'), i);
     cols.push(date);
   }
@@ -265,7 +265,7 @@ app.get('/office', (req,res) => {
     // }).sort((a,b) => a - b);
 
       let slotArray = [],
-          daysToCalc = 200;
+          daysToCalc = 300;
 
       for (var i = 0; i < daysToCalc; i++) {
         slotArray[i] = {
