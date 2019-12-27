@@ -287,16 +287,16 @@ app.get('/office', (req,res) => {
 
 app.post('/updateManualCtr', (req,res) => {
 
-	People.bulkWrite(req.body.onLeave.map(val => {
-			return {
-				updateOne: {
-					"filter" : {_id: val.id},
-					"update": {$set: {leave: '', 'Returned(ing)': val.returning}}
-				}
-			}
-	})).then(msg => console.log(msg));
-
-	People.updateMany({_id: {$in: req.body.notOnLeave}},{$set: {leave: '', 'manualCtr': req.body.extraDaysBonus}}).then(msg => console.log(msg));
+	// People.bulkWrite(req.body.onLeave.map(val => {
+	// 		return {
+	// 			updateOne: {
+	// 				"filter" : {_id: val.id},
+	// 				"update": {$set: {leave: '', 'Returned(ing)': val.returning}}
+	// 			}
+	// 		}
+	// })).then(msg => console.log(msg));
+  //
+	// People.updateMany({_id: {$in: req.body.notOnLeave}},{$set: {leave: '', 'manualCtr': req.body.extraDaysBonus}}).then(msg => console.log(msg));
 	return res.status(200).send(req.body);
 
 })
