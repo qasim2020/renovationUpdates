@@ -84,10 +84,15 @@ function addDays(date, days) {
 function allotLeave(leaveType,person,thisDate) {
   if (!person['leave']) person['leave'] = [];
   if (!person['MC']) person['MC'] = 0;
+  // console.log('going to give leave', leaveType);
+  // console.log(';;;;;;;;;');
+  // console.log(person);
+  // console.log(';;;;;;;;;');
+
   switch (leaveType) {
-    case 'P Lve':
+    case 'P':
       person['leave'].push({
-        leave: 'P Lve',
+        leaveType: 'P',
         start: addDays(thisDate,1),
         end: addDays(thisDate,30 + (Number(person['Addl Days']) || 0) + (person.MC || 0)),
         specialDays: person.MC
@@ -95,9 +100,9 @@ function allotLeave(leaveType,person,thisDate) {
       person['Last Maj Lve'] = addDays(thisDate,30 + (Number(person['Addl Days']) || 0) + (person.MC || 0));
       person['Returned(ing)'] = person['Last Maj Lve'];
       break;
-    case 'C Lve':
+    case 'C':
       person['leave'].push({
-        leave: 'C Lve',
+        leaveType: 'C',
         start: addDays(thisDate,1),
         end: addDays(thisDate,13 + (Number(person['Addl Days']) || 0) + (person.MC || 0)),
         specialDays: person.MC
@@ -107,7 +112,7 @@ function allotLeave(leaveType,person,thisDate) {
       break;
     case 'W1':
       person['leave'].push({
-        leave: 'W1',
+        leaveType: 'W1',
         start: addDays(thisDate,1),
         end: addDays(thisDate,4 + (Number(person['Addl Days']) || 0) + (person.MC || 0)),
         specialDays: person.MC
@@ -116,35 +121,44 @@ function allotLeave(leaveType,person,thisDate) {
       break;
     case 'W2':
       person['leave'].push({
-        leave: 'W2',
+        leaveType: 'W2',
         start: addDays(thisDate,1),
         end: addDays(thisDate,3 + (Number(person['Addl Days']) || 0) + (person.MC || 0)),
         specialDays: person.MC
       });
-      person['Returned(ing)'] = addDays(thisDate,3 + (Number(person['Addl Days']) || 0) + (person.MC || 0));
+      // person['Returned(ing)'] = addDays(thisDate,3 + (Number(person['Addl Days']) || 0) + (person.MC || 0));
       break;
     default: break;
   }
   person.MC = 0;
+  // console.log(person);
+  console.log(';;;;;;;;;');
   return person;
 }
 
-People.find({}).lean().then(sorted => {
-  let slotArray = [],
-      daysToCalc = 100;
-
-  for (var i = 0; i < daysToCalc; i++) {
-    slotArray[i] = {
-      date: addDays(new Date(), i),
-      slot: 8
-    };
-  }
-
-  updatecalc(slotArray, 0, sorted, daysToCalc);
-
-}).catch(e => console.log(e));
+// People.find({}).lean().then(sorted => {
+//   let slotArray = [],
+//       daysToCalc = 60;
+//
+//   for (var i = 0; i < daysToCalc; i++) {
+//     slotArray[i] = {
+//       date: addDays(new Date(), i),
+//       slot: 8
+//     };
+//   }
+//   // console.log(sorted);
+//
+//   sorted = updatecalc(slotArray, 0, sorted, daysToCalc);
+//
+//   // console.log(sorted);
+//
+// }).catch(e => console.log(e));
 
 function updatecalc(slotArray, day, sorted, daysToCalc) {
+
+  let originalPeople = sorted;
+
+  // console.log(originalPeople);
 
   if (day > daysToCalc - 1) return sorted;
 
@@ -158,41 +172,106 @@ function updatecalc(slotArray, day, sorted, daysToCalc) {
 
   let todaysSlot = slotArray.find(val => `${val.date.getDate()}, ${val.date.getMonth()}, ${val.date.getMonth()}` == `${thisDate.getDate()}, ${thisDate.getMonth()}, ${thisDate.getMonth()}` )
 
-  if (onLeave >= todaysSlot.slot) return updatecalc(slotArray, day + 1, sorted, daysToCalc);
+  if (onLeave >= todaysSlot.slot) {
+    day += 1;
+    return updatecalc(slotArray, day, originalPeople, daysToCalc);
+  }
 
   // get fwd and back distance
 
-  sorted = sorted.map(val => Object.assign(val,{
+  // console.log(sorted.find(val => 'Ilyas'.indexOf(val.Name)));
+
+  sorted = sorted.filter(val => val.leave.every(val => !(thisDate >= val.start && thisDate <= val.end) ))
+  .map(val => Object.assign(val,{
     back: val.leave.filter(val => thisDate > val.end).sort((a,b) => b.end - a.end)[0].end,
-    backMaj: val.leave.filter(val => thisDate > val.end && /C|P/g.test(val.leaveType)).sort((a,b) => a.end - b.end)[0].end,
+    backMaj: val.leave.filter(val => thisDate > val.end && /C|P/g.test(val.leaveType)).sort((a,b) => b.end - a.end)[0].end,
     fwd: getFwdDistance(val, thisDate, 'C|P|W1|W2'),
     fwdMaj: getFwdDistance(val, thisDate, 'C|P')
-  }));
+  })).filter(val => diff(val.back, thisDate) > 30 || diff(val.fwd, thisDate) > 30) // leave not granted in last 30 days
+  .sort((a,b) => a.back - b.back)
+  .slice(0,todaysSlot.slot); // Get elements with slot list available
 
-  console.log(JSON.stringify(sorted, 0,2));
+  // console.log('+++++++');
+  // console.log(sorted);
+  // console.log('------');
 
+
+  // Swtich to allot leave
+
+  sorted = sorted.map(p => {
+    console.log({
+      // name: p.Name.split(' ')[0],
+      back: diff(p.back, thisDate),
+      backMaj: diff(p.backMaj, thisDate),
+      // backDate: p.backMaj,
+      fwd: diff(p.fwd, thisDate),
+      fwdMaj: diff(p.fwdMaj, thisDate)
+    });
+    switch (true) {
+      case (diff(p.back, thisDate) > 30 && diff(p.backMaj, thisDate) < 90 && diff(p.fwd, thisDate) > 30):
+        if (p.back == p.backMaj) {
+          console.log('give 3 days weekend');
+          p = allotLeave('W1',p,thisDate);
+        }
+        else {
+          console.log('give 2 days weekend');
+          p = allotLeave('W2',p,thisDate);
+        }
+        break;
+      case (diff(p.backMaj,thisDate) > 90 && diff(p.fwdMaj,thisDate) > 60 && diff(p.back, thisDate) > 30 && diff(p.fwd, thisDate) > 30):
+        let daysinPleave = Math.abs(Math.floor(p['P Lve'] - thisDate)/1000/60/60/24);
+        if (daysinPleave < 60) {
+          console.log('give him p leave');
+          p = allotLeave('P',p,thisDate);
+          p['P Lve'] = addDays(thisDate, 30 * 11);
+        } else {
+          console.log('give him c leave');
+          p = allotLeave('C',p,thisDate);
+        }
+        break;
+      default:
+        console.log('No condition met');
+    }
+    return p;
+  })
+
+  // console.log(sorted[0]);
+
+  // console.log('+=+=+++++++=======+');
+
+  originalPeople = originalPeople.map(o => {
+    let person = sorted.find(val => val._id == o._id) || o;
+    return o;
+  })
+
+  // console.log(originalPeople);
+
+
+  // console.log('*******');
+
+  // console.log(JSON.stringify(sorted, 0,2));
+
+  // TODO: add 1 to day and re run current function for next day
+
+  day += 1;
+
+  return updatecalc(slotArray, day, originalPeople, daysToCalc);
+
+}
+
+function diff(date, thisDate) {
+  return Math.abs(Math.floor((date - thisDate) /1000/60/60/24));
 }
 
 function getFwdDistance(val, thisDate, regex) {
   try {
-    console.log('----');
     var regex = new RegExp(regex);
     return val.leave.filter(val => {
-      console.log(thisDate, val.start, thisDate < val.start && regex.test(val.leaveType));
       return thisDate < val.start && regex.test(val.leaveType);
     }).sort((a,b) => a.start - b.start)[0].start
   } catch (e) {
-    // console.log(e);
     return addDays(thisDate, 365);
   }
 }
-
-
-
-
-
-
-
-
 
 module.exports = {startcalc, addDays, allotLeave, updatecalc}

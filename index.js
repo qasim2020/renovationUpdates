@@ -13,7 +13,7 @@ const {People} = require('./models/people');
 const {mongoose} = require('./db/mongoose');
 const {sendmail} = require('./js/sendmail');
 const {sheet} = require('./server/sheets.js');
-const {startcalc,addDays} = require('./life.js');
+const {startcalc,addDays, updatecalc} = require('./life.js');
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -211,13 +211,14 @@ hbs.registerHelper("drawTableRows", (cols,person) => {
       return val >= elem.start && val <= elem.end;
     });
 
+    if (!found) return `<td><div class="${val.toString().trim().split(' ').slice(1,4).join('-')}"></div></td>`;
+
     let data = `<p>${person.Rank} ${person.Name}</p>
 		<p>Leave: ${found.leaveType}</p>
 		<p>Starts: ${found.start.toString().trim().split(' ').slice(0,4).join(' ')}</p>
 		<p>Ends: ${found.end.toString().trim().split(' ').slice(0,4).join(' ')}</p>`;
-    
-    if (found) return `<td><div data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leaveType.slice(0,1).toUpperCase()} active" leave-ending="${found.end}" my-data="${data}">${found.leaveType.slice(0,1)}</div></td>`
-    return `<td><div class="${val.toString().trim().split(' ').slice(1,4).join('-')}"></div></td>`;
+    // console.log(val, found.leaveType);
+    return `<td><div data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leaveType} active" leave-ending="${found.end}" my-data="${data}">${found.leaveType}</div></td>`
   })
   return cols.join('');
 })
@@ -245,7 +246,7 @@ app.get('/office', (req,res) => {
 
   let cols = [], rows = [];
   for (var i = 0; i < 200; i++) {
-    let date = addDays(new Date('1 Oct 2019'), i);
+    let date = addDays(new Date('1 Sep 2019'), i);
     cols.push(date);
   }
   for (var i = 0; i < 30; i++) {
@@ -262,6 +263,20 @@ app.get('/office', (req,res) => {
     //     return total;
     //   },0);
     // }).sort((a,b) => a - b);
+
+      let slotArray = [],
+          daysToCalc = 200;
+
+      for (var i = 0; i < daysToCalc; i++) {
+        slotArray[i] = {
+          date: addDays(new Date(), i),
+          slot: 8
+        };
+      }
+
+      sorted = updatecalc(slotArray, 0, sorted, daysToCalc);
+    //
+    // }).catch(e => console.log(e));
 
 		res.render('office.hbs',{
 			rows,cols,sorted
