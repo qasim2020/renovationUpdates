@@ -255,15 +255,6 @@ app.get('/office', (req,res) => {
 
   People.find().then((sorted) => {
 
-    // let minDate = sorted.map(val => {
-    //   // return Math.max(...val.leave.start);
-    //   return val.leave.reduce((total, val) => {
-    //     if (val.start - 0 < total) return val.start - 0; // 6 < 10 return 10;
-    //     total = val.start - 0; // 10
-    //     return total;
-    //   },0);
-    // }).sort((a,b) => a - b);
-
       let slotArray = [],
           daysToCalc = 300;
 
@@ -275,8 +266,6 @@ app.get('/office', (req,res) => {
       }
 
       sorted = updatecalc(slotArray, 0, sorted, daysToCalc);
-    //
-    // }).catch(e => console.log(e));
 
 		res.render('office.hbs',{
 			rows,cols,sorted
