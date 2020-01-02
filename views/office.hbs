@@ -5,6 +5,10 @@
     <link rel="stylesheet" href="/reset.css">
     <style media="screen">
 
+      html {
+        scroll-behavior: smooth;
+      }
+
       .popover {
         position: absolute;
         background: #009688;
@@ -103,7 +107,7 @@
         background: #6FCF97;
       }
 
-      td > div.W {
+      .W1, .W2, .E {
         background: #56CCF2;
       }
 
@@ -169,6 +173,31 @@
         display: none !important;
       }
 
+      .specialDays_plus {
+        background: #ff000054;
+      }
+
+      .specialDays_minus {
+        /* background: black; */
+        background: none;
+        border: 2px solid black;
+        box-sizing: border-box;
+      }
+
+      #col_true {
+        font-weight: bold;
+        background: aqua;
+      }
+
+      .partition_true {
+        font-weight: bold;
+        border-right: 1px solid black;
+      }
+
+      .low_true {
+        opacity: 0.5;
+      }
+
     </style>
     <title>LMS</title>
   </head>
@@ -216,7 +245,7 @@
             <!-- Name / Date -->
           </div> </th>
           {{#each cols}}
-          <th class="rotate"><div><span>{{getDateForCol this}}</span></div></th>
+            {{{getDateForCol this}}}
           {{/each}}
         </tr>
         {{#each sorted as |person|}}
@@ -245,6 +274,14 @@
     <div class="popover shadow"></div>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
     <script type="text/javascript">
+
+      $(document).ready(() => {
+        let date = new Date();
+        // console.log('herlo');
+        // location.hash = `#Jan222020`;
+        location.hash = `#${date.getMonth()}${date.getDate()}${date.getYear()}`;
+        // $(`#${date.getMonth()}${date.getDate()}${date.getYear()}`).css({'font-weight': 'bold'});
+      })
 
 
       $('.active').on('mouseenter mouseleave', function() {

@@ -202,23 +202,78 @@ app.post('/sendmail',(req,res) => {
 })
 
 hbs.registerHelper("getDateForCol", (date) => {
-  return date.toString().trim().split(' ').slice(1,4).join(' ');
+  let isThisToday = `${date.getMonth()}${date.getDate()}${date.getYear()}` == `${new Date().getMonth()}${new Date().getDate()}${new Date().getYear()}`;
+  let isThisLastDay = new Date(date.getFullYear(), date.getMonth()+1, 0).getDate() == date.getDate();
+  return `
+  <th class="rotate partition_${isThisLastDay}" id="${date.getMonth()}${date.getDate()}${date.getYear()}">
+    <div>
+      <span id="col_${isThisToday}">${date.toString().trim().split(' ').slice(1,4).join(' ')}</span>
+    </div>
+  </th>`
+
 })
 
 hbs.registerHelper("drawTableRows", (cols,person) => {
   cols = cols.map(val => {
     let found = person.leave.find(elem => {
-      return val >= elem.start && val <= elem.end;
+      if (elem.specialDays < 0) {
+        return val >= elem.start && val <= addDays(elem.end, Math.abs(elem.specialDays));
+      } else {
+        return val >= elem.start && val <= elem.end;
+      }
     });
 
-    if (!found) return `<td><div class="${val.toString().trim().split(' ').slice(1,4).join('-')}"></div></td>`;
+    let newCol = "";
+    let isThisLastDay = new Date(val.getFullYear(), val.getMonth()+1, 0).getDate() == val.getDate();
+    let isThisLessThenToday = new Date().getTime() > val.getTime();
 
-    let data = `<p>${person.Rank} ${person.Name}</p>
-		<p>Leave: ${found.leaveType}</p>
-		<p>Starts: ${found.start.toString().trim().split(' ').slice(0,4).join(' ')}</p>
-		<p>Ends: ${found.end.toString().trim().split(' ').slice(0,4).join(' ')}</p>`;
-    // console.log(val, found.leaveType);
-    return `<td><div data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leaveType} active" leave-ending="${found.end}" my-data="${data}">${found.leaveType}</div></td>`
+    if (!found) {
+      newCol = `<td class="partition_${isThisLastDay}"><div class="${val.toString().trim().split(' ').slice(1,4).join('-')}"></div></td>`;
+
+    } else {
+
+      let data = `<p>${person.Rank} ${person.Name}</p>
+  		<p>Leave: ${found.leaveType}</p>
+  		<p>Starts: ${found.start.toString().trim().split(' ').slice(0,4).join(' ')}</p>
+  		<p>Ends: ${found.end.toString().trim().split(' ').slice(0,4).join(' ')}</p>`;
+      if (found.specialDays < 0) {
+        console.log({
+          specialDays: found.specialDays,
+          diff: (found.end - val)/1000/60/60/24,
+          bool:  ((found.end - val)/1000/60/60/24) >= found.specialDays
+        });
+      }
+      switch (true) {
+        case (found.specialDays < 0 && ((found.end - val)/1000/60/60/24) >= found.specialDays && val > found.end):
+          console.log('negative special days');
+          newCol = `<td class="low_${isThisLessThenToday}"><div class="${val.toString().trim().split(' ').slice(1,4).join('-')} specialDays_minus active">${found.specialDays}</div></td>`;
+          break;
+        case (found.specialDays > 0 && (found.end - val)/1000/60/60/24 <= found.specialDays):
+          console.log('positive special days');
+          newCol = `<td class="low_${isThisLessThenToday}"><div data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leaveType} active specialDays_plus" leave-ending="${found.end}" my-data="${data}">${found.leaveType}</div></td>`
+          break;
+        default:
+          newCol = `<td class="low_${isThisLessThenToday}"><div data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leaveType} active" leave-ending="${found.end}" my-data="${data}">${found.leaveType}</div></td>`
+      }
+
+    }
+
+    return newCol;
+
+    // if (!found && person.specialDays < 0) {
+    //   return `<td><div class="${val.toString().trim().split(' ').slice(1,4).join('-')}"></div></td>`;
+    // } else if (!found && person.specialDays > 0) {
+    //   return `<td><div class="${val.toString().trim().split(' ').slice(1,4).join('-')} specialDays"></div></td>`;
+    // }
+    //
+    //
+    //
+    // let data = `<p>${person.Rank} ${person.Name}</p>
+		// <p>Leave: ${found.leaveType}</p>
+		// <p>Starts: ${found.start.toString().trim().split(' ').slice(0,4).join(' ')}</p>
+		// <p>Ends: ${found.end.toString().trim().split(' ').slice(0,4).join(' ')}</p>`;
+    // // console.log(val, found.leaveType);
+    // return `<td><div data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leaveType} active" leave-ending="${found.end}" my-data="${data}">${found.leaveType}</div></td>`
   })
   return cols.join('');
 })
@@ -244,6 +299,8 @@ app.get('/updateFromExcel', (req,res) => {
 
 app.get('/office', (req,res) => {
 
+  // console.log('office opened');
+
   let cols = [], rows = [];
   for (var i = 0; i < 300; i++) {
     let date = addDays(new Date('1 Sep 2019'), i);
@@ -267,10 +324,14 @@ app.get('/office', (req,res) => {
 
       sorted = updatecalc(slotArray, 0, sorted, daysToCalc);
 
+      // console.log(sorted[0].leave);
 		res.render('office.hbs',{
 			rows,cols,sorted
 		})
-	}).catch(e => res.status(400).send(e));
+	}).catch(e => {
+    console.log(e);
+    res.status(400).send(e)
+  });
 
 })
 

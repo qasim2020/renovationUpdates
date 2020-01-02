@@ -14,7 +14,7 @@ readXlsxFile(__dirname+'/server/LMS.xlsx').then((row) => {
 
       if (row[0][index] == 'leave' && inner != 'leave') {
         if (!total.hasOwnProperty('leave')) total.leave = [];
-        let arr = inner.replace('/\r/\n','').trim().split(';');
+        let arr = inner.replace('\r\n','').trim().split(';');
         let values = arr.reduce((total,nVal) => {
           if (!nVal) return total;
           Object.assign(total, {

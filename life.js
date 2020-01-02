@@ -208,7 +208,7 @@ function updatecalc(slotArray, day, sorted, daysToCalc) {
       fwdMaj: diff(p.fwdMaj, thisDate)
     });
     switch (true) {
-      case (diff(p.back, thisDate) > 30 && diff(p.backMaj, thisDate) < 90 && diff(p.fwd, thisDate) > 30):
+      case (diff(p.back, thisDate) > 30 && diff(p.backMaj, thisDate) < 70 && diff(p.fwd, thisDate) > 30):
         if (p.back == p.backMaj) {
           console.log('give 3 days weekend');
           p = allotLeave('W1',p,thisDate);
@@ -218,7 +218,7 @@ function updatecalc(slotArray, day, sorted, daysToCalc) {
           p = allotLeave('W2',p,thisDate);
         }
         break;
-      case (diff(p.backMaj,thisDate) > 90 && diff(p.fwdMaj,thisDate) > 60 && diff(p.back, thisDate) > 30 && diff(p.fwd, thisDate) > 30):
+      case (diff(p.backMaj,thisDate) > 70 && diff(p.fwdMaj,thisDate) > 60 && diff(p.back, thisDate) > 30 && diff(p.fwd, thisDate) > 30):
         let daysinPleave = Math.abs(Math.floor(p['P Lve'] - thisDate)/1000/60/60/24);
         if (daysinPleave < 60) {
           console.log('give him p leave');
