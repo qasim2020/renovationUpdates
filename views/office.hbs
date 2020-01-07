@@ -275,13 +275,25 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
     <script type="text/javascript">
 
-      $(document).ready(() => {
-        let date = new Date();
+      // $(document).ready(() => {
+      //   let date = new Date();
+      //   $('table').scrollTo(1500, 0);
         // console.log('herlo');
         // location.hash = `#Jan222020`;
-        location.hash = `#${date.getMonth()}${date.getDate()}${date.getYear()}`;
+        // location.hash = `#${date.getMonth()}${date.getDate()}${date.getYear()}`;
         // $(`#${date.getMonth()}${date.getDate()}${date.getYear()}`).css({'font-weight': 'bold'});
-      })
+      // })
+
+      $(document).ready(function() {
+          let date = new Date();
+          $(".table").animate(
+            {
+              scrollLeft: $(`#${date.getMonth()}${date.getDate()}${date.getYear()}`).offset().left
+            },
+            200, //speed,
+            'linear'
+          );
+      });
 
 
       $('.active').on('mouseenter mouseleave', function() {

@@ -20,6 +20,7 @@ readXlsxFile(__dirname+'/server/LMS.xlsx').then((row) => {
           Object.assign(total, {
             [nVal.split(':')[0].replace('\r\n','').trim()]: nVal.split(':')[1].trim()
           });
+          // console.log(total);
           return total;
         },{})
         total['leave'][total.leave.length] = values;

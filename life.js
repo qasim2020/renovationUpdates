@@ -84,10 +84,57 @@ function addDays(date, days) {
 function allotLeave(leaveType,person,thisDate) {
   if (!person['leave']) person['leave'] = [];
   if (!person['MC']) person['MC'] = 0;
-  // console.log('going to give leave', leaveType);
-  // console.log(';;;;;;;;;');
-  // console.log(person);
-  // console.log(';;;;;;;;;');
+  let weekendsMissed = 0;
+  console.log('-----++++----');
+
+
+  // sort this person leaves
+  let sortedLeaves = person.leave.sort((a,b) => b.end - a.end)
+  // get only leaves that are before thisDate
+  .filter(val => val.end < thisDate);
+
+  console.log(sortedLeaves);
+
+  let specialDays_Sum = sortedLeaves.reduce((sum,val) => {
+    // if (/W/g.test(val)) return sum;
+    console.log({specialDays: val.specialDays});
+    return sum += Number(val.specialDays);
+  },0);
+
+  console.log('======');
+  console.log({specialDays_Sum});
+  console.log('-======');
+
+  if (/P|C/g.test(leaveType)) {
+    // Calculate weekends missed from prvs major leave till today
+    // All leaves since previous major leave
+
+    let weekendsAvailed = 0;
+
+    while (/W/.test(sortedLeaves.shift())) {
+      weekendsAvailed++;
+    }
+
+    2 - weekendsAvailed > 0 ? weekendsMissed = 2 - weekendsAvailed : weekendsMissed = 0;
+
+    // no of weekends availed since today
+
+  }
+
+  // no of weekends missed before
+
+  if (/W2/g.test(leaveType) && /W/g.test(sortedLeaves.shift())) weekendsMissed = 0;
+
+  // console.log({weekendsAvailed});
+
+  // return console.log(sortedLeaves);
+
+  person.MC = person.MC + weekendsMissed - specialDays_Sum;
+
+  console.log({leaveType, weekendsMissed, specialDays_Sum, MC: person.MC});
+
+
+  // return console.log({specialDays_Sum});
 
   switch (leaveType) {
     case 'P':
@@ -182,12 +229,15 @@ function updatecalc(slotArray, day, sorted, daysToCalc) {
   // console.log(sorted.find(val => 'Ilyas'.indexOf(val.Name)));
 
   sorted = sorted.filter(val => val.leave.every(val => !(thisDate >= val.start && thisDate <= val.end) ))
-  .map(val => Object.assign(val,{
-    back: val.leave.filter(val => thisDate > val.end).sort((a,b) => b.end - a.end)[0].end,
-    backMaj: val.leave.filter(val => thisDate > val.end && /C|P/g.test(val.leaveType)).sort((a,b) => b.end - a.end)[0].end,
-    fwd: getFwdDistance(val, thisDate, 'C|P|W1|W2'),
-    fwdMaj: getFwdDistance(val, thisDate, 'C|P')
-  })).filter(val => diff(val.back, thisDate) > 30 || diff(val.fwd, thisDate) > 30) // leave not granted in last 30 days
+  .map(val => {
+    // console.log(val);
+      return Object.assign(val,{
+        back: val.leave.filter(val => thisDate > val.end).sort((a,b) => b.end - a.end)[0].end,
+        backMaj: val.leave.filter(val => thisDate > val.end && /C|P/g.test(val.leaveType)).sort((a,b) => b.end - a.end)[0].end,
+        fwd: getFwdDistance(val, thisDate, 'C|P|W1|W2'),
+        fwdMaj: getFwdDistance(val, thisDate, 'C|P')
+      })
+  }).filter(val => diff(val.back, thisDate) > 30 || diff(val.fwd, thisDate) > 30) // leave not granted in last 30 days
   .sort((a,b) => a.back - b.back)
   .slice(0,todaysSlot.slot); // Get elements with slot list available
 
