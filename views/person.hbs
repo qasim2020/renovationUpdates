@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>{{person.Rank}} {{person.Name}}</title>
+    <style media="screen">
+    body {
+      max-width: 800px;
+      margin: auto;
+      padding-top: 20px;
+      font-family: monospace;
+    }
+      .leave-box {
+        border: 1px solid lavender;
+        padding: 20px;
+        margin: 0px;
+        background: lightgray;
+        border-radius: 3px;
+      }
+
+      .maj-btn {
+        margin-top: 15px;
+        padding: 6px 11px;
+        background: lightcyan;
+        border: 1px solid lightgrey;
+        border-radius: 3px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Name: {{person.Rank}} {{person.Name}}</p>
+    <p>Addl Days: {{person.addlDays}}</p>
+    <p>P Leave: {{person.[P Lve]}}</p>
+    <p>Leave:</p>
+    {{#each person.leave}}
+    <div class="leave-box">
+      <p>Leave Type: {{leaveType}}</p>
+      <p>Start: {{start}}</p>
+      <p>End: {{end}}</p>
+      <p>Special Days: {{specialDays}}</p>
+      <button type="button" name="button">Edit</button>
+    </div>
+
+    {{/each}}
+
+    <button type="button" name="button" class="maj-btn">Edit major details</button>
+  </body>
+</html>

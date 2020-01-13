@@ -228,7 +228,7 @@ hbs.registerHelper("drawTableRows", (cols,person) => {
     let isThisLessThenToday = new Date().getTime() > val.getTime();
 
     if (!found) {
-      newCol = `<td class="partition_${isThisLastDay}"><div class="${val.toString().trim().split(' ').slice(1,4).join('-')}"></div></td>`;
+      newCol = `<td class="partition_${isThisLastDay}"><textarea class="${val.toString().trim().split(' ').slice(1,4).join('-')}"></textarea></td>`;
 
     } else {
 
@@ -246,14 +246,14 @@ hbs.registerHelper("drawTableRows", (cols,person) => {
       switch (true) {
         case (found.specialDays < 0 && ((found.end - val)/1000/60/60/24) >= found.specialDays && val > found.end):
           console.log('negative special days');
-          newCol = `<td class="low_${isThisLessThenToday}"><div class="${val.toString().trim().split(' ').slice(1,4).join('-')} specialDays_minus active">${found.specialDays}</div></td>`;
+          newCol = `<td class="low_${isThisLessThenToday}"><textarea class="${val.toString().trim().split(' ').slice(1,4).join('-')} specialDays_minus active">${found.specialDays}</textarea></td>`;
           break;
         case (found.specialDays > 0 && (found.end - val)/1000/60/60/24 <= found.specialDays):
           console.log('positive special days');
-          newCol = `<td class="low_${isThisLessThenToday}"><div data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leaveType} active specialDays_plus" leave-ending="${found.end}" my-data="${data}">${found.leaveType}</div></td>`
+          newCol = `<td class="low_${isThisLessThenToday}"><textarea data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leaveType} active specialDays_plus" leave-ending="${found.end}" my-data="${data}">${found.leaveType}</textarea></td>`
           break;
         default:
-          newCol = `<td class="low_${isThisLessThenToday}"><div data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leaveType} active" leave-ending="${found.end}" my-data="${data}">${found.leaveType}</div></td>`
+          newCol = `<td class="low_${isThisLessThenToday}"><textarea data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leaveType} active" leave-ending="${found.end}" my-data="${data}">${found.leaveType}</textarea></td>`
       }
 
     }
@@ -349,6 +349,13 @@ app.post('/updateManualCtr', (req,res) => {
 	// People.updateMany({_id: {$in: req.body.notOnLeave}},{$set: {leave: '', 'manualCtr': req.body.extraDaysBonus}}).then(msg => console.log(msg));
 	return res.status(200).send(req.body);
 
+})
+
+app.get('/profile',(req,res) => {
+  People.findById(req.query.id).then(person => {
+    console.log(person);
+    res.status(200).render('person.hbs',{person})
+  }).catch(e => res.status(400).send(e));
 })
 
 app.listen(port, () => {
