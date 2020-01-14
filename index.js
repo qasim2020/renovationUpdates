@@ -228,7 +228,7 @@ hbs.registerHelper("drawTableRows", (cols,person) => {
     let isThisLessThenToday = new Date().getTime() > val.getTime();
 
     if (!found) {
-      newCol = `<td class="partition_${isThisLastDay}"><textarea class="${val.toString().trim().split(' ').slice(1,4).join('-')}"></textarea></td>`;
+      newCol = `<td class="partition_${isThisLastDay}"><div class="${val.toString().trim().split(' ').slice(1,4).join('-')}"></div></td>`;
 
     } else {
 
@@ -246,34 +246,20 @@ hbs.registerHelper("drawTableRows", (cols,person) => {
       switch (true) {
         case (found.specialDays < 0 && ((found.end - val)/1000/60/60/24) >= found.specialDays && val > found.end):
           console.log('negative special days');
-          newCol = `<td class="low_${isThisLessThenToday}"><textarea class="${val.toString().trim().split(' ').slice(1,4).join('-')} specialDays_minus active">${found.specialDays}</textarea></td>`;
+          newCol = `<td class="low_${isThisLessThenToday}"><div my_id="${person._id}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} specialDays_minus active">${found.specialDays}</div></td>`;
           break;
         case (found.specialDays > 0 && (found.end - val)/1000/60/60/24 <= found.specialDays):
           console.log('positive special days');
-          newCol = `<td class="low_${isThisLessThenToday}"><textarea data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leaveType} active specialDays_plus" leave-ending="${found.end}" my-data="${data}">${found.leaveType}</textarea></td>`
+          newCol = `<td class="low_${isThisLessThenToday}"><div my_id="${person._id}" data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leaveType} active specialDays_plus" leave-ending="${found.end}" my-data="${data}">${found.leaveType}</div></td>`
           break;
         default:
-          newCol = `<td class="low_${isThisLessThenToday}"><textarea data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leaveType} active" leave-ending="${found.end}" my-data="${data}">${found.leaveType}</textarea></td>`
+          newCol = `<td class="low_${isThisLessThenToday}"><div my_id="${person._id}" data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leaveType} active" leave-ending="${found.end}" my-data="${data}">${found.leaveType}</div></td>`
       }
 
     }
 
     return newCol;
 
-    // if (!found && person.specialDays < 0) {
-    //   return `<td><div class="${val.toString().trim().split(' ').slice(1,4).join('-')}"></div></td>`;
-    // } else if (!found && person.specialDays > 0) {
-    //   return `<td><div class="${val.toString().trim().split(' ').slice(1,4).join('-')} specialDays"></div></td>`;
-    // }
-    //
-    //
-    //
-    // let data = `<p>${person.Rank} ${person.Name}</p>
-		// <p>Leave: ${found.leaveType}</p>
-		// <p>Starts: ${found.start.toString().trim().split(' ').slice(0,4).join(' ')}</p>
-		// <p>Ends: ${found.end.toString().trim().split(' ').slice(0,4).join(' ')}</p>`;
-    // // console.log(val, found.leaveType);
-    // return `<td><div data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leaveType} active" leave-ending="${found.end}" my-data="${data}">${found.leaveType}</div></td>`
   })
   return cols.join('');
 })
@@ -299,8 +285,6 @@ app.get('/updateFromExcel', (req,res) => {
 
 app.get('/office', (req,res) => {
 
-  // console.log('office opened');
-
   let cols = [], rows = [];
   for (var i = 0; i < 300; i++) {
     let date = addDays(new Date('1 Sep 2019'), i);
@@ -311,20 +295,6 @@ app.get('/office', (req,res) => {
   }
 
   People.find().then((sorted) => {
-
-      let slotArray = [],
-          daysToCalc = 300;
-
-      for (var i = 0; i < daysToCalc; i++) {
-        slotArray[i] = {
-          date: addDays(new Date(), i),
-          slot: 8
-        };
-      }
-
-      sorted = updatecalc(slotArray, 0, sorted, daysToCalc);
-
-      // console.log(sorted[0].leave);
 		res.render('office.hbs',{
 			rows,cols,sorted
 		})
@@ -351,9 +321,39 @@ app.post('/updateManualCtr', (req,res) => {
 
 })
 
+app.post('/saveCalculated', (req,res) => {
+  let slotArray = [],
+      daysToCalc = 300;
+
+  for (var i = 0; i < daysToCalc; i++) {
+    slotArray[i] = {
+      date: addDays(new Date(), i),
+      slot: 8
+    };
+  }
+  People.find().then((sorted) => {
+    sorted = updatecalc(slotArray, 0, sorted, daysToCalc);
+    return People.bulkWrite(sorted.map(val => {
+  			return {
+  				updateOne: {
+  					"filter" : {_id: val._id},
+  					"update": {$set: {leave: val.leave}}
+  				}
+  			}
+  	}))
+  }).then(msg => console.log(msg))
+  .catch(e => {
+    console.log(e);
+    res.status(400).send(e)
+  });
+
+})
+
 app.get('/profile',(req,res) => {
-  People.findById(req.query.id).then(person => {
+  console.log(req.query.id);
+  People.findById(mongoose.Types.ObjectId(req.query.id)).lean().then(person => {
     console.log(person);
+    person.leave = person.leave.sort((a,b) => a.end - b.end);
     res.status(200).render('person.hbs',{person})
   }).catch(e => res.status(400).send(e));
 })

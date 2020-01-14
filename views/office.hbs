@@ -210,7 +210,7 @@
         </svg>
         <input type="text" name="" value="" placeholder="Search">
       </div>
-      <button type="button" name="button" onclick="">
+      <button type="button" name="button" onclick="saveCalculated()">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 5V1L7 6L12 11V7C15.31 7 18 9.69 18 13C18 16.31 15.31 19 12 19C8.69 19 6 16.31 6 13H4C4 17.42 7.58 21 12 21C16.42 21 20 17.42 20 13C20 8.58 16.42 5 12 5Z" fill="#828282"/>
         </svg>
@@ -332,6 +332,12 @@
 
       });
 
+      $('.active').on('click',function() {
+        let my_id = $(this).attr('my_id');
+        console.log({my_id});
+        window.location.assign(`/profile?id=${my_id}`);
+      })
+
       $('#uploadBonus').on('click',function() {
 
         if (!$('#extraDaysBonus').val() || !$('#dateBonus').val()) return $(this).closest('div').find('.error').html('Please enter something above.');
@@ -384,6 +390,21 @@
             return $(this).closest('div').find('.error').html(e.responseText);
           });
       })
+
+      function saveCalculated() {
+        $.ajax({
+            url: '/saveCalculated',
+            type: 'post',
+            headers: {
+                'content-type': 'application/json',
+            }
+          }).done((msg) => {
+            return console.log(msg);
+          }).fail((e) => {
+            return console.log('error here', e);
+            // return $(this).closest('div').find('.error').html(e.responseText);
+          });
+      }
 
 
     </script>

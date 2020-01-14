@@ -35,15 +35,23 @@
     <p>Leave:</p>
     {{#each person.leave}}
     <div class="leave-box">
-      <p>Leave Type: {{leaveType}}</p>
-      <p>Start: {{start}}</p>
-      <p>End: {{end}}</p>
-      <p>Special Days: {{specialDays}}</p>
-      <button type="button" name="button">Edit</button>
+      <p id="type">Leave Type: {{leaveType}}</p>
+      <p id="start">Start: {{start}}</p>
+      <p id="end">End: {{end}}</p>
+      <p id="specialDays">Special Days: {{specialDays}}</p>
+      <button type="button" name="button" class="small-btn">Edit</button>
     </div>
 
     {{/each}}
 
     <button type="button" name="button" class="maj-btn">Edit major details</button>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
+    <script type="text/javascript">
+
+    $(document).on("click", ".small-btn", function () {
+        console.log(typeof Object.values($(this).closest('div').find('p')), $(this).closest('div').find('p'));
+    });
+
+    </script>
   </body>
 </html>
