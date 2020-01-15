@@ -349,6 +349,26 @@ app.post('/saveCalculated', (req,res) => {
 
 })
 
+hbs.registerHelper('inputDateFormat', function(val) {
+  var d = new Date(val),
+          month = '' + (d.getMonth() + 1),
+          day = '' + d.getDate(),
+          year = d.getFullYear();
+
+  if (month.length < 2)
+      month = '0' + month;
+  if (day.length < 2)
+      day = '0' + day;
+
+  return [year, month, day].join('-');
+  // The specified value "Mon Dec 23 2019 00:00:00 GMT+0500 (Pakistan Standard Time)" does not conform to the required format, "yyyy-MM-dd".
+
+})
+
+hbs.registerHelper('getDashedDate', function(val) {
+  return `${val.toString().trim().split(' ').slice(1,4).join('-')}`;
+})
+
 app.get('/profile',(req,res) => {
   console.log(req.query.id);
   People.findById(mongoose.Types.ObjectId(req.query.id)).lean().then(person => {
@@ -356,6 +376,31 @@ app.get('/profile',(req,res) => {
     person.leave = person.leave.sort((a,b) => a.end - b.end);
     res.status(200).render('person.hbs',{person})
   }).catch(e => res.status(400).send(e));
+})
+
+app.post('/updatePerson',(req,res) => {
+  console.log(req.body);
+  People.updateOne(
+    {'leave._id': mongoose.Types.ObjectId(req.body.leaveId)},
+    {'$set': {
+          'leave.$.leaveType': req.body.leaveType,
+          'leave.$.start': req.body.start,
+          'leave.$.end': req.body.end,
+          // 'leave.$.specialDays': req.body.specialDays,
+      }
+    }).then(msg => res.status(200).send(msg)).catch(e => res.status(400).send(e));
+})
+
+app.post('/deleteLeave', (req,res) => {
+  People.updateOne(
+    {_id: mongoose.Types.ObjectId(req.body.personId)},
+    {'$pull': {
+          'leave': {_id: mongoose.Types.ObjectId(req.body.leaveId)},
+          // 'leave.$.start': req.body.start,
+          // 'leave.$.end': req.body.end,
+          // 'leave.$.specialDays': req.body.specialDays,
+      }
+    }).then(msg => res.status(200).send(msg)).catch(e => res.status(400).send(e));
 })
 
 app.listen(port, () => {

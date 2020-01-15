@@ -26,6 +26,10 @@
         border-radius: 3px;
         font-weight: bold;
       }
+
+      .d-none {
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -35,11 +39,24 @@
     <p>Leave:</p>
     {{#each person.leave}}
     <div class="leave-box">
-      <p id="type">Leave Type: {{leaveType}}</p>
-      <p id="start">Start: {{start}}</p>
-      <p id="end">End: {{end}}</p>
-      <p id="specialDays">Special Days: {{specialDays}}</p>
-      <button type="button" name="button" class="small-btn">Edit</button>
+      <p id="type">
+        <span class="toggle_me">Leave Type: {{leaveType}}</span>
+        <span class="toggle_me d-none">Leave Type: <input type="text" name="type" class="type" value="{{leaveType}}"> </span>
+      </p>
+      <p id="start">
+        <span class="toggle_me">Start: {{getDashedDate start}}</span>
+        <span class="toggle_me d-none">Start: <input type="Date" name="start" class="start" value="{{inputDateFormat start}}"> </span>
+      </p>
+      <p id="end">
+        <span class="toggle_me">End: {{getDashedDate end}}</span>
+        <span class="toggle_me d-none">End: <input type="Date" name="end" class="end" value="{{inputDateFormat end}}" </span>
+      </p>
+      <p id="specialDays">
+        <span class="toggle_me">Special Days: {{specialDays}}</span>
+        <span class="toggle_me d-none">Special Days: <input type="text" name="specialDays" class="specialDays" value="{{specialDays}}"> </span>
+      </p>
+      <button my-id="{{_id}}" type="button" name="button" class="small-btn">Edit</button>
+      <button my-id="{{_id}}" type="button" name="button" class="delete-btn">Delete</button>
     </div>
 
     {{/each}}
@@ -49,8 +66,65 @@
     <script type="text/javascript">
 
     $(document).on("click", ".small-btn", function () {
-        console.log(typeof Object.values($(this).closest('div').find('p')), $(this).closest('div').find('p'));
+        $(this).closest('div').find('.toggle_me').toggleClass('d-none');
+        $(this).html() == 'Edit' ? $(this).toggleClass('apply').html('Apply') : $(this).html('Edit');
     });
+
+    $(document).on('click','.apply',function() {
+      let data = {
+        leaveId: $(this).attr('my-id'),
+        leaveType: $(this).closest('div').find('.type').val(),
+        start: $(this).closest('div').find('.start').val(),
+        end: $(this).closest('div').find('.end').val(),
+        specialDays: $(this).closest('div').find('.specialDays').val()
+      };
+
+      console.log(data);
+
+      data = JSON.stringify(data);
+
+
+      $.ajax({
+          url: '/updatePerson',
+          type: 'post',
+          data,
+          headers: {
+              'content-type': 'application/json',
+          }
+        }).done((msg) => {
+          window.location.assign(`/profile?id={{person._id}}`);
+          return console.log(msg);
+        }).fail((e) => {
+          return console.log('error here', e);
+        });
+    })
+
+    $(document).on('click','.delete-btn', function() {
+      let data = {
+        personId: `{{person._id}}`,
+        leaveId: $(this).attr('my-id')
+      };
+
+      console.log(data);
+
+      data = JSON.stringify(data);
+
+
+      $.ajax({
+          url: '/deleteLeave',
+          type: 'post',
+          data,
+          headers: {
+              'content-type': 'application/json',
+          }
+        }).done((msg) => {
+          window.location.assign(`/profile?id={{person._id}}`);
+          return console.log(msg);
+        }).fail((e) => {
+          return console.log('error here', e.responseText);
+          // return $(this).closest('div').find('.error').html(e.responseText);
+        });
+    })
 
     </script>
   </body>
