@@ -400,7 +400,7 @@ app.post('/updatePerson',(req,res) => {
           'leave.$.leaveType': req.body.leaveType,
           'leave.$.start': req.body.start,
           'leave.$.end': req.body.end,
-          // 'leave.$.specialDays': req.body.specialDays,
+          'leave.$.specialDays': req.body.specialDays,
       }
     }
   ).then(msg => res.status(200).send(msg)).catch(e => res.status(400).send(e));
