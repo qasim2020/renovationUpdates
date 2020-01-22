@@ -14,6 +14,7 @@ const {mongoose} = require('./db/mongoose');
 const {sendmail} = require('./js/sendmail');
 const {sheet} = require('./server/sheets.js');
 const {startcalc,addDays, updatecalc} = require('./life.js');
+const {loadData} = require('./LMS.js');
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -294,7 +295,20 @@ app.get('/office', (req,res) => {
     rows.push(i);
   }
 
+  let slotArray = [],
+      daysToCalc = 300;
+
+  for (var i = 0; i < daysToCalc; i++) {
+    slotArray[i] = {
+      date: addDays(new Date(), i),
+      slot: 8
+    };
+  }
+
   People.find().then((sorted) => {
+    // get data and calculate the leaves basing on this data
+    sorted = updatecalc(slotArray, 0, sorted, daysToCalc);
+
 		res.render('office.hbs',{
 			rows,cols,sorted
 		})
@@ -322,30 +336,30 @@ app.post('/updateManualCtr', (req,res) => {
 })
 
 app.post('/saveCalculated', (req,res) => {
-  let slotArray = [],
-      daysToCalc = 300;
-
-  for (var i = 0; i < daysToCalc; i++) {
-    slotArray[i] = {
-      date: addDays(new Date(), i),
-      slot: 8
-    };
-  }
-  People.find().then((sorted) => {
-    sorted = updatecalc(slotArray, 0, sorted, daysToCalc);
-    return People.bulkWrite(sorted.map(val => {
-  			return {
-  				updateOne: {
-  					"filter" : {_id: val._id},
-  					"update": {$set: {leave: val.leave}}
-  				}
-  			}
-  	}))
-  }).then(msg => console.log(msg))
-  .catch(e => {
-    console.log(e);
-    res.status(400).send(e)
-  });
+  // let slotArray = [],
+  //     daysToCalc = 300;
+  //
+  // for (var i = 0; i < daysToCalc; i++) {
+  //   slotArray[i] = {
+  //     date: addDays(new Date(), i),
+  //     slot: 8
+  //   };
+  // }
+  // People.find().then((sorted) => {
+  //   sorted = updatecalc(slotArray, 0, sorted, daysToCalc);
+  //   return People.bulkWrite(sorted.map(val => {
+  // 			return {
+  // 				updateOne: {
+  // 					"filter" : {_id: val._id},
+  // 					"update": {$set: {leave: val.leave}}
+  // 				}
+  // 			}
+  // 	}))
+  // }).then(msg => console.log(msg))
+  // .catch(e => {
+  //   console.log(e);
+  //   res.status(400).send(e)
+  // });
 
 })
 
@@ -388,7 +402,8 @@ app.post('/updatePerson',(req,res) => {
           'leave.$.end': req.body.end,
           // 'leave.$.specialDays': req.body.specialDays,
       }
-    }).then(msg => res.status(200).send(msg)).catch(e => res.status(400).send(e));
+    }
+  ).then(msg => res.status(200).send(msg)).catch(e => res.status(400).send(e));
 })
 
 app.post('/deleteLeave', (req,res) => {
@@ -401,6 +416,23 @@ app.post('/deleteLeave', (req,res) => {
           // 'leave.$.specialDays': req.body.specialDays,
       }
     }).then(msg => res.status(200).send(msg)).catch(e => res.status(400).send(e));
+})
+
+app.post('/addNewLeave', (req,res) => {
+  People.updateOne(
+    {_id: mongoose.Types.ObjectId(req.body.personId)},
+    {'$push': {'leave' : req.body.newLeave}}
+  ).then(msg => res.status(200).send('Saved the leave. Page will refresh after you press Ok.')).catch(e => res.status(400).send(e));
+});
+
+app.post('/loadData', (req,res) => {
+  loadData().then(msg => {
+    console.log(msg);
+    res.status(200).send(msg);
+  }).catch(e => {
+    console.log(e);
+    res.status(400).send(e);
+  })
 })
 
 app.listen(port, () => {

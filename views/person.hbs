@@ -8,6 +8,7 @@
       max-width: 800px;
       margin: auto;
       padding-top: 20px;
+      padding-bottom: 50px;
       font-family: monospace;
     }
       .leave-box {
@@ -18,7 +19,7 @@
         border-radius: 3px;
       }
 
-      .maj-btn {
+      .maj-btn, .manual-btn, .done-btn{
         margin-top: 15px;
         padding: 6px 11px;
         background: lightcyan;
@@ -30,13 +31,25 @@
       .d-none {
         display: none;
       }
+
+      .adding {
+        background: lightcoral;
+      }
+
+      .adding > .small-btn, .adding > .delete-btn {
+        display: none;
+      }
+
+      .adding > .add-btn.d-none, .adding > .cancel-btn.d-none {
+        display: initial;
+      }
+
     </style>
   </head>
   <body>
     <p>Name: {{person.Rank}} {{person.Name}}</p>
     <p>Addl Days: {{person.addlDays}}</p>
     <p>P Leave: {{person.[P Lve]}}</p>
-    <p>Leave:</p>
     {{#each person.leave}}
     <div class="leave-box">
       <p id="type">
@@ -55,13 +68,19 @@
         <span class="toggle_me">Special Days: {{specialDays}}</span>
         <span class="toggle_me d-none">Special Days: <input type="text" name="specialDays" class="specialDays" value="{{specialDays}}"> </span>
       </p>
+      <button my-id="{{_id}}" type="button" name="button" class="add-btn d-none">Add New</button>
+      <button my-id="{{_id}}" type="button" name="button" class="cancel-btn d-none" onclick="$(this).closest('.leave-box').remove()">Cancel</button>
       <button my-id="{{_id}}" type="button" name="button" class="small-btn">Edit</button>
       <button my-id="{{_id}}" type="button" name="button" class="delete-btn">Delete</button>
     </div>
 
     {{/each}}
 
+    <button type="button" name="button" class="manual-btn" onclick="$(`.leave-box:eq(-1)`).clone().insertAfter(`.leave-box:eq(-1)`).addClass('adding').find(`.small-btn`).trigger('click')">Add leave manually</button>
     <button type="button" name="button" class="maj-btn">Edit major details</button>
+    <button type="button" name="button" class="done-btn" onclick="window.location.assign(`/office`);">Done</button>
+
+
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="  crossorigin="anonymous"></script>
     <script type="text/javascript">
 
@@ -122,6 +141,40 @@
           return console.log(msg);
         }).fail((e) => {
           return console.log('error here', e.responseText);
+          // return $(this).closest('div').find('.error').html(e.responseText);
+        });
+    })
+
+    $(document).on('click','.add-btn', function() {
+      let data = {
+        personId: `{{person._id}}`,
+        newLeave: {
+          leaveType: $(this).closest('div').find('.type').val(),
+          start: $(this).closest('div').find('.start').val(),
+          end: $(this).closest('div').find('.end').val(),
+          specialDays: $(this).closest('div').find('.specialDays').val()
+        }
+      };
+
+      console.log(data);
+
+      data = JSON.stringify(data);
+
+
+      $.ajax({
+          url: '/addNewLeave',
+          type: 'post',
+          data,
+          headers: {
+              'content-type': 'application/json',
+          }
+        }).done((msg) => {
+          alert(msg);
+          window.location.assign(`/profile?id={{person._id}}`);
+          // return console.log(msg);
+        }).fail((e) => {
+          alert(e.responseText);
+          // return console.log('error here', e.responseText);
           // return $(this).closest('div').find('.error').html(e.responseText);
         });
     })
