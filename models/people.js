@@ -18,6 +18,12 @@ var People = mongoose.model('people', {
     start: Date,
     end: Date,
     specialDays: String
+  }],
+  tempLeave: [{
+    leaveType: String,
+    start: Date,
+    end: Date,
+    specialDays: String
   }]
 });
 

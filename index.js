@@ -216,7 +216,7 @@ hbs.registerHelper("getDateForCol", (date) => {
 
 hbs.registerHelper("drawTableRows", (cols,person) => {
   cols = cols.map(val => {
-    let found = person.leave.find(elem => {
+    let found = person.tempLeave.find(elem => {
       if (elem.specialDays < 0) {
         return val >= elem.start && val <= addDays(elem.end, Math.abs(elem.specialDays));
       } else {
@@ -307,7 +307,7 @@ app.get('/office', (req,res) => {
 
   People.find().then((sorted) => {
     // get data and calculate the leaves basing on this data
-    sorted = updatecalc(slotArray, 0, sorted, daysToCalc);
+    // sorted = updatecalc(slotArray, 0, sorted, daysToCalc);
 
 		res.render('office.hbs',{
 			rows,cols,sorted
@@ -336,30 +336,30 @@ app.post('/updateManualCtr', (req,res) => {
 })
 
 app.post('/saveCalculated', (req,res) => {
-  // let slotArray = [],
-  //     daysToCalc = 300;
-  //
-  // for (var i = 0; i < daysToCalc; i++) {
-  //   slotArray[i] = {
-  //     date: addDays(new Date(), i),
-  //     slot: 8
-  //   };
-  // }
-  // People.find().then((sorted) => {
-  //   sorted = updatecalc(slotArray, 0, sorted, daysToCalc);
-  //   return People.bulkWrite(sorted.map(val => {
-  // 			return {
-  // 				updateOne: {
-  // 					"filter" : {_id: val._id},
-  // 					"update": {$set: {leave: val.leave}}
-  // 				}
-  // 			}
-  // 	}))
-  // }).then(msg => console.log(msg))
-  // .catch(e => {
-  //   console.log(e);
-  //   res.status(400).send(e)
-  // });
+  let slotArray = [],
+      daysToCalc = 300;
+
+  for (var i = 0; i < daysToCalc; i++) {
+    slotArray[i] = {
+      date: addDays(new Date(), i),
+      slot: 8
+    };
+  }
+  People.find().then((sorted) => {
+    sorted = updatecalc(slotArray, 0, sorted, daysToCalc);
+    return People.bulkWrite(sorted.map(val => {
+  			return {
+  				updateOne: {
+  					"filter" : {_id: val._id},
+  					"update": {$set: {tempLeave: val.leave}}
+  				}
+  			}
+  	}))
+  }).then(msg => res.status(200).send('Leaves have been calculated.'))
+  .catch(e => {
+    console.log(e);
+    res.status(400).send(e)
+  });
 
 })
 
@@ -410,10 +410,7 @@ app.post('/deleteLeave', (req,res) => {
   People.updateOne(
     {_id: mongoose.Types.ObjectId(req.body.personId)},
     {'$pull': {
-          'leave': {_id: mongoose.Types.ObjectId(req.body.leaveId)},
-          // 'leave.$.start': req.body.start,
-          // 'leave.$.end': req.body.end,
-          // 'leave.$.specialDays': req.body.specialDays,
+          'leave': {_id: mongoose.Types.ObjectId(req.body.leaveId)}
       }
     }).then(msg => res.status(200).send(msg)).catch(e => res.status(400).send(e));
 })
