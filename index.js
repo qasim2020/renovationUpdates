@@ -11,10 +11,7 @@ const readXlsxFile = require('read-excel-file/node');
 
 const {People} = require('./models/people');
 const {mongoose} = require('./db/mongoose');
-const {sendmail} = require('./js/sendmail');
-const {sheet} = require('./server/sheets.js');
 const {startcalc,addDays, updatecalc} = require('./life.js');
-const {loadData} = require('./LMS.js');
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -91,115 +88,6 @@ hbs.registerHelper("getObjectUsingKey", (data, key) => {
     return total;
   },{});
   return object[key];
-})
-
-app.get('/',(req,res) => {
-
-  let dateToday = moment().format('YYYY-MM-DD');
-
-  readXlsxFile(__dirname+'/server/life.xlsx').then((rows) => {
-    let sorted = rows.map((val) =>
-      val.reduce((total,inner,index) => {
-
-        if (inner) Object.assign(total,{
-          [rows[0][index]]: inner
-        })
-        return total;
-      },{})
-    ).filter((val,index) => index != 0);
-
-    sorted.map(val => {
-      Object.keys(val).forEach(key => {
-        if (key == 'Date') return;
-        let arr = val[key].replace('/\r/\n','').trim().split(';');
-        let values = arr.reduce((total,nVal) => {
-          if (!nVal) return total;
-          total.push(
-            {[nVal.split(': ')[0].replace('\r\n','')]: nVal.split(': ')[1].trim()}
-          );
-          return total;
-        },[])
-        val[key] = values;
-      });
-      return val;
-    });
-
-    let askedPage = req.query.pagerequest && req.query.pagerequest.toUpperCase() || 'SRE';
-
-    sorted = sorted.map((val,index) => {
-      return val[askedPage.toUpperCase()];
-    })
-
-    // console.log({pagerequest: req.query.pagerequest,sorted});
-
-    sorted[0] = {
-      Subject: sorted[0][0].Subject,
-      Instructor: sorted[0][1].Instructor,
-      ClassSenior: sorted[0][2].ClassSenior,
-      Note: sorted[0][3].Note,
-      CreditHours: sorted[0][4].CreditHours,
-    }
-
-    // console.log(sorted);
-
-    console.log(askedPage.toUpperCase());
-
-    res.render('abasyn.hbs',{
-        sorted,
-        [askedPage.toLowerCase()]: 'active',
-        pagerequest: askedPage.toUpperCase()
-      });
-  });
-
-});
-
-app.get('/getSuggestions',(req,res) => {
-  sheet('external','todayUpdates').then((msg)=> {
-    res.status(200).send(msg);
-  }).catch((e) => {
-    console.log(e);
-    res.status(400).send(e);
-  });
-});
-
-app.get('/getOldData',(req,res) => {
-  sheet('old','read').then((msg) => {
-    res.status(200).send(msg);
-  }).catch((e) => {
-    console.log(e.response.status,e.response.statusText);
-    res.status(400).send(e);
-  });
-})
-
-app.post('/data',(req,res) => {
-  // _.pick(req.body,['timestamp','date','loc','category','name','responsibility','work','quantity','unit','remarks']);
-  let arr = req.body;
-  if (arr.length != 10) return res.status(400).send('Please fill all the fields in the form.');
-  sheet('external','update',[arr]).then((msg) => {
-    return res.status(200).send(msg);
-  }).catch((e) => {
-    console.log(e);
-    return res.status(400).send(e);
-  })
-});
-
-app.post('/oldDataUpload',(req,res) => {
-  sheet('oldformatted','batchUpdate',req.body).then((msg) => {
-    return res.status(200).send(msg);
-  }).catch((e) => {
-    console.log(e);
-    res.status(400).send(e);
-  })
-});
-
-app.post('/sendmail',(req,res) => {
-  console.log(req.body.val);
-  sendmail('qasimali24@gmail.com',req.body.val,'Feedback from Abasyn').then((msg) => {
-    res.status(200).send(msg)
-  }).catch(e => {
-    console.log(e);
-    res.status(400).send(e);
-  });
 })
 
 hbs.registerHelper("getDateForCol", (date) => {
@@ -283,8 +171,7 @@ app.get('/updateFromExcel', (req,res) => {
 
 })
 
-
-app.get('/office', (req,res) => {
+app.get('/', (req,res) => {
 
   let cols = [], rows = [];
   for (var i = 0; i < 300; i++) {
