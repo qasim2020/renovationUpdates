@@ -226,11 +226,9 @@ function updatecalc(slotArray, day, sorted, daysToCalc) {
 
   // get fwd and back distance
 
-  // console.log(sorted.find(val => 'Ilyas'.indexOf(val.Name)));
-
   sorted = sorted.filter(val => val.leave.every(val => !(thisDate >= val.start && thisDate <= val.end) ))
   .map(val => {
-    console.log(val);
+    console.log(thisDate, val.leave, val.leave.filter(val => thisDate > val.end));
       return Object.assign(val,{
         back: val.leave.filter(val => thisDate > val.end).sort((a,b) => b.end - a.end)[0].end,
         backMaj: val.leave.filter(val => thisDate > val.end && /C|P/g.test(val.leaveType)).sort((a,b) => b.end - a.end)[0].end,

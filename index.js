@@ -12,6 +12,7 @@ const readXlsxFile = require('read-excel-file/node');
 const {People} = require('./models/people');
 const {mongoose} = require('./db/mongoose');
 const {startcalc,addDays, updatecalc} = require('./life.js');
+const {loadData} = require('./LMS.js');
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -94,7 +95,7 @@ hbs.registerHelper("getDateForCol", (date) => {
   let isThisToday = `${date.getMonth()}${date.getDate()}${date.getYear()}` == `${new Date().getMonth()}${new Date().getDate()}${new Date().getYear()}`;
   let isThisLastDay = new Date(date.getFullYear(), date.getMonth()+1, 0).getDate() == date.getDate();
   return `
-  <th class="rotate partition_${isThisLastDay}" id="${date.getMonth()}${date.getDate()}${date.getYear()}">
+  <th class="rotate partition_${isThisLastDay} ${date.toString().split(' ').slice(1,2).join('')}" id="${date.getMonth()}${date.getDate()}${date.getYear()}">
     <div>
       <span id="col_${isThisToday}">${date.toString().trim().split(' ').slice(1,4).join(' ')}</span>
     </div>
@@ -183,7 +184,7 @@ app.get('/', (req,res) => {
   }
 
   let slotArray = [],
-      daysToCalc = 300;
+      daysToCalc = 30;
 
   for (var i = 0; i < daysToCalc; i++) {
     slotArray[i] = {
@@ -223,8 +224,9 @@ app.post('/updateManualCtr', (req,res) => {
 })
 
 app.post('/saveCalculated', (req,res) => {
+
   let slotArray = [],
-      daysToCalc = 300;
+      daysToCalc = 30;
 
   for (var i = 0; i < daysToCalc; i++) {
     slotArray[i] = {

@@ -560,18 +560,20 @@
       }
 
       let month = (iterate) => {
+
         let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
         let date = addDays($('.selectors > span').html(), iterate * 34);
-        // let scrolling = $('.table').width() - Math.abs($(`#${date.getMonth()}1${date.getYear()}`).position().left);
-        console.log({date: `#${date.getMonth()}1${date.getYear()}`, offset: $(`#${date.getMonth()}1${date.getYear()}`).offset().left, scrolling});
+        console.log($(`.partition_true.${date.toString().split(' ').slice(1,2).join('')}`).offset());
+        let scrolling = $('.table').width() - Math.abs($(`#${date.getMonth()}1${date.getYear()}`).position().left);
+        // console.log({date: `#${date.getMonth()}1${date.getYear()}`, offset: $(`#${date.getMonth()}1${date.getYear()}`).offset().left, scrolling});
         // $(".table").scrollLeft(scrolling);
         // location.href = `#${date.getMonth()}1${date.getYear()}`;
         $(".table").animate(
           {
-            scrollLeft: $(`#${date.getMonth()}1${date.getYear()}`).position().left
+            scrollLeft: -$(`.partition_true.${date.toString().split(' ').slice(1,2).join('')}`).offset().left
           },
-          0,
+          100,
           'linear'
         );
 
