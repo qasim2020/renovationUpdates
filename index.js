@@ -176,12 +176,12 @@ app.get('/test',(req,res) => {
   req.query.date = req.query.date || [];
   let date = new Date(), cols = [], rows = [];
   console.log(req.query.date, date);
-  for (var i = 0; i < 28; i++) {
+  for (var i = 0; i < 31; i++) {
     let ndate = addDays(date, i);
     cols.push(ndate);
   }
 
-  for (var i = 0; i < 28; i++) {
+  for (var i = 0; i < 31; i++) {
     rows.push(i);
   }
 
@@ -196,33 +196,54 @@ app.get('/test',(req,res) => {
 })
 app.get('/', (req,res) => {
 
-  let cols = [], rows = [];
-  for (var i = 0; i < 300; i++) {
-    let date = addDays(new Date('1 Sep 2019'), i);
-    cols.push(date);
+  req.query.date = req.query.date || [];
+  let date = new Date(), cols = [], rows = [];
+  console.log(req.query.date, date);
+  for (var i = 0; i < 31; i++) {
+    let ndate = addDays(date, i);
+    cols.push(ndate);
   }
-  for (var i = 0; i < 30; i++) {
+
+  for (var i = 0; i < 31; i++) {
     rows.push(i);
   }
 
-  let slotArray = [],
-      daysToCalc = 30;
-
-  for (var i = 0; i < daysToCalc; i++) {
-    slotArray[i] = {
-      date: addDays(new Date(), i),
-      slot: 8
-    };
-  }
-
   People.find().then((sorted) => {
-		res.render('office.hbs',{
-			rows,cols,sorted
-		})
-	}).catch(e => {
+    res.render('office.hbs',{
+      rows,cols,sorted
+    })
+  }).catch(e => {
     console.log(e);
     res.status(400).send(e)
   });
+
+  // let cols = [], rows = [];
+  // for (var i = 0; i < 300; i++) {
+  //   let date = addDays(new Date('1 Sep 2019'), i);
+  //   cols.push(date);
+  // }
+  // for (var i = 0; i < 30; i++) {
+  //   rows.push(i);
+  // }
+  //
+  // let slotArray = [],
+  //     daysToCalc = 30;
+  //
+  // for (var i = 0; i < daysToCalc; i++) {
+  //   slotArray[i] = {
+  //     date: addDays(new Date(), i),
+  //     slot: 8
+  //   };
+  // }
+  //
+  // People.find().then((sorted) => {
+	// 	res.render('office.hbs',{
+	// 		rows,cols,sorted
+	// 	})
+	// }).catch(e => {
+  //   console.log(e);
+  //   res.status(400).send(e)
+  // });
 
 })
 

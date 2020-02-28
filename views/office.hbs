@@ -60,12 +60,15 @@
         justify-content: center;
         width: 100%;
         position: fixed;
-        top: 0px;
         background: white;
-        z-index: 10;
-
+        z-index: 1000;
         padding: 5px;
         box-sizing: border-box;
+        max-width: 1440px;
+        margin: auto;
+        left: 50%;
+        top: 18px;
+        transform: translate(-50%,-50%);
       }
 
       nav > * {
@@ -182,8 +185,8 @@
       }
 
       .table {
-        /* overflow: scroll; */
-        max-width: 100%;
+        max-width: 1440px;
+        margin: auto;
         margin-top: 7px;
       }
 
@@ -365,9 +368,11 @@
         position: absolute;
         padding: 6px 8px 6px 8px;
         z-index: 10;
-        margin-top: -1px;
         width: 131px;
-        border: 1px solid #dcd9d9;
+        border-top: 1px solid #dcd9d9;
+        border-bottom: 1px solid #dcd9d9;
+        box-sizing: border-box;
+        border-right: 0px solid;
       }
 
       tr.boxes > td:nth-child(2) {
