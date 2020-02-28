@@ -24,7 +24,7 @@ app.set('view engine','hbs');
 // app.use('/fonts', express.static(__dirname + '/node_modules/roboto-fontface'));
 app.use(express.static(__dirname+'/static'));
 
-app.get('/jquery', function(req, res) {
+app.get('/jquery-', function(req, res) {
     res.sendFile(__dirname + '/node_modules/jquery/dist/jquery.js');
 });
 
