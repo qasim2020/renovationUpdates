@@ -16,11 +16,22 @@ const {loadData} = require('./LMS.js');
 
 var app = express();
 var port = process.env.PORT || 3000;
-app.use(express.static(__dirname+'/static'));
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 hbs.registerPartials(__dirname + '/views/partials');
 app.set('view engine','hbs');
+
+// app.use('/fonts', express.static(__dirname + '/node_modules/roboto-fontface'));
+app.use(express.static(__dirname+'/static'));
+
+app.get('/jquery', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/jquery/dist/jquery.js');
+});
+
+app.get('/roboto', function(req, res) {
+    res.sendFile(__dirname + '/node_modules/roboto-fontface/css/roboto/roboto-fontface.css');
+});
+
 
 hbs.registerHelper("fixText",function (text) {
   if (!text) return;
