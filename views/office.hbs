@@ -182,7 +182,7 @@
       }
 
       .table {
-        overflow: scroll;
+        /* overflow: scroll; */
         max-width: 100%;
         margin-top: 7px;
       }
@@ -355,6 +355,25 @@
         margin: 0 4px;
       }
 
+      tbody > tr {
+        position: relative;
+        height: 31px;
+      }
+
+      td.name {
+        background: white;
+        position: absolute;
+        padding: 6px 8px 6px 8px;
+        z-index: 10;
+        margin-top: -1px;
+        width: 131px;
+        border: 1px solid #dcd9d9;
+      }
+
+      tr.boxes > td:nth-child(2) {
+        padding-left: 9rem;
+      }
+
 
     </style>
     <div class="selectors">
@@ -373,6 +392,7 @@
     <div class="table">
       <table style="">
         <tr>
+          <th></th>
           <th><div class="">
             <!-- Name / Date -->
           </div> </th>
@@ -381,9 +401,9 @@
           {{/each}}
         </tr>
         {{#each sorted as |person|}}
-        <tr>
-          <td id="{{person._id}}">{{person.Name}}</td>
-
+        <tr class="boxes">
+          <td class="name" id="{{person._id}}">{{person.Name}}</td>
+          <td></td>
           {{{drawTableRows ../cols person}}}
         </tr>
         {{/each}}

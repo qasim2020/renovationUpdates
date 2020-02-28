@@ -172,6 +172,28 @@ app.get('/updateFromExcel', (req,res) => {
 
 })
 
+app.get('/test',(req,res) => {
+  req.query.date = req.query.date || [];
+  let date = new Date(), cols = [], rows = [];
+  console.log(req.query.date, date);
+  for (var i = 0; i < 28; i++) {
+    let ndate = addDays(date, i);
+    cols.push(ndate);
+  }
+
+  for (var i = 0; i < 28; i++) {
+    rows.push(i);
+  }
+
+  People.find().then((sorted) => {
+		res.render('office.hbs',{
+			rows,cols,sorted
+		})
+	}).catch(e => {
+    console.log(e);
+    res.status(400).send(e)
+  });
+})
 app.get('/', (req,res) => {
 
   let cols = [], rows = [];
@@ -194,9 +216,6 @@ app.get('/', (req,res) => {
   }
 
   People.find().then((sorted) => {
-    // get data and calculate the leaves basing on this data
-    // sorted = updatecalc(slotArray, 0, sorted, daysToCalc);
-
 		res.render('office.hbs',{
 			rows,cols,sorted
 		})
