@@ -7,7 +7,7 @@ let slot = 7,
     today = new Date();
 
 function startcalc(sorted, day) {
-  if (day > 200) {
+  if (day > 60) {
     return sorted;
     // return console.log(JSON.stringify(sorted, null, 4));
   }
