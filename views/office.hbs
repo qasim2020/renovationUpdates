@@ -296,36 +296,38 @@
 
       <div class="search">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14V14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z" fill="#828282"/>
+          <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14V14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z" fill="#828282"/>
         </svg>
         <input type="text" name="" value="" placeholder="Search a Name">
       </div>
-      <button type="button" name="button" onclick="saveCalculated()">
+
+      <button type="button" name="button" onclick="$.post('/loadData',function(data, msg) {alert(data,msg)});">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 5V1L7 6L12 11V7C15.31 7 18 9.69 18 13C18 16.31 15.31 19 12 19C8.69 19 6 16.31 6 13H4C4 17.42 7.58 21 12 21C16.42 21 20 17.42 20 13C20 8.58 16.42 5 12 5Z" fill="#828282"/>
+          <path d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25ZM20.71 7.04C21.1 6.65 21.1 6.02 20.71 5.63L18.37 3.29C17.98 2.9 17.35 2.9 16.96 3.29L15.13 5.12L18.88 8.87L20.71 7.04V7.04Z" fill="#828282"/>
+        </svg>
+
+        <p>Load from Excel</p>
+      </button>
+
+      <button type="button" name="button" onclick="saveCalculated(60)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 5V1L7 6L12 11V7C15.31 7 18 9.69 18 13C18 16.31 15.31 19 12 19C8.69 19 6 16.31 6 13H4C4 17.42 7.58 21 12 21C16.42 21 20 17.42 20 13C20 8.58 16.42 5 12 5Z" fill="#828282"/>
         </svg>
 
         <p>Re Calculate Leave</p>
       </button>
       <button type="button" name="button" onclick="$('.addBonusModal').toggleClass('d-none');">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#828282"/>
+          <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#828282"/>
         </svg>
 
         <p>Add Bonus Days</p>
       </button>
-      <button type="button" name="button" onclick="$.post('/loadData',function(data, msg) {alert(data,msg)});">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25ZM20.71 7.04C21.1 6.65 21.1 6.02 20.71 5.63L18.37 3.29C17.98 2.9 17.35 2.9 16.96 3.29L15.13 5.12L18.88 8.87L20.71 7.04V7.04Z" fill="#828282"/>
-        </svg>
-
-        <p>Load from Excel</p>
-      </button>
-      <button type="button" name="button">
+      <button type="button" name="button" onclick=goto('/startsoftware')>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10ZM19 3H5C3.89 3 3 3.9 3 5V19C3 20.1 3.89 21 5 21H19C20.11 21 21 20.1 21 19V5C21 3.9 20.11 3 19 3ZM17.25 12C17.25 12.23 17.23 12.46 17.2 12.68L18.68 13.84C18.81 13.95 18.85 14.14 18.76 14.29L17.36 16.71C17.27 16.86 17.09 16.92 16.93 16.86L15.19 16.16C14.83 16.44 14.43 16.67 14.01 16.85L13.75 18.7C13.72 18.87 13.57 19 13.4 19H10.6C10.43 19 10.28 18.87 10.25 18.71L9.99 16.86C9.56 16.68 9.17 16.45 8.81 16.17L7.07 16.87C6.91 16.93 6.73 16.87 6.64 16.72L5.24 14.3C5.15 14.15 5.19 13.96 5.32 13.85L6.8 12.69C6.77 12.46 6.75 12.23 6.75 12C6.75 11.77 6.77 11.54 6.8 11.32L5.32 10.16C5.19 10.05 5.15 9.86 5.24 9.71L6.64 7.29C6.73 7.14 6.91 7.08 7.07 7.14L8.81 7.84C9.17 7.56 9.57 7.33 9.99 7.15L10.25 5.3C10.28 5.13 10.43 5 10.6 5H13.4C13.57 5 13.72 5.13 13.75 5.29L14.01 7.14C14.44 7.32 14.83 7.55 15.19 7.83L16.93 7.13C17.09 7.07 17.27 7.13 17.36 7.28L18.76 9.7C18.85 9.85 18.81 10.04 18.68 10.15L17.2 11.31C17.23 11.54 17.25 11.77 17.25 12V12Z" fill="#828282"/>
         </svg>
-        <p>Write Policies</p>
+        <p>Start Software</p>
       </button>
     </nav>
     <style media="screen">
@@ -382,13 +384,13 @@
 
     </style>
     <div class="selectors">
-      <button onclick="month(-1)" type="button" name="button">
+      <button onclick="month(-{{displayDays}})" type="button" name="button">
         <svg width="5" height="10" viewBox="0 0 5 10" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M4.5 8.79289L0.707107 5L4.5 1.20711V8.79289Z" fill="#4F4F4F" stroke="#4F4F4F"/>
         </svg>
       </button>
-      <span>Jan 2020</span>
-      <button onclick="month(1)" type="button" name="button">
+      <span>{{date}}</span>
+      <button onclick="month({{displayDays}})" type="button" name="button">
         <svg width="5" height="10" viewBox="0 0 5 10" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M0.5 1.20711L4.29289 5L0.5 8.79289V1.20711Z" fill="#4F4F4F" stroke="#4F4F4F"/>
         </svg>
@@ -430,6 +432,7 @@
     </div>
     <div class="popover shadow"></div>
     <script src="/jquery"  integrity=""  crossorigin="anonymous"></script>
+    <!-- <script src="/life"  integrity=""  crossorigin="anonymous"></script> -->
     <script type="text/javascript">
 
       // $(document).ready(() => {
@@ -462,13 +465,13 @@
           // openFullscreen();
           let date = new Date();
           console.log({date, Month: date.getMonth(), year: date.getYear()});
-          $(".table").animate(
-            {
-              scrollLeft: $(`#${date.getMonth()}${date.getDate()}${date.getYear()}`).offset().left
-            },
-            200,
-            'linear'
-          );
+          // $(".table").animate(
+          //   {
+          //     scrollLeft: $(`#${date.getMonth()}${date.getDate()}${date.getYear()}`).offset().left
+          //   },
+          //   200,
+          //   'linear'
+          // );
       });
 
 
@@ -567,49 +570,81 @@
           });
       })
 
-      function saveCalculated() {
+      function saveCalculated(days) {
         $.ajax({
-            url: '/saveCalculated',
+            url: `/saveCalculated?days=${days}`,
             type: 'post',
             headers: {
                 'content-type': 'application/json',
             }
           }).done((msg) => {
             alert(msg);
-            // return console.log(msg);
+            return console.log(msg);
           }).fail((e) => {
             alert(e.responseText);
-            // return console.log('error here', e);
+            return console.log('error here', e);
             // return $(this).closest('div').find('.error').html(e.responseText);
           });
       }
 
       let month = (iterate) => {
 
-        let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        let today = $('tr:eq(0)>th:eq(2) span').html(), required;
 
-        let date = addDays($('.selectors > span').html(), iterate * 34);
-        console.log($(`.partition_true.${date.toString().split(' ').slice(1,2).join('')}`).offset());
-        let scrolling = $('.table').width() - Math.abs($(`#${date.getMonth()}1${date.getYear()}`).position().left);
-        // console.log({date: `#${date.getMonth()}1${date.getYear()}`, offset: $(`#${date.getMonth()}1${date.getYear()}`).offset().left, scrolling});
-        // $(".table").scrollLeft(scrolling);
-        // location.href = `#${date.getMonth()}1${date.getYear()}`;
-        $(".table").animate(
-          {
-            scrollLeft: -$(`.partition_true.${date.toString().split(' ').slice(1,2).join('')}`).offset().left
-          },
-          100,
-          'linear'
-        );
+        switch (true) {
+          case iterate < 0:
+            required = subtractDays(today,-iterate)
+            console.log('here', iterate);
+            break;
+          case iterate > 0:
+            required = addDays(today,iterate)
+            console.log('here', iterate);
+            break;
+          default:
+            console.log('not met');
+        }
+        console.log({iterate,required});
+        // $('.selectors > span').html(`${required.toString().split(' ').splice(1,3).join(' ')}`);
 
-        $('.selectors > span').html(`${months[date.getMonth()]} 20${date.getYear().toString().slice(1,3)}`);
+        window.location.assign(`/?date=${required}`);
+        // let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        return;
+        // return console.log(iterate, month[iterate]);
+
+        // let date = addDays($('.selectors > span').html(), iterate * 34);
+        // console.log($(`.partition_true.${date.toString().split(' ').slice(1,2).join('')}`).offset());
+        // let scrolling = $('.table').width() - Math.abs($(`#${date.getMonth()}1${date.getYear()}`).position().left);
+        // // console.log({date: `#${date.getMonth()}1${date.getYear()}`, offset: $(`#${date.getMonth()}1${date.getYear()}`).offset().left, scrolling});
+        // // $(".table").scrollLeft(scrolling);
+        // // location.href = `#${date.getMonth()}1${date.getYear()}`;
+        // $(".table").animate(
+        //   {
+        //     scrollLeft: -$(`.partition_true.${date.toString().split(' ').slice(1,2).join('')}`).offset().left
+        //   },
+        //   100,
+        //   'linear'
+        // );
+        //
+        // $('.selectors > span').html(`${months[date.getMonth()]} 20${date.getYear().toString().slice(1,3)}`);
       }
+
 
 
       function addDays(date, days) {
         var result = new Date(date);
         result.setDate(result.getDate() + days);
         return result;
+      }
+
+      function subtractDays(date, days) {
+        var result = new Date(date);
+        result.setDate(result.getDate() - days);
+        return result;
+      }
+
+      function goto(url) {
+        window.location.assign(`${url}`);
+        return;
       }
 
 

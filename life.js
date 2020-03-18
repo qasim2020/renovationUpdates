@@ -81,11 +81,17 @@ function addDays(date, days) {
   return result;
 }
 
+function subtractDays(date, days) {
+  var result = new Date(date);
+  result.setDate(result.getDate() - days);
+  return result;
+}
+
 function allotLeave(leaveType,person,thisDate) {
   if (!person['leave']) person['leave'] = [];
   if (!person['MC']) person['MC'] = 0;
   let weekendsMissed = 0;
-  console.log('-----++++----');
+  // console.log('-----++++----');
 
 
   // sort this person leaves
@@ -93,17 +99,17 @@ function allotLeave(leaveType,person,thisDate) {
   // get only leaves that are before thisDate
   .filter(val => val.end < thisDate);
 
-  console.log(sortedLeaves);
+  // console.log(sortedLeaves);
 
   let specialDays_Sum = sortedLeaves.reduce((sum,val) => {
     // if (/W/g.test(val)) return sum;
-    console.log({specialDays: val.specialDays});
+    // console.log({specialDays: val.specialDays});
     return sum += Number(val.specialDays);
   },0);
 
-  console.log('======');
-  console.log({specialDays_Sum});
-  console.log('-======');
+  // console.log('======');
+  // console.log({specialDays_Sum});
+  // console.log('-======');
 
   if (/P|C/g.test(leaveType)) {
     // Calculate weekends missed from prvs major leave till today
@@ -131,7 +137,7 @@ function allotLeave(leaveType,person,thisDate) {
 
   person.MC = person.MC + weekendsMissed - specialDays_Sum;
 
-  console.log({leaveType, weekendsMissed, specialDays_Sum, MC: person.MC});
+  // console.log({leaveType, weekendsMissed, specialDays_Sum, MC: person.MC});
 
 
   // return console.log({specialDays_Sum});
@@ -179,7 +185,7 @@ function allotLeave(leaveType,person,thisDate) {
   }
   person.MC = 0;
   // console.log(person);
-  console.log(';;;;;;;;;');
+  // console.log(';;;;;;;;;');
   return person;
 }
 
@@ -207,7 +213,9 @@ function updatecalc(slotArray, day, sorted, daysToCalc) {
 
   // console.log(originalPeople);
 
-  if (day > daysToCalc - 1) return sorted;
+  console.log(`calculated ${day} x days of ${daysToCalc}`);
+
+  if (day >= daysToCalc) return sorted;
 
   // is slot available
 
@@ -218,9 +226,10 @@ function updatecalc(slotArray, day, sorted, daysToCalc) {
   }).filter(val => val).length;
 
   let todaysSlot = slotArray.find(val => `${val.date.getDate()}, ${val.date.getMonth()}, ${val.date.getMonth()}` == `${thisDate.getDate()}, ${thisDate.getMonth()}, ${thisDate.getMonth()}` )
-
   if (onLeave >= todaysSlot.slot) {
     day += 1;
+    // console.log({daysToCalc, day});
+
     return updatecalc(slotArray, day, originalPeople, daysToCalc);
   }
 
@@ -228,7 +237,11 @@ function updatecalc(slotArray, day, sorted, daysToCalc) {
 
   sorted = sorted.filter(val => val.leave.every(val => !(thisDate >= val.start && thisDate <= val.end) ))
   .map(val => {
-    console.log(thisDate, val.leave, val.leave.filter(val => thisDate > val.end));
+    // console.log({
+    //   date: thisDate,
+    //   leave:  val.leave,
+    //   back: val.leave.filter(val => thisDate > val.end)
+    // });
       return Object.assign(val,{
         back: val.leave.filter(val => thisDate > val.end).sort((a,b) => b.end - a.end)[0].end,
         backMaj: val.leave.filter(val => thisDate > val.end && /C|P/g.test(val.leaveType)).sort((a,b) => b.end - a.end)[0].end,
@@ -247,38 +260,51 @@ function updatecalc(slotArray, day, sorted, daysToCalc) {
   // Swtich to allot leave
 
   sorted = sorted.map(p => {
-    console.log({
-      // name: p.Name.split(' ')[0],
-      back: diff(p.back, thisDate),
-      backMaj: diff(p.backMaj, thisDate),
-      // backDate: p.backMaj,
-      fwd: diff(p.fwd, thisDate),
-      fwdMaj: diff(p.fwdMaj, thisDate)
-    });
+    // console.log({
+    //   // name: p.Name.split(' ')[0],
+    //   back: diff(p.back, thisDate),
+    //   backMaj: diff(p.backMaj, thisDate),
+    //   // backDate: p.backMaj,
+    //   fwd: diff(p.fwd, thisDate),
+    //   fwdMaj: diff(p.fwdMaj, thisDate)
+    // });
+    if (onLeave >= todaysSlot.slot) {
+      // day += 1;
+      // console.log(`calculated ${day} x days of ${daysToCalc}`);
+      // console.log({daysToCalc, day});
+      return p; // updatecalc(slotArray, day, originalPeople, daysToCalc);
+    };
+
+    // console.log({todaysSlot: todaysSlot.slot, onLeave});
+
     switch (true) {
       case (diff(p.back, thisDate) > 30 && diff(p.backMaj, thisDate) < 70 && diff(p.fwd, thisDate) > 30):
         if (p.back == p.backMaj) {
-          console.log('give 3 days weekend');
+          // console.log('give 3 days weekend');
           p = allotLeave('W1',p,thisDate);
+          onLeave++;
         }
         else {
-          console.log('give 2 days weekend');
+          // console.log('give 2 days weekend');
           p = allotLeave('W2',p,thisDate);
+          onLeave++;
         }
         break;
       case (diff(p.backMaj,thisDate) > 70 && diff(p.fwdMaj,thisDate) > 60 && diff(p.back, thisDate) > 30 && diff(p.fwd, thisDate) > 30):
         let daysinPleave = Math.abs(Math.floor(p['P Lve'] - thisDate)/1000/60/60/24);
         if (daysinPleave < 60) {
-          console.log('give him p leave');
+          // console.log('give him p leave');
           p = allotLeave('P',p,thisDate);
           p['P Lve'] = addDays(thisDate, 30 * 11);
+          onLeave++;
         } else {
-          console.log('give him c leave');
+          // console.log('give him c leave');
           p = allotLeave('C',p,thisDate);
+          onLeave++;
         }
         break;
       default:
-        console.log('No condition met');
+        // console.log('No condition met');
     }
     return p;
   })

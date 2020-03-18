@@ -24,9 +24,13 @@ app.set('view engine','hbs');
 // app.use('/fonts', express.static(__dirname + '/node_modules/roboto-fontface'));
 app.use(express.static(__dirname+'/static'));
 
-app.get('/jquery-', function(req, res) {
+app.get('/jquery', function(req, res) {
     res.sendFile(__dirname + '/node_modules/jquery/dist/jquery.js');
 });
+
+// app.get('/life', function(req, res) {
+//     res.sendFile(__dirname + '/life.js');
+// });
 
 app.get('/roboto', function(req, res) {
     res.sendFile(__dirname + '/node_modules/roboto-fontface/css/roboto/roboto-fontface.css');
@@ -138,19 +142,19 @@ hbs.registerHelper("drawTableRows", (cols,person) => {
   		<p>Starts: ${found.start.toString().trim().split(' ').slice(0,4).join(' ')}</p>
   		<p>Ends: ${found.end.toString().trim().split(' ').slice(0,4).join(' ')}</p>`;
       if (found.specialDays < 0) {
-        console.log({
-          specialDays: found.specialDays,
-          diff: (found.end - val)/1000/60/60/24,
-          bool:  ((found.end - val)/1000/60/60/24) >= found.specialDays
-        });
+        // console.log({
+        //   specialDays: found.specialDays,
+        //   diff: (found.end - val)/1000/60/60/24,
+        //   bool:  ((found.end - val)/1000/60/60/24) >= found.specialDays
+        // });
       }
       switch (true) {
         case (found.specialDays < 0 && ((found.end - val)/1000/60/60/24) >= found.specialDays && val > found.end):
-          console.log('negative special days');
+          // console.log('negative special days');
           newCol = `<td class="low_${isThisLessThenToday}"><div my_id="${person._id}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} specialDays_minus active">${found.specialDays}</div></td>`;
           break;
         case (found.specialDays > 0 && (found.end - val)/1000/60/60/24 <= found.specialDays):
-          console.log('positive special days');
+          // console.log('positive special days');
           newCol = `<td class="low_${isThisLessThenToday}"><div my_id="${person._id}" data-today="${val.toString().trim().split(' ').slice(1,4).join('-')}" class="${val.toString().trim().split(' ').slice(1,4).join('-')} ${found.leaveType} active specialDays_plus" leave-ending="${found.end}" my-data="${data}">${found.leaveType}</div></td>`
           break;
         default:
@@ -205,23 +209,29 @@ app.get('/test',(req,res) => {
     res.status(400).send(e)
   });
 })
+
+app.get('/startsoftware', (req,res) => {
+  console.log('hellow');
+  res.render('startsoftware.hbs');
+})
 app.get('/', (req,res) => {
 
-  req.query.date = req.query.date || [];
-  let date = new Date(), cols = [], rows = [];
+  req.query.date = req.query.date || new Date();
+
+  let date = new Date(req.query.date), cols = [], rows = [], displayDays = 30;
   console.log(req.query.date, date);
-  for (var i = 0; i < 31; i++) {
+  for (var i = 0; i < displayDays; i++) {
     let ndate = addDays(date, i);
     cols.push(ndate);
   }
 
-  for (var i = 0; i < 31; i++) {
+  for (var i = 0; i < displayDays; i++) {
     rows.push(i);
   }
 
   People.find().then((sorted) => {
     res.render('office.hbs',{
-      rows,cols,sorted
+      rows,cols,sorted,displayDays,date: date.toString().split(' ').splice(1,3).join(' ')
     })
   }).catch(e => {
     console.log(e);
@@ -275,9 +285,9 @@ app.post('/updateManualCtr', (req,res) => {
 })
 
 app.post('/saveCalculated', (req,res) => {
-
+  console.log('trigger saveCalculated');
   let slotArray = [],
-      daysToCalc = 30;
+      daysToCalc = 120;
 
   for (var i = 0; i < daysToCalc; i++) {
     slotArray[i] = {
@@ -285,8 +295,10 @@ app.post('/saveCalculated', (req,res) => {
       slot: 8
     };
   }
-  People.find().then((sorted) => {
+  People.find()
+  .then((sorted) => {
     sorted = updatecalc(slotArray, 0, sorted, daysToCalc);
+    console.log('-------------');
     return People.bulkWrite(sorted.map(val => {
   			return {
   				updateOne: {
@@ -295,7 +307,8 @@ app.post('/saveCalculated', (req,res) => {
   				}
   			}
   	}))
-  }).then(msg => res.status(200).send('Leaves have been calculated.'))
+  })
+  .then(msg => res.status(200).send('Leaves have been calculated.'))
   .catch(e => {
     console.log(e);
     res.status(400).send(e)
