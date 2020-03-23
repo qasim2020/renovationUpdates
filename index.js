@@ -216,56 +216,33 @@ app.get('/startsoftware', (req,res) => {
 })
 app.get('/', (req,res) => {
 
-  req.query.date = req.query.date || new Date();
+  return res.status(200).render('home.hbs');
 
-  let date = new Date(req.query.date), cols = [], rows = [], displayDays = 30;
-  console.log(req.query.date, date);
-  for (var i = 0; i < displayDays; i++) {
-    let ndate = addDays(date, i);
-    cols.push(ndate);
-  }
+})
 
-  for (var i = 0; i < displayDays; i++) {
-    rows.push(i);
-  }
+app.get('/office', (req,res) => {
+  
+    req.query.date = req.query.date || new Date();
 
-  People.find().then((sorted) => {
-    res.render('office.hbs',{
-      rows,cols,sorted,displayDays,date: date.toString().split(' ').splice(1,3).join(' ')
-    })
-  }).catch(e => {
-    console.log(e);
-    res.status(400).send(e)
-  });
+    let date = new Date(req.query.date), cols = [], rows = [], displayDays = 30;
+    console.log(req.query.date, date);
+    for (var i = 0; i < displayDays; i++) {
+      let ndate = addDays(date, i);
+      cols.push(ndate);
+    }
 
-  // let cols = [], rows = [];
-  // for (var i = 0; i < 300; i++) {
-  //   let date = addDays(new Date('1 Sep 2019'), i);
-  //   cols.push(date);
-  // }
-  // for (var i = 0; i < 30; i++) {
-  //   rows.push(i);
-  // }
-  //
-  // let slotArray = [],
-  //     daysToCalc = 30;
-  //
-  // for (var i = 0; i < daysToCalc; i++) {
-  //   slotArray[i] = {
-  //     date: addDays(new Date(), i),
-  //     slot: 8
-  //   };
-  // }
-  //
-  // People.find().then((sorted) => {
-	// 	res.render('office.hbs',{
-	// 		rows,cols,sorted
-	// 	})
-	// }).catch(e => {
-  //   console.log(e);
-  //   res.status(400).send(e)
-  // });
+    for (var i = 0; i < displayDays; i++) {
+      rows.push(i);
+    }
 
+    People.find().then((sorted) => {
+      res.render('office.hbs',{
+        rows,cols,sorted,displayDays,date: date.toString().split(' ').splice(1,3).join(' ')
+      })
+    }).catch(e => {
+      console.log(e);
+      res.status(400).send(e)
+    });
 })
 
 app.post('/updateManualCtr', (req,res) => {
