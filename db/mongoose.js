@@ -5,8 +5,6 @@ mongoose.connect(process.env.MONGODB_URI,{
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
-mongoose.set('useCreateIndex', true);
-mongoose.set('useFindAndModify', false);
 // mongoose.set('useUnifiedTopology', true);
 
 module.exports = {mongoose};
